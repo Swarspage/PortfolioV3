@@ -1,0 +1,74 @@
+.cursorLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+}
+
+.cursorDot,
+.cursorRing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease,
+    border-radius 0.2s ease;
+  will-change: transform, width, height;
+}
+
+.cursorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.cursorRing {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  opacity: 0;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #fff;
+  transition: opacity 0.2s ease;
+}
+
+.pointer {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.text {
+  width: 96px;
+  height: 10px;
+  border-radius: 999px;
+  opacity: 0.5;
+}
+
+.card {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card .label {
+  opacity: 1;
+}

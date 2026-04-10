@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #050508;
+  --color-brand-surface: rgba(255, 255, 255, 0.04);
+  --color-brand-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-brand-border: rgba(255, 255, 255, 0.12);
+  --color-brand-border-hover: rgba(255, 255, 255, 0.28);
+  
+  --color-brand-text: rgba(255, 255, 255, 0.95);
+  --color-brand-muted: #a0a0a0;
+  --color-brand-accent: #bfdbfe;
+  --color-brand-glow: rgba(191, 219, 254, 0.4);
+  
+  --font-display: "Gasdrifo", "Trebuchet MS", sans-serif;
+  --font-body: "Outfit", "Trebuchet MS", sans-serif;
+
+  --animate-spotlight: spotlight 2s ease forwards;
+}
+
+
+@font-face {
+  font-family: "Gasdrifo";
+  src: url("/fonts/NCLGasdrifo-Demo.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/Outfit-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  @apply font-body text-brand-text bg-brand-bg;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; margin: 0; }
+::-webkit-scrollbar-thumb { background: rgba(107, 114, 128, 0.8); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(75, 85, 99, 0.9); background-clip: content-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+html { overflow-y: scroll; scrollbar-gutter: stable; }
+* { scrollbar-width: thin; scrollbar-color: rgba(107, 114, 128, 0.8) transparent; }
+body::selection { font-weight: 900; color: #000000; background-color: #bfdbfe; border-radius: 50%; }
+body { overflow-y: auto; }
+
+@keyframes border-glow-translate { from { transform: translateX(-100%); } to { transform: translateX(500%); } }
+@keyframes border-glow-scale { 0%,100% { transform: translateX(-50%) scaleY(0.8);} 50% { transform: translateX(-50%) scaleY(1.8);} }
+@keyframes star-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes star-shine { 0%,100% { opacity: 0; } 50% { opacity: 0.5; } }
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+.scanline { background: linear-gradient(to bottom, transparent 0%, rgba(34, 211, 238, 0.1) 50%, transparent 100%); animation: scanline 3s linear infinite; }
+@keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+
+@keyframes spotlight {
+  0%   { opacity: 0; transform: translate(-72%, -62%) skewX(-30deg) scale(0.5); }
+  100% { opacity: 1; transform: translate(-50%, -40%) skewX(-30deg) scale(1); }
+}
+
+/* Custom scrollbar hider */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
