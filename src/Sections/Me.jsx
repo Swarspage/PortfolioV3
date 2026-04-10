@@ -3,13 +3,15 @@ import { SplineScene } from "../Components/SplineScene";
 import { Spotlight } from "../Components/Spotlight";
 import { gsap } from "../lib/gsapScroll";
 
-const Me = () => {
+const Me = ({ onSplineLoad, isAppReady }) => {
   const leftRef = useRef(null);
   const headingRef = useRef(null);
   const subtitleRef = useRef(null);
   const ctaRef = useRef(null);
 
   useEffect(() => {
+    if (!isAppReady) return; // Halt entrance timeline until screen is ready!
+
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     tl.fromTo(
@@ -29,7 +31,7 @@ const Me = () => {
         { y: 0, opacity: 1, duration: 0.8 },
         "-=0.5"
       );
-  }, []);
+  }, [isAppReady]);
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -51,6 +53,8 @@ const Me = () => {
         <SplineScene
           scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
           className="w-full h-full"
+          onSplineLoad={onSplineLoad}
+          isAppReady={isAppReady}
         />
       </div>
 

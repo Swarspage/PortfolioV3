@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Top 8 Finalist · Code-A-Thon 2.0",
+    "category": "01",
+    "date": "2025",
+    "description": "Out of 100+ submissions, Singularity placed Top 8. Built over 1.5 months — not a weekend sprint — it pulled real-time telemetry from NASA, SpaceX, and ISRO into a single mission control. Orbital mechanics, 3D globe rendering, AI integration, live ISS tracking. The kind of project you build when you actually care about what you're making.",
+    "icon": "🏆"
+  },
+  {
+    "title": "Shipped to 500+ Users · SIMS",
+    "category": "02",
+    "date": "2024",
+    "description": "Most portfolio projects live on localhost. SIMS lives at a college domain and gets used by over 500 students every day. Built during my internship under the HOD — I owned the entire frontend. Seeing something you built actually get used is a different kind of validation.",
+    "icon": "🚀"
+  },
+  {
+    "title": "GitHub Workshop · Volunteer",
+    "category": "03",
+    "date": "2024",
+    "description": "Volunteered at a Git & GitHub workshop for third-year students. Helped them get comfortable with version control, branching, and collaborative development. Teaching something is the fastest way to find out how well you actually know it.",
+    "icon": "🤝"
+  },
+  {
+    "title": "8.365 GPA · B.Tech",
+    "category": "04",
+    "date": "2023 – Present",
+    "description": "Balancing active development, hackathons, freelance work, and an internship — while holding an 8.365. The academics and the building happen in parallel, not instead of each other.",
+    "icon": "🎓"
+  }
+]

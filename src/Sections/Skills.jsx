@@ -24,51 +24,51 @@ import ProblemSolving from "../assets/problemsolving.png";
 // ─── Card dimensions ──────────────────────────────────────────────────────────
 const DESKTOP_CARD_W = 104;
 const DESKTOP_CARD_H = 92;
-const MOBILE_CARD_W  = 88;
-const MOBILE_CARD_H  = 78;
+const MOBILE_CARD_W = 88;
+const MOBILE_CARD_H = 78;
 
 // ─── Physics constants ────────────────────────────────────────────────────────
-const SPRING_K          = 0.038;
-const DAMPING           = 0.87;
-const COLLISION_FORCE   = 0.55;
-const MIN_SEP_DESKTOP   = 116;
-const MIN_SEP_MOBILE    = 96;
-const EDGE_PAD_DESKTOP  = 68;
-const EDGE_PAD_MOBILE   = 50;
-const BOUNDARY_FORCE    = 0.45;
-const ATTRACT_RADIUS    = 185;
-const ATTRACT_STRENGTH  = 0.026;
-const AVOID_R_DESKTOP   = 130;
-const AVOID_R_MOBILE    = 80;
+const SPRING_K = 0.038;
+const DAMPING = 0.87;
+const COLLISION_FORCE = 0.55;
+const MIN_SEP_DESKTOP = 116;
+const MIN_SEP_MOBILE = 96;
+const EDGE_PAD_DESKTOP = 68;
+const EDGE_PAD_MOBILE = 50;
+const BOUNDARY_FORCE = 0.45;
+const ATTRACT_RADIUS = 185;
+const ATTRACT_STRENGTH = 0.026;
+const AVOID_R_DESKTOP = 130;
+const AVOID_R_MOBILE = 80;
 
 // ─── Skills data ──────────────────────────────────────────────────────────────
 const SKILLS = [
-  { skill: "React",          img: ReactLogo,      glow: "#61DAFB", dx: 10, dy: 12, related: ["JavaScript", "Node.js", "HTML", "CSS"] },
-  { skill: "JavaScript",    img: JavaScript,     glow: "#F7DF1E", dx: 36, dy:  9, related: ["React", "Node.js", "HTML", "CSS"] },
-  { skill: "Python",         img: Python,         glow: "#4B8BBE", dx: 62, dy: 12, related: ["MySQL", "MongoDB", "Problem Solving"] },
-  { skill: "Node.js",        img: NodeLogo,       glow: "#339933", dx: 84, dy: 17, related: ["Express", "MongoDB", "JavaScript"] },
-  { skill: "MongoDB",        img: MongoDB,        glow: "#47A248", dx:  7, dy: 37, related: ["Node.js", "Express"] },
-  { skill: "Express",        img: Express,        glow: "#AAAAAA", dx: 27, dy: 33, related: ["Node.js", "MongoDB", "JavaScript"] },
-  { skill: "MySQL",          img: MySQL,          glow: "#00618A", dx: 54, dy: 31, related: ["Node.js", "Python", "Express"] },
-  { skill: "HTML",           img: HTML,           glow: "#E34F26", dx: 77, dy: 39, related: ["CSS", "JavaScript", "React"] },
-  { skill: "CSS",            img: CSS,            glow: "#1572B6", dx: 89, dy: 54, related: ["HTML", "JavaScript", "React"] },
-  { skill: "Java",           img: Java,           glow: "#ED8B00", dx: 15, dy: 61, related: ["C", "C++", "Problem Solving"] },
-  { skill: "C",              img: C,              glow: "#A8B9CC", dx: 42, dy: 67, related: ["C++", "Java", "Problem Solving"] },
-  { skill: "C++",            img: Cpp,            glow: "#00599C", dx: 65, dy: 71, related: ["C", "Java", "Problem Solving"] },
-  { skill: "Git",            img: Git,            glow: "#F05032", dx:  5, dy: 79, related: ["GitHub", "VS Code"] },
-  { skill: "GitHub",         img: GitHub,         glow: "#D0D0D0", dx: 30, dy: 83, related: ["Git", "VS Code"] },
-  { skill: "VS Code",        img: VSCode,         glow: "#007ACC", dx: 56, dy: 81, related: ["Git", "GitHub"] },
-  { skill: "Canva",          img: Canva,          glow: "#00C4CC", dx: 80, dy: 75, related: ["HTML", "CSS"] },
-  { skill: "Postman",        img: Postman,        glow: "#FF6C37", dx: 91, dy: 29, related: ["Express", "Node.js", "MongoDB"] },
-  { skill: "Problem Solving",img: ProblemSolving, glow: "#BFDBFE", dx: 47, dy: 86, related: ["C", "C++", "Java", "Python"] },
+  { skill: "React", img: ReactLogo, glow: "#61DAFB", dx: 10, dy: 12, related: ["JavaScript", "Node.js", "HTML", "CSS"] },
+  { skill: "JavaScript", img: JavaScript, glow: "#F7DF1E", dx: 36, dy: 9, related: ["React", "Node.js", "HTML", "CSS"] },
+  { skill: "Python", img: Python, glow: "#4B8BBE", dx: 62, dy: 12, related: ["MySQL", "MongoDB", "Problem Solving"] },
+  { skill: "Node.js", img: NodeLogo, glow: "#339933", dx: 84, dy: 17, related: ["Express", "MongoDB", "JavaScript"] },
+  { skill: "MongoDB", img: MongoDB, glow: "#47A248", dx: 7, dy: 37, related: ["Node.js", "Express"] },
+  { skill: "Express", img: Express, glow: "#AAAAAA", dx: 27, dy: 33, related: ["Node.js", "MongoDB", "JavaScript"] },
+  { skill: "MySQL", img: MySQL, glow: "#00618A", dx: 54, dy: 31, related: ["Node.js", "Python", "Express"] },
+  { skill: "HTML", img: HTML, glow: "#E34F26", dx: 77, dy: 39, related: ["CSS", "JavaScript", "React"] },
+  { skill: "CSS", img: CSS, glow: "#1572B6", dx: 89, dy: 54, related: ["HTML", "JavaScript", "React"] },
+  { skill: "Java", img: Java, glow: "#ED8B00", dx: 15, dy: 61, related: ["C", "C++", "Problem Solving"] },
+  { skill: "C", img: C, glow: "#A8B9CC", dx: 42, dy: 67, related: ["C++", "Java", "Problem Solving"] },
+  { skill: "C++", img: Cpp, glow: "#00599C", dx: 65, dy: 71, related: ["C", "Java", "Problem Solving"] },
+  { skill: "Git", img: Git, glow: "#F05032", dx: 5, dy: 79, related: ["GitHub", "VS Code"] },
+  { skill: "GitHub", img: GitHub, glow: "#D0D0D0", dx: 30, dy: 83, related: ["Git", "VS Code"] },
+  { skill: "VS Code", img: VSCode, glow: "#007ACC", dx: 56, dy: 81, related: ["Git", "GitHub"] },
+  { skill: "Canva", img: Canva, glow: "#00C4CC", dx: 80, dy: 75, related: ["HTML", "CSS"] },
+  { skill: "Postman", img: Postman, glow: "#FF6C37", dx: 91, dy: 29, related: ["Express", "Node.js", "MongoDB"] },
+  { skill: "Problem Solving", img: ProblemSolving, glow: "#BFDBFE", dx: 47, dy: 86, related: ["C", "C++", "Java", "Python"] },
 ];
 
 const MOBILE_POSITIONS = [
-  { dx: 8, dy: 10 }, { dx: 42, dy: 8 },  { dx: 70, dy: 11 },
+  { dx: 8, dy: 10 }, { dx: 42, dy: 8 }, { dx: 70, dy: 11 },
   { dx: 84, dy: 22 }, { dx: 7, dy: 26 }, { dx: 30, dy: 24 },
   { dx: 58, dy: 30 }, { dx: 85, dy: 40 }, { dx: 6, dy: 48 },
   { dx: 27, dy: 55 }, { dx: 52, dy: 60 }, { dx: 76, dy: 57 },
-  { dx: 88, dy: 68 }, { dx: 8, dy: 72 },  { dx: 35, dy: 78 },
+  { dx: 88, dy: 68 }, { dx: 8, dy: 72 }, { dx: 35, dy: 78 },
   { dx: 62, dy: 76 }, { dx: 85, dy: 83 }, { dx: 46, dy: 87 },
 ];
 
@@ -76,8 +76,8 @@ const MOBILE_POSITIONS = [
 function applyCollisionForces(nodes, minSep) {
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
-      const dx   = nodes[j].x - nodes[i].x;
-      const dy   = nodes[j].y - nodes[i].y;
+      const dx = nodes[j].x - nodes[i].x;
+      const dy = nodes[j].y - nodes[i].y;
       const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
       if (dist < minSep) {
         const overlap = (minSep - dist) / dist;
@@ -90,16 +90,16 @@ function applyCollisionForces(nodes, minSep) {
   }
 }
 
-function applyBoundaryForce(node, W, H, pad) {
-  if (node.x < pad)       node.vx += (pad - node.x)           * BOUNDARY_FORCE;
-  if (node.x > W - pad)   node.vx -= (node.x - (W - pad))     * BOUNDARY_FORCE;
-  if (node.y < pad)       node.vy += (pad - node.y)           * BOUNDARY_FORCE;
-  if (node.y > H - pad)   node.vy -= (node.y - (H - pad))     * BOUNDARY_FORCE;
+function applyBoundaryForce(node, W, H, pad, topOffset = 0) {
+  if (node.x < pad) node.vx += (pad - node.x) * BOUNDARY_FORCE;
+  if (node.x > W - pad) node.vx -= (node.x - (W - pad)) * BOUNDARY_FORCE;
+  if (node.y < pad + topOffset) node.vy += (pad + topOffset - node.y) * BOUNDARY_FORCE;
+  if (node.y > H - pad) node.vy -= (node.y - (H - pad)) * BOUNDARY_FORCE;
 }
 
 function applyHeadingAvoidance(node, cx, cy, r) {
-  const dx   = node.x - cx;
-  const dy   = node.y - cy;
+  const dx = node.x - cx;
+  const dy = node.y - cy;
   const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
   if (dist < r) {
     const force = ((r - dist) / dist) * 0.38;
@@ -110,8 +110,8 @@ function applyHeadingAvoidance(node, cx, cy, r) {
 
 function applyMagneticForce(node, mouse) {
   if (!mouse) return;
-  const dx   = mouse.x - node.x;
-  const dy   = mouse.y - node.y;
+  const dx = mouse.x - node.x;
+  const dy = mouse.y - node.y;
   const dist = Math.sqrt(dx * dx + dy * dy);
   if (dist < ATTRACT_RADIUS && dist > 1) {
     const strength = (1 - dist / ATTRACT_RADIUS) * ATTRACT_STRENGTH;
@@ -134,8 +134,8 @@ function drawConstellation(ctx, cssW, cssH, nodes, hoveredIdx, dashOffset) {
   ctx.clearRect(0, 0, cssW, cssH);
   if (hoveredIdx === null || hoveredIdx === undefined) return;
 
-  const hNode     = nodes[hoveredIdx];
-  const relNames  = SKILLS[hoveredIdx].related;
+  const hNode = nodes[hoveredIdx];
+  const relNames = SKILLS[hoveredIdx].related;
   const glowColor = SKILLS[hoveredIdx].glow;
 
   relNames.forEach((name) => {
@@ -149,11 +149,11 @@ function drawConstellation(ctx, cssW, cssH, nodes, hoveredIdx, dashOffset) {
     grad.addColorStop(1, hexToRgba(glowColor, 0.13));
 
     ctx.beginPath();
-    ctx.strokeStyle   = grad;
-    ctx.lineWidth     = 1.5;
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
     ctx.setLineDash([9, 6]);
     ctx.lineDashOffset = -dashOffset;
-    ctx.globalAlpha   = 0.8;
+    ctx.globalAlpha = 0.8;
     ctx.moveTo(hNode.x, hNode.y);
     ctx.lineTo(tNode.x, tNode.y);
     ctx.stroke();
@@ -173,16 +173,17 @@ function drawConstellation(ctx, cssW, cssH, nodes, hoveredIdx, dashOffset) {
 
 // ─── Skills component ─────────────────────────────────────────────────────────
 export default function Skills() {
-  const sectionRef      = useRef(null);
-  const headingRef      = useRef(null);
-  const canvasRef       = useRef(null);
-  const cardRefs        = useRef([]);
-  const physicsRef      = useRef([]);
-  const mouseRef        = useRef(null);
-  const hoveredIdxRef   = useRef(null);
-  const rafRef          = useRef(null);
-  const dashOffsetRef   = useRef(0);
-  const sizeRef         = useRef({ W: 0, H: 0 });
+  const sectionRef = useRef(null);
+  const innerRef = useRef(null);
+  const headingRef = useRef(null);
+  const canvasRef = useRef(null);
+  const cardRefs = useRef([]);
+  const physicsRef = useRef([]);
+  const mouseRef = useRef(null);
+  const hoveredIdxRef = useRef(null);
+  const rafRef = useRef(null);
+  const dashOffsetRef = useRef(0);
+  const sizeRef = useRef({ W: 0, H: 0 });
   const physicsActiveRef = useRef(false);
 
   // Detect mobile after mount (avoids SSR mismatch)
@@ -200,7 +201,7 @@ export default function Skills() {
     [isMobile]
   );
 
-  const setCardRef      = useCallback((i) => (el) => { cardRefs.current[i] = el; }, []);
+  const setCardRef = useCallback((i) => (el) => { cardRefs.current[i] = el; }, []);
   const handleHoverChange = useCallback((idx, active) => {
     if (active) {
       hoveredIdxRef.current = idx;
@@ -211,62 +212,92 @@ export default function Skills() {
     }
   }, []);
 
-  // ── GSAP entrance ──────────────────────────────────────────────────────────
+  // ── MASTER PIN: same pattern as Projects — section pins, content appears, holds, exits ──
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    const inner = innerRef.current;
+    if (!section || !inner) return;
+
     const cards = cardRefs.current.filter(Boolean);
-    if (!cards.length) return;
+    const distances = [130, 165, 105, 185, 145, 95, 205, 115, 155, 135, 175, 98, 190, 125, 165, 105, 150, 130];
+    let hasTriggered = false;
 
-    gsap.set(cards, { opacity: 0, scale: 0.2 });
-    const distances = [130,165,105,185,145,95,205,115,155,135,175,98,190,125,165,105,150,130];
+    // Start inner hidden — will appear as pin begins
+    gsap.set(inner, { opacity: 0, scale: 0.92, filter: "blur(10px)" });
+    
+    // Preset cards with their explosion coordinates to avoid .fromTo calculation flashes
+    cards.forEach((card, i) => {
+      const angle = Math.random() * Math.PI * 2;
+      const r = distances[i % distances.length];
+      gsap.set(card, { opacity: 0, scale: 0.2, x: Math.cos(angle) * r, y: Math.sin(angle) * r });
+    });
 
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: "top 75%", once: true },
-      onComplete: () => {
-        gsap.set(cards, { clearProps: "x,y,scale" });
-        physicsActiveRef.current = true;
+    const masterTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "+=200%",
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
       },
     });
 
-    cards.forEach((card, i) => {
-      const angle = Math.random() * Math.PI * 2;
-      const r     = distances[i % distances.length];
-      tl.fromTo(
-        card,
-        { opacity: 0, scale: 0.2, x: Math.cos(angle) * r, y: Math.sin(angle) * r },
-        { opacity: 1, scale: 1,  x: 0, y: 0, duration: 0.8, ease: "back.out(1.4)" },
-        i * 0.055
-      );
+    // ENTRANCE: inner wrapper reveals
+    masterTl.to(inner, {
+      opacity: 1, scale: 1, filter: "blur(0px)",
+      duration: 1, ease: "power3.out",
     });
 
-    if (headingRef.current) {
-      gsap.fromTo(headingRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 75%" } }
-      );
-    }
+    // Kick off card burst-in (time-based, not scrubbed — physics needs to take over)
+    masterTl.call(() => {
+      if (hasTriggered) return;
+      hasTriggered = true;
+      const burstTl = gsap.timeline({
+        onComplete: () => {
+          physicsActiveRef.current = true;
+        },
+      });
+      cards.forEach((card, i) => {
+        burstTl.to(
+          card,
+          { opacity: 1, scale: 1, x: 0, y: 0, duration: 0.8, ease: "back.out(1.4)" },
+          i * 0.055
+        );
+      });
+    });
 
-    return () => { if (tl.scrollTrigger) tl.scrollTrigger.kill(); tl.kill(); };
+    // HOLD: user sits with physics cloud
+    masterTl.to({}, { duration: 1.5 });
+
+    // EXIT: inner peels away, next section reveals from behind
+    masterTl.to(inner, {
+      opacity: 0, scale: 0.88, filter: "blur(10px)",
+      duration: 1, ease: "power2.in",
+    });
+
+    return () => {
+      if (masterTl.scrollTrigger) masterTl.scrollTrigger.kill();
+      masterTl.kill();
+    };
   }, [isMobile]);
 
   // ── Physics rAF loop ───────────────────────────────────────────────────────
   useEffect(() => {
     const section = sectionRef.current;
-    const canvas  = canvasRef.current;
+    const canvas = canvasRef.current;
     if (!section) return;
 
     // Canvas sizing — canvas coordinate space = CSS pixels (ctx.scale handles DPR)
     const updateSize = () => {
-      const r   = section.getBoundingClientRect();
+      const r = section.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
       sizeRef.current = { W: r.width, H: r.height };
 
       if (canvas) {
-        canvas.width        = Math.round(r.width  * dpr);
-        canvas.height       = Math.round(r.height * dpr);
-        canvas.style.width  = `${r.width}px`;
+        canvas.width = Math.round(r.width * dpr);
+        canvas.height = Math.round(r.height * dpr);
+        canvas.style.width = `${r.width}px`;
         canvas.style.height = `${r.height}px`;
 
         const ctx = canvas.getContext("2d");
@@ -277,35 +308,37 @@ export default function Skills() {
     };
     updateSize();
 
-    const { W, H }  = sizeRef.current;
+    const { W, H } = sizeRef.current;
     const positions = homePositions;
+    const topOffset = isMobile ? 100 : 140;
+    const usableH = H - topOffset;
 
     // Physics nodes store card center position (CSS px from section top-left)
     physicsRef.current = SKILLS.map((_, i) => {
-      const pos   = positions[i];
+      const pos = positions[i];
       const homeX = (pos.dx / 100) * W;
-      const homeY = (pos.dy / 100) * H;
+      const homeY = (pos.dy / 100) * usableH + topOffset;
       return { x: homeX, y: homeY, vx: 0, vy: 0, homeX, homeY, phase: i * 0.71 };
     });
 
     // Get a fresh ctx reference after updateSize (transform is already set)
-    const ctx    = canvas ? canvas.getContext("2d") : null;
-    let   frame  = 0;
+    const ctx = canvas ? canvas.getContext("2d") : null;
+    let frame = 0;
 
-    const minSep    = isMobile ? MIN_SEP_MOBILE    : MIN_SEP_DESKTOP;
-    const edgePad   = isMobile ? EDGE_PAD_MOBILE   : EDGE_PAD_DESKTOP;
-    const avoidR    = isMobile ? AVOID_R_MOBILE     : AVOID_R_DESKTOP;
+    const minSep = isMobile ? MIN_SEP_MOBILE : MIN_SEP_DESKTOP;
+    const edgePad = isMobile ? EDGE_PAD_MOBILE : EDGE_PAD_DESKTOP;
+    const avoidR = isMobile ? AVOID_R_MOBILE : AVOID_R_DESKTOP;
 
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop);
       frame++;
 
-      const nodes       = physicsRef.current;
+      const nodes = physicsRef.current;
       const { W: cW, H: cH } = sizeRef.current;
 
       // Spring drift
       nodes.forEach((node) => {
-        const t  = frame * 0.007 + node.phase;
+        const t = frame * 0.007 + node.phase;
         const px = Math.sin(t * 0.65) * 16;
         const py = Math.cos(t * 0.48) * 13;
         node.vx += (node.homeX + px - node.x) * SPRING_K;
@@ -316,8 +349,10 @@ export default function Skills() {
 
       applyCollisionForces(nodes, minSep);
 
+      const currentTopOffset = isMobile ? 100 : 140;
+
       nodes.forEach((node) => {
-        applyBoundaryForce(node, cW, cH, edgePad);
+        applyBoundaryForce(node, cW, cH, edgePad, currentTopOffset);
         applyHeadingAvoidance(node, cW / 2, cH / 2, avoidR);
         if (!isMobile) applyMagneticForce(node, mouseRef.current);
         node.x += node.vx;
@@ -351,7 +386,7 @@ export default function Skills() {
     rafRef.current = requestAnimationFrame(loop);
 
     // Mouse tracking (relative to section, CSS pixels — matching node space)
-    const onMouseMove  = (e) => {
+    const onMouseMove = (e) => {
       const r = section.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - r.left, y: e.clientY - r.top };
     };
@@ -360,15 +395,17 @@ export default function Skills() {
     const onResize = () => {
       updateSize();
       const { W: nW, H: nH } = sizeRef.current;
+      const currTopOffset = isMobile ? 100 : 140;
+      const currUsableH = nH - currTopOffset;
       physicsRef.current.forEach((node, i) => {
-        const pos     = homePositions[i];
-        node.homeX    = (pos.dx / 100) * nW;
-        node.homeY    = (pos.dy / 100) * nH;
+        const pos = homePositions[i];
+        node.homeX = (pos.dx / 100) * nW;
+        node.homeY = (pos.dy / 100) * currUsableH + currTopOffset;
       });
     };
 
     if (!isMobile) {
-      section.addEventListener("mousemove",  onMouseMove);
+      section.addEventListener("mousemove", onMouseMove);
       section.addEventListener("mouseleave", onMouseLeave);
     }
     window.addEventListener("resize", onResize);
@@ -376,7 +413,7 @@ export default function Skills() {
     return () => {
       cancelAnimationFrame(rafRef.current);
       if (!isMobile) {
-        section.removeEventListener("mousemove",  onMouseMove);
+        section.removeEventListener("mousemove", onMouseMove);
         section.removeEventListener("mouseleave", onMouseLeave);
       }
       window.removeEventListener("resize", onResize);
@@ -390,63 +427,67 @@ export default function Skills() {
       id="skills"
       className="relative h-screen w-full overflow-hidden bg-transparent"
     >
-      {/* Canvas sits BEHIND cards; pointer-events disabled so events reach cards */}
-      <canvas
-        ref={canvasRef}
-        style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}
-      />
-
-      {/* Skill cloud — z-index above canvas */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
-        {SKILLS.map((s, i) => {
-          const pos = isMobile ? MOBILE_POSITIONS[i] : s;
-          return (
-            <SkillCard
-              key={s.skill}
-              ref={setCardRef(i)}
-              idx={i}
-              skill={s.skill}
-              img={s.img}
-              glow={s.glow}
-              // Position so that the card CENTER falls on (pos.dx%, pos.dy%)
-              left={`calc(${pos.dx}% - ${cardW / 2}px)`}
-              top={`calc(${pos.dy}% - ${cardH / 2}px)`}
-              width={cardW}
-              height={cardH}
-              isMobile={isMobile}
-              onHoverChange={handleHoverChange}
-            />
-          );
-        })}
-      </div>
-
-      {/* Heading overlay — pointer-events none so it doesn't steal hover */}
-      <div
-        ref={headingRef}
-        style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}
-        className="flex flex-col items-center justify-center select-none"
-      >
-        <SplitText
-          text="SKILLS"
-          className="font-display text-[clamp(4rem,9vw,8rem)] font-bold text-white tracking-widest leading-none text-center drop-shadow-[0_0_40px_rgba(255,255,255,0.08)]"
-          delay={0}
-          duration={0.9}
-          ease="power3.out"
-          splitType="chars"
-          from={{ opacity: 0, y: 40, scale: 0.85 }}
-          to={{ opacity: 1, y: 0, scale: 1 }}
-          threshold={0.4}
+      {/* Inner wrapper — exit transition animates this, not individual cards */}
+      <div ref={innerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+        {/* Canvas sits BEHIND cards; pointer-events disabled so events reach cards */}
+        <canvas
+          ref={canvasRef}
+          style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}
         />
-        <p className="text-brand-accent tracking-[0.3em] uppercase text-xs mt-5 font-body opacity-70">
-          The tech ecosystem I thrive in
-        </p>
-      </div>
 
-      {/* Edge fades */}
-      <div className="absolute top-0 left-0 w-full h-32 pointer-events-none z-20"
-           style={{ background: "linear-gradient(to bottom, #000 0%, transparent 100%)" }} />
-      <div className="absolute bottom-0 left-0 w-full h-32 pointer-events-none z-20"
-           style={{ background: "linear-gradient(to top, #000 0%, transparent 100%)" }} />
+        {/* Skill cloud — z-index above canvas */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
+          {SKILLS.map((s, i) => {
+            const pos = isMobile ? MOBILE_POSITIONS[i] : s;
+            const topOffset = isMobile ? 100 : 140;
+            return (
+              <SkillCard
+                key={s.skill}
+                ref={setCardRef(i)}
+                idx={i}
+                skill={s.skill}
+                img={s.img}
+                glow={s.glow}
+                // Position so that the card CENTER falls on (pos.dx%, pos.dy%)
+                left={`calc(${pos.dx}% - ${cardW / 2}px)`}
+                top={`calc((100% - ${topOffset}px) * ${pos.dy / 100} + ${topOffset}px - ${cardH / 2}px)`}
+                width={cardW}
+                height={cardH}
+                isMobile={isMobile}
+                onHoverChange={handleHoverChange}
+              />
+            );
+          })}
+        </div>
+
+        {/* Heading overlay — pointer-events none so it doesn't steal hover */}
+        <div
+          ref={headingRef}
+          style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}
+          className="flex flex-col items-center justify-center select-none"
+        >
+          <SplitText
+            text="SKILLS"
+            className="font-display text-[clamp(4rem,9vw,8rem)] font-bold text-white tracking-widest leading-none text-center drop-shadow-[0_0_40px_rgba(255,255,255,0.08)]"
+            delay={0}
+            duration={0.9}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 40, scale: 0.85 }}
+            to={{ opacity: 1, y: 0, scale: 1 }}
+            threshold={0.4}
+          />
+          <p className="text-brand-accent tracking-[0.3em] uppercase text-xs mt-5 font-body opacity-70">
+            The tech ecosystem I thrive in
+          </p>
+        </div>
+
+        {/* Edge fades */}
+        <div className="absolute top-0 left-0 w-full h-32 pointer-events-none z-20"
+          style={{ background: "linear-gradient(to bottom, #000 0%, transparent 100%)" }} />
+        <div className="absolute bottom-0 left-0 w-full h-32 pointer-events-none z-20"
+          style={{ background: "linear-gradient(to top, #000 0%, transparent 100%)" }} />
+      </div>{/* end innerRef */}
     </section>
   );
 }
@@ -455,7 +496,7 @@ export default function Skills() {
 const SkillCard = forwardRef(({ idx, skill, img, glow, left, top, width, height, isMobile, onHoverChange }, ref) => {
   const [hovered, setHovered] = useState(false);
 
-  const onEnter = () => { setHovered(true);  onHoverChange?.(idx, true);  };
+  const onEnter = () => { setHovered(true); onHoverChange?.(idx, true); };
   const onLeave = () => { setHovered(false); onHoverChange?.(idx, false); };
 
   return (

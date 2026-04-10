@@ -21,7 +21,7 @@
       "name": "SIMS",
       "impactStatement": "Built for a college. Used by the entire college.",
       "description": "A Student Information Management System built during my internship under the college HOD. Manages academic records, internships, placements, and achievements across three user roles. I owned the frontend end-to-end — 500+ students use it daily.",
-      "imageSrc": "../assets/SIMS.png",
+      "imageSrc": "../assets/sims.png",
       "githubLink": null,
       "liveLink": "https://sims.csidmce.com",
       "technologies": [
@@ -37,8 +37,8 @@
       "name": "Recipe App",
       "impactStatement": "Your fridge has ingredients. This app has ideas.",
       "description": "An AI-powered recipe platform built around how people actually cook. Drop in what's in your fridge, get matched recipes instantly. Chef AI handles custom recipes, nutrition tables, and builds a taste profile from your saved history.",
-      "imageSrc": "../assets/RecipeApp.png",
-      "githubLink": null,
+      "imageSrc": "../assets/RecipeAi.png",
+      "githubLink": "https://github.com/Swarspage/Recipe-App.git",
       "liveLink": null,
       "technologies": [
         "React",

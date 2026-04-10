@@ -6,6 +6,7 @@ import aboutData from "../Components/AboutData.json";
 
 const About = () => {
   const sectionRef = useRef(null);
+  const innerRef = useRef(null);
   const headingRef = useRef(null);
   const imageContainerRef = useRef(null);
   const textBlocksRef = useRef([]);
@@ -29,11 +30,13 @@ const About = () => {
     gsap.set(blocks.slice(1), { y: 50, opacity: 0, filter: "blur(4px)" });
     gsap.set(blocks[0], { y: 0, opacity: 1, filter: "blur(0px)" });
 
+    const isDesktop = window.innerWidth >= 768;
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${blocks.length * 100}%`,
+        end: `+=${(blocks.length + 1) * 100}%`,
         pin: true,
         scrub: 1,
         anticipatePin: 1
@@ -64,6 +67,17 @@ const About = () => {
       }
     });
 
+    // EXIT: About peels away (scales back, fades) — reveals Projects from behind
+    if (innerRef.current) {
+      tl.to(innerRef.current, {
+        scale: 0.88,
+        opacity: 0,
+        filter: "blur(8px)",
+        duration: 1.5,
+        ease: "power2.in"
+      }, "+=0.3");
+    }
+
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
@@ -93,7 +107,7 @@ const About = () => {
       id="about" 
       className="relative h-screen w-full overflow-hidden bg-transparent"
     >
-      <div className="w-full h-full max-w-7xl mx-auto relative md:flex md:flex-row md:items-center md:px-12 lg:px-24 gap-12 lg:gap-20">
+      <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto relative md:flex md:flex-row md:items-center md:px-12 lg:px-24 gap-12 lg:gap-20">
         
         {/* --- Left Column Wrapper (Desktop: Bundles Title + Bios) --- */}
         <div className="md:flex md:flex-col md:justify-center md:flex-1 relative h-full">

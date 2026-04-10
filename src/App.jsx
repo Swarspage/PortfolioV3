@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Lenis from "lenis";
 import Particles from "./Components/Particles";
+import Loader from "./Components/Loader";
 import Me from "./Sections/Me";
 import About from "./Sections/About";
 import Education from "./Sections/Education";
@@ -14,6 +15,14 @@ import Navbar from "./Sections/Navbar";
 import { ScrollTrigger, syncLenisWithScrollTrigger } from "./lib/gsapScroll";
 
 function App() {
+  const [splineLoaded, setSplineLoaded] = useState(false);
+  const [loaderComplete, setLoaderComplete] = useState(false);
+
+  useEffect(() => {
+    if (!loaderComplete) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
+  }, [loaderComplete]);
+
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -72,9 +81,14 @@ function App() {
         />
       </div>
 
+      <Loader isAppLoaded={splineLoaded} onComplete={() => setLoaderComplete(true)} />
+
       <div className="relative z-10 w-full overflow-hidden text-brand-text min-h-screen bg-transparent pointer-events-none">
         <Navbar />
-        <Me />
+        <Me 
+          onSplineLoad={() => setSplineLoaded(true)} 
+          isAppReady={loaderComplete} 
+        />
         <About />
         <Projects />
         <Skills />

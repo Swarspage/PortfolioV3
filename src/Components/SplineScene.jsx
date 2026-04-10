@@ -1,21 +1,28 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useState, useEffect } from 'react'
 
 const Spline = lazy(() => import('@splinetool/react-spline'))
 
-export function SplineScene({ scene, className }) {
+export function SplineScene({ scene, className, onSplineLoad, isAppReady }) {
+  const [splineApp, setSplineApp] = useState(null);
+
+  const handleLoad = (app) => {
+    app.stop(); // Freeze instantly upon load to wait for Loader.jsx cinematic!
+    setSplineApp(app);
+    if (onSplineLoad) onSplineLoad();
+  };
+
+  useEffect(() => {
+    if (isAppReady && splineApp) {
+      splineApp.play(); // Execute robust intro zoom animation once loader clears!
+    }
+  }, [isAppReady, splineApp]);
+
   return (
-    <Suspense
-      fallback={
-        <div className="w-full h-full flex items-center justify-center">
-          <span className="text-brand-muted text-sm tracking-[0.2em] uppercase animate-pulse">
-            Loading 3D...
-          </span>
-        </div>
-      }
-    >
+    <Suspense fallback={null}>
       <Spline
         scene={scene}
         className={className}
+        onLoad={handleLoad}
       />
     </Suspense>
   )

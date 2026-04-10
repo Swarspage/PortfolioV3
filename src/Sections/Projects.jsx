@@ -1,20 +1,32 @@
 import { useRef, useEffect } from "react";
 import Skilltube from "../assets/Skilltube.png";
 import Vayu from "../assets/Vayu.png";
+import Singularity from "../assets/Singularity.png";
+import sims from "../assets/sims.png";
+import RecipeAi from "../assets/RecipeAi.png";
 import projectsData from "../Components/ProjectsData.json";
 import { gsap } from "../lib/gsapScroll";
 
 const imageMap = {
-  SkillTube: Skilltube,
-  Vayu,
+  "Singularity": Singularity,
+  "SIMS": sims,
+  "Recipe App": RecipeAi,
+  "SkillTube": Skilltube,
+  "Vayu": Vayu,
 };
 
 const Projects = () => {
   const sectionRef = useRef(null);
+  const innerRef = useRef(null);
   const panelsRef = useRef([]);
+  const dotsRef = useRef([]);
 
   const setPanelRef = (index) => (el) => {
     if (el) panelsRef.current[index] = el;
+  };
+
+  const setDotRef = (index) => (el) => {
+    if (el) dotsRef.current[index] = el;
   };
 
   useEffect(() => {
@@ -25,14 +37,18 @@ const Projects = () => {
 
     // Same pattern as About.jsx: first card visible, rest blurred below
     gsap.set(cards, { clearProps: "all" });
-    gsap.set(cards.slice(1), { y: 60, opacity: 0, filter: "blur(6px)" });
-    gsap.set(cards[0], { y: 0, opacity: 1, filter: "blur(0px)" });
+    gsap.set(cards.slice(1), { y: 60, autoAlpha: 0, filter: "blur(6px)" });
+    gsap.set(cards[0], { y: 0, autoAlpha: 1, filter: "blur(0px)" });
+
+    const dots = dotsRef.current.filter(Boolean);
+    gsap.set(dots, { width: "0.5rem", background: "rgba(255,255,255,0.15)" });
+    if(dots[0]) gsap.set(dots[0], { width: "2rem", background: "var(--color-brand-accent)" });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${cards.length * 100}%`,
+        end: `+=${(cards.length + 1) * 100}%`,
         pin: true,
         scrub: 1,
         anticipatePin: 1,
@@ -44,11 +60,19 @@ const Projects = () => {
       if (index > 0) {
         tl.to(card, {
           y: 0,
-          opacity: 1,
+          autoAlpha: 1,
           filter: "blur(0px)",
           duration: 1,
           ease: "power2.out",
         });
+        if(dots[index]) {
+          tl.to(dots[index], {
+            width: "2rem",
+            background: "var(--color-brand-accent)",
+            duration: 1,
+            ease: "power2.out",
+          }, "<");
+        }
       }
       // Exit: float upward, blur out
       if (index < cards.length - 1) {
@@ -56,15 +80,34 @@ const Projects = () => {
           card,
           {
             y: -60,
-            opacity: 0,
+            autoAlpha: 0,
             filter: "blur(6px)",
             duration: 1,
             ease: "power2.in",
           },
           "+=0.5"
         );
+        if(dots[index]) {
+          tl.to(dots[index], {
+            width: "0.5rem",
+            background: "rgba(255,255,255,0.15)",
+            duration: 1,
+            ease: "power2.in",
+          }, "<");
+        }
       }
     });
+
+    // EXIT: Projects dissolves out to reveal Skills
+    if (innerRef.current) {
+      tl.to(innerRef.current, {
+        opacity: 0,
+        scale: 0.92,
+        filter: "blur(12px)",
+        duration: 1.5,
+        ease: "power2.in"
+      }, "+=0.3");
+    }
 
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
@@ -87,7 +130,7 @@ const Projects = () => {
         WORK
       </span>
 
-      <div className="w-full h-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-16 lg:gap-24 relative pt-20 md:pt-0 pb-6 md:pb-0">
+      <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-16 lg:gap-24 relative pt-20 md:pt-0 pb-6 md:pb-0">
 
         {/* ── LEFT: Animated Project Cards ── */}
         <div className="relative w-full md:w-[52%] h-[55vh] sm:h-[60vh] md:h-[82vh] shrink-0">
@@ -151,20 +194,39 @@ const Projects = () => {
                   {project.description}
                 </p>
 
-                {/* CTA link */}
-                <a
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300"
-                  style={{ color: "var(--color-brand-accent)" }}
-                >
-                  View on GitHub
-                  <span
-                    className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
-                    style={{ background: "var(--color-brand-accent)" }}
-                  />
-                </a>
+                {/* CTA links */}
+                <div className="flex flex-wrap items-center gap-6 mt-auto pt-2 relative z-50">
+                  {project.githubLink && (
+                    <a
+                      href={project.githubLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
+                      style={{ color: "var(--color-brand-accent)", pointerEvents: "auto", position: "relative", zIndex: 50 }}
+                    >
+                      View Code
+                      <span
+                        className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
+                        style={{ background: "var(--color-brand-accent)" }}
+                      />
+                    </a>
+                  )}
+                  {project.liveLink && (
+                    <a
+                      href={project.liveLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
+                      style={{ color: "rgb(209, 213, 219)", pointerEvents: "auto", position: "relative", zIndex: 50 }} // gray-300
+                    >
+                      Live Demo
+                      <span
+                        className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
+                        style={{ background: "rgb(209, 213, 219)" }}
+                      />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -212,6 +274,7 @@ const Projects = () => {
             {projectsData.projectsData.map((_, i) => (
               <span
                 key={i}
+                ref={setDotRef(i)}
                 className="block rounded-full"
                 style={{
                   width: i === 0 ? "2rem" : "0.5rem",
