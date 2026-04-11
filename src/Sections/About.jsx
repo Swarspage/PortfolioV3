@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import image from "../assets/image.png";
+import image from "../assets/image.webp";
 import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 import aboutData from "../Components/AboutData.json";
@@ -36,7 +36,7 @@ const About = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${(blocks.length + 1) * 100}%`,
+        end: `+=${(blocks.length + 1) * 50}%`,
         pin: true,
         scrub: 1,
         anticipatePin: 1

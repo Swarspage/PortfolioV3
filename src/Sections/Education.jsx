@@ -56,7 +56,7 @@ const Education = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${cards.length * 150}%`, // lots of scroll depth for the stacking
+        end: `+=${cards.length * 75}%`, // lots of scroll depth for the stacking
         pin: true,
         scrub: 1,
         anticipatePin: 1

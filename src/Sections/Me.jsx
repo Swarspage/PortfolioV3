@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { SplineScene } from "../Components/SplineScene";
 import { Spotlight } from "../Components/Spotlight";
 import { gsap } from "../lib/gsapScroll";
@@ -8,6 +8,16 @@ const Me = ({ onSplineLoad, isAppReady }) => {
   const headingRef = useRef(null);
   const subtitleRef = useRef(null);
   const ctaRef = useRef(null);
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!isAppReady) return; // Halt entrance timeline until screen is ready!
@@ -40,6 +50,7 @@ const Me = ({ onSplineLoad, isAppReady }) => {
   return (
     <section
       id="me"
+      ref={sectionRef}
       className="relative h-screen w-full overflow-hidden bg-transparent"
     >
       {/* Spotlight */}
@@ -55,6 +66,7 @@ const Me = ({ onSplineLoad, isAppReady }) => {
           className="w-full h-full"
           onSplineLoad={onSplineLoad}
           isAppReady={isAppReady}
+          isVisible={isVisible}
         />
       </div>
 

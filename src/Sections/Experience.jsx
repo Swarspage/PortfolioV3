@@ -55,7 +55,7 @@ const Experience = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=650%",   // Extra massive breathing room for deeper scrub
+        end: "+=300%",   // Extra massive breathing room for deeper scrub
         pin: true,
         scrub: 1,
         anticipatePin: 1,

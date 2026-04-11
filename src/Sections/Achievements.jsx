@@ -28,7 +28,7 @@ const Achievements = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=320%",
+        end: "+=160%",
         pin: true,
         scrub: 1,
         anticipatePin: 1,

@@ -2,7 +2,7 @@ import { Suspense, lazy, useState, useEffect } from 'react'
 
 const Spline = lazy(() => import('@splinetool/react-spline'))
 
-export function SplineScene({ scene, className, onSplineLoad, isAppReady }) {
+export function SplineScene({ scene, className, onSplineLoad, isAppReady, isVisible = true }) {
   const [splineApp, setSplineApp] = useState(null);
 
   const handleLoad = (app) => {
@@ -13,9 +13,13 @@ export function SplineScene({ scene, className, onSplineLoad, isAppReady }) {
 
   useEffect(() => {
     if (isAppReady && splineApp) {
-      splineApp.play(); // Execute robust intro zoom animation once loader clears!
+      if (isVisible) {
+        splineApp.play(); // Execute robust intro zoom animation once loader clears!
+      } else {
+        splineApp.stop(); // Pause computation to resolve lag when off-screen
+      }
     }
-  }, [isAppReady, splineApp]);
+  }, [isAppReady, splineApp, isVisible]);
 
   return (
     <Suspense fallback={null}>

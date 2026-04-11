@@ -1,9 +1,9 @@
 import { useRef, useEffect } from "react";
-import Skilltube from "../assets/Skilltube.png";
-import Vayu from "../assets/Vayu.png";
-import Singularity from "../assets/Singularity.png";
-import sims from "../assets/sims.png";
-import RecipeAi from "../assets/RecipeAi.png";
+import Skilltube from "../assets/Skilltube.webp";
+import Vayu from "../assets/Vayu.webp";
+import Singularity from "../assets/Singularity.webp";
+import sims from "../assets/sims.webp";
+import RecipeAi from "../assets/RecipeAi.webp";
 import projectsData from "../Components/ProjectsData.json";
 import { gsap } from "../lib/gsapScroll";
 
@@ -48,7 +48,7 @@ const Projects = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${(cards.length + 1) * 100}%`,
+        end: `+=${(cards.length + 1) * 50}%`,
         pin: true,
         scrub: 1,
         anticipatePin: 1,

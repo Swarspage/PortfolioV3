@@ -2,24 +2,24 @@ import { useCallback, useEffect, useMemo, useRef, useState, forwardRef } from "r
 import { gsap } from "../lib/gsapScroll";
 import SplitText from "../Components/SplitText";
 
-import C from "../assets/C.png";
-import Cpp from "../assets/cpp.png";
-import Java from "../assets/java.png";
-import Python from "../assets/Python.png";
-import JavaScript from "../assets/js.png";
-import HTML from "../assets/html.png";
-import CSS from "../assets/css.png";
-import ReactLogo from "../assets/react.png";
-import NodeLogo from "../assets/node-js.png";
-import Express from "../assets/express.png";
-import MongoDB from "../assets/MongoDB.png";
-import MySQL from "../assets/MySQL.png";
-import Git from "../assets/Git.png";
-import GitHub from "../assets/github.png";
-import VSCode from "../assets/VS.png";
-import Canva from "../assets/canva.png";
-import Postman from "../assets/postman.png";
-import ProblemSolving from "../assets/problemsolving.png";
+import C from "../assets/C.webp";
+import Cpp from "../assets/cpp.webp";
+import Java from "../assets/java.webp";
+import Python from "../assets/Python.webp";
+import JavaScript from "../assets/js.webp";
+import HTML from "../assets/html.webp";
+import CSS from "../assets/css.webp";
+import ReactLogo from "../assets/react.webp";
+import NodeLogo from "../assets/node-js.webp";
+import Express from "../assets/express.webp";
+import MongoDB from "../assets/MongoDB.webp";
+import MySQL from "../assets/MySQL.webp";
+import Git from "../assets/Git.webp";
+import GitHub from "../assets/github.webp";
+import VSCode from "../assets/VS.webp";
+import Canva from "../assets/canva.webp";
+import Postman from "../assets/postman.webp";
+import ProblemSolving from "../assets/problemsolving.webp";
 
 // ─── Card dimensions ──────────────────────────────────────────────────────────
 const DESKTOP_CARD_W = 104;
@@ -185,6 +185,15 @@ export default function Skills() {
   const dashOffsetRef = useRef(0);
   const sizeRef = useRef({ W: 0, H: 0 });
   const physicsActiveRef = useRef(false);
+  const isSectionVisibleRef = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      isSectionVisibleRef.current = entry.isIntersecting;
+    });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Detect mobile after mount (avoids SSR mismatch)
   const [isMobile, setIsMobile] = useState(false);
@@ -236,7 +245,7 @@ export default function Skills() {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=200%",
+        end: "+=100%",
         pin: true,
         scrub: 1,
         anticipatePin: 1,
@@ -331,6 +340,7 @@ export default function Skills() {
 
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop);
+      if (!isSectionVisibleRef.current) return;
       frame++;
 
       const nodes = physicsRef.current;

@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
-import discord from "../assets/discord.png";
-import linkedin from "../assets/linkedin-logo.png";
-import github from "../assets/github.png";
-import x from "../assets/X.png";
-import emailIcon from "../assets/email.png";
+import discord from "../assets/discord.webp";
+import linkedin from "../assets/linkedin-logo.webp";
+import github from "../assets/github.webp";
+import x from "../assets/X.webp";
+import emailIcon from "../assets/email.webp";
 import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
@@ -100,7 +100,7 @@ const Contact = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=300%",
+        end: "+=150%",
         pin: true,
         scrub: 1,
         anticipatePin: 1,

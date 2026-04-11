@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "../lib/gsapScroll";
-import pfp from "../assets/image.png";
-import bannerImg from "../assets/utubebanner.png";
+import pfp from "../assets/image.webp";
+import bannerImg from "../assets/utubebanner.webp";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 const recentVideos = [
@@ -59,7 +59,7 @@ const Youtube = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=260%",
+        end: "+=150%",
         pin: true,
         scrub: 1,
         anticipatePin: 1,
