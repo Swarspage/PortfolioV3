@@ -2,6 +2,10 @@ import { useRef, useEffect } from "react";
 import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
+// Skip filter:blur on mobile — prevents expensive GPU layer compositing on low-power devices
+const IS_MOBILE = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const educationData = [
   {
     institution: "Datta Meghe College of Eng.",
@@ -48,18 +52,19 @@ const Education = () => {
     gsap.set(cards, { clearProps: "all" });
 
     // Initial states: Card 0 up and ready, rest tucked below
-    gsap.set(cards[0], { y: 0, opacity: 1, filter: "blur(0px)", scale: 1 });
-    gsap.set(cards.slice(1), { y: "60vh", opacity: 0, filter: "blur(8px)", scale: 0.8 });
+    gsap.set(cards[0], { y: 0, opacity: 1, scale: 1 });
+    gsap.set(cards.slice(1), { y: "60vh", opacity: 0, ...(IS_MOBILE ? {} : { filter: "blur(8px)" }), scale: 0.8 });
     gsap.set(texts, { opacity: 0, y: 30 }); // hide left text
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${cards.length * 75}%`, // lots of scroll depth for the stacking
+        end: `+=${cards.length * 75}%`,
         pin: true,
         scrub: 1,
-        anticipatePin: 1
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       }
     });
 
@@ -85,7 +90,7 @@ const Education = () => {
           y: -depth * 40,              // drift upwards slightly
           scale: 1 - depth * 0.055,    // shrink down
           opacity: 1 - depth * 0.45,   // aggressively darken
-          filter: `blur(${depth * 2.5}px)`, // blur it
+          filter: IS_MOBILE ? "none" : `blur(${depth * 2.5}px)`, // blur it
           duration: 1,
           ease: "power2.inOut"
         }, 0);
@@ -96,14 +101,14 @@ const Education = () => {
         y: 0,
         opacity: 1,
         scale: 1,
-        filter: "blur(0px)",
+        ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
         duration: 1.2,
         ease: "power3.out"
       }, 0); // sync with pushback
 
       tl.add(stepTl, `+=${0.1}`); // tiny hold between card swaps
     });
-    
+
     // Hold at end
     tl.to({}, { duration: 0.5 });
 
@@ -117,10 +122,9 @@ const Education = () => {
     <section
       ref={sectionRef}
       id="education"
-      className="relative flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 text-brand-text overflow-hidden h-screen w-full"
-      style={{ minHeight: "600px" }}
+      className="relative flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 text-brand-text overflow-hidden h-dvh min-h-[650px] w-full"
     >
-      <div ref={innerRef} className="z-10 w-full max-w-6xl flex flex-col lg:flex-row gap-8 lg:gap-16 items-center justify-between pt-16 md:pt-0">
+      <div ref={innerRef} className="z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-20 items-center justify-between pt-24 md:pt-0 will-change-[opacity,transform,filter]">
 
         {/* Left column: Heading and Copy */}
         <div className="w-full lg:w-5/12 flex flex-col items-start gap-4 md:gap-8">
@@ -150,13 +154,13 @@ const Education = () => {
         </div>
 
         {/* Right column: Animated Progression Cards */}
-        <div className="w-full lg:w-[45%] relative h-[40vh] sm:h-[45vh] lg:h-[38vh] pointer-events-auto mt-4 lg:mt-0 perspective-1000 shrink-0">
+        <div className="w-full lg:w-[45%] relative min-h-[300px] h-[45vh] sm:h-[40vh] lg:h-[38vh] pointer-events-auto mt-8 lg:mt-0 perspective-1000 shrink-0">
           {educationData.map((item, index) => {
             return (
               <div
                 key={index}
                 ref={setCardRef(index)}
-                className="absolute inset-0 flex flex-col justify-center p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-brand-surface/80 backdrop-blur-xl border border-brand-border/60 shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-colors duration-500 hover:border-brand-accent/50 hover:bg-brand-surface-hover"
+                className="absolute inset-0 flex flex-col justify-center p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-brand-surface/80 backdrop-blur-sm md:backdrop-blur-xl border border-brand-border/60 shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-colors duration-500 hover:border-brand-accent/50 hover:bg-brand-surface-hover"
                 style={{
                   zIndex: educationData.length - index,
                   transformOrigin: "top center",
@@ -182,7 +186,7 @@ const Education = () => {
                   <p className="text-lg md:text-xl text-white/95 font-medium font-body tracking-tight">
                     {item.degree}
                   </p>
-                  <p className="text-brand-muted text-base font-body tracking-wide opacity-90 line-clamp-2 md:line-clamp-none">
+                  <p className="text-brand-muted text-sm md:text-base font-body tracking-wide opacity-90 line-clamp-3 md:line-clamp-none">
                     {item.details}
                   </p>
                 </div>

@@ -3,6 +3,10 @@ import { gsap } from "../lib/gsapScroll";
 import pfp from "../assets/image.webp";
 import bannerImg from "../assets/utubebanner.webp";
 
+// Skip filter:blur on mobile — prevents expensive GPU layer compositing on low-power devices
+const IS_MOBILE = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 // ─── Data ───────────────────────────────────────────────────────────────────
 const recentVideos = [
   {
@@ -50,7 +54,7 @@ const Youtube = () => {
     const videos = videoListRef.current.filter(Boolean);
 
     // Initial state
-    gsap.set(inner, { opacity: 0, scale: 0.92, filter: "blur(10px)" });
+    gsap.set(inner, { opacity: 0, scale: 0.92, ...(IS_MOBILE ? {} : { filter: "blur(10px)" }) });
     gsap.set(left, { opacity: 0, x: -60 });
     gsap.set(right, { opacity: 0, x: 60 });
     gsap.set(videos, { opacity: 0, y: 20 });
@@ -63,11 +67,12 @@ const Youtube = () => {
         pin: true,
         scrub: 1,
         anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
     // ENTRANCE
-    masterTl.to(inner, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out" });
+    masterTl.to(inner, { opacity: 1, scale: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }), duration: 0.8, ease: "power3.out" });
     masterTl.to(left, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.5");
     masterTl.to(right, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.55");
     masterTl.to(videos, { opacity: 1, y: 0, stagger: 0.1, duration: 0.5, ease: "power2.out" }, "-=0.2");
@@ -76,7 +81,7 @@ const Youtube = () => {
     masterTl.to({}, { duration: 1.2 });
 
     // EXIT
-    masterTl.to(inner, { opacity: 0, scale: 0.88, filter: "blur(10px)", duration: 0.8, ease: "power2.in" });
+    masterTl.to(inner, { opacity: 0, scale: 0.88, ...(IS_MOBILE ? {} : { filter: "blur(10px)" }), duration: 0.8, ease: "power2.in" });
 
     return () => {
       if (masterTl.scrollTrigger) masterTl.scrollTrigger.kill();
@@ -88,7 +93,7 @@ const Youtube = () => {
     <section
       ref={sectionRef}
       id="youtube"
-      className="relative h-screen w-full overflow-hidden text-brand-text"
+      className="relative h-dvh w-full overflow-hidden text-brand-text"
     >
       {/* Subtle red glow */}
       <div className="absolute right-[-5%] top-[20%] w-[40vw] h-[40vw] bg-red-700/8 rounded-full blur-[140px] pointer-events-none" />
@@ -100,7 +105,7 @@ const Youtube = () => {
         <p className="text-brand-muted tracking-[0.3em] uppercase text-[10px] lg:text-xs font-body mb-3 lg:mb-6">Building in Public</p>
 
         {/* ── Two-column layout ── */}
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 w-full max-w-7xl mx-auto h-auto lg:h-[calc(100vh-12rem)] lg:max-h-[560px]">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 w-full max-w-7xl mx-auto h-auto lg:h-[calc(100dvh-12rem)] lg:max-h-[600px] mt-8 lg:mt-0">
 
           {/* ── LEFT: Featured Video ── */}
           <div ref={leftRef} className="flex-1 flex flex-col gap-2 lg:gap-3 min-w-0">
@@ -126,11 +131,11 @@ const Youtube = () => {
             </div>
 
             {/* Featured video embed */}
-            <div className="relative w-full aspect-video lg:flex-1 lg:aspect-auto rounded-xl lg:rounded-2xl overflow-hidden bg-black ring-1 ring-brand-border shadow-2xl pointer-events-auto shrink-0">
+            <div className="relative w-full aspect-video lg:h-full lg:aspect-auto rounded-xl lg:rounded-[2rem] overflow-hidden bg-black ring-1 ring-brand-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto shrink-0 will-change-transform">
               <iframe
                 src={`https://www.youtube.com/embed/${featuredVideo.id}?rel=0&modestbranding=1`}
                 title="Featured Video"
-                className="absolute inset-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full object-cover"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
@@ -150,7 +155,7 @@ const Youtube = () => {
           </div>
 
           {/* ── RIGHT: Recent Uploads ── */}
-          <div ref={rightRef} className="w-full lg:w-72 flex flex-col gap-2 lg:gap-3 min-w-0 shrink-0">
+          <div ref={rightRef} className="w-full lg:w-80 flex flex-col gap-3 lg:gap-4 min-w-0 shrink-0 will-change-[opacity,transform]">
             <p className="text-brand-muted text-[10px] lg:text-xs tracking-widest uppercase font-body">Recent Uploads</p>
 
             <div className="flex flex-col gap-2 lg:gap-3 flex-1 pointer-events-auto">

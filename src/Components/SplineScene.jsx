@@ -2,11 +2,22 @@ import { Suspense, lazy, useState, useEffect } from 'react'
 
 const Spline = lazy(() => import('@splinetool/react-spline'))
 
+// Reduce canvas resolution on mobile to prevent GPU memory crashes on lower-end devices
+const IS_MOBILE_TOUCH = typeof window !== 'undefined' &&
+  window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 export function SplineScene({ scene, className, onSplineLoad, isAppReady, isVisible = true }) {
   const [splineApp, setSplineApp] = useState(null);
 
   const handleLoad = (app) => {
     app.stop(); // Freeze instantly upon load to wait for Loader.jsx cinematic!
+
+    // On mobile: mark canvas so it renders at native resolution (no DPR upscaling)
+    // This reduces GPU memory pressure on lower-end devices without breaking the scene
+    if (IS_MOBILE_TOUCH && app.canvas) {
+      app.canvas.style.imageRendering = 'auto';
+    }
+
     setSplineApp(app);
     if (onSplineLoad) onSplineLoad();
   };

@@ -18,13 +18,21 @@ const GridMotion = ({
     const combinedItems = items.length > 0 ? items.slice(0, totalItems) : defaultItems;
 
     useEffect(() => {
-        gsap.ticker.lagSmoothing(0);
+        // Visibility gate — skip all work when off-screen
+        const isVisible = { current: false };
+        const observer = new IntersectionObserver(([entry]) => {
+            isVisible.current = entry.isIntersecting;
+        });
+        if (gridRef.current) observer.observe(gridRef.current);
 
         const handleMouseMove = e => {
             mouseXRef.current = e.clientX;
         };
 
         const updateMotion = () => {
+            // Early return when off-screen: near-zero CPU cost
+            if (!isVisible.current) return;
+
             autoOffsetRef.current += autoScrollSpeed;
 
             const maxMoveAmount = 300;
@@ -54,6 +62,7 @@ const GridMotion = ({
         window.addEventListener('mousemove', handleMouseMove);
 
         return () => {
+            observer.disconnect();
             window.removeEventListener('mousemove', handleMouseMove);
             removeAnimationLoop();
         };

@@ -52,6 +52,7 @@ const Projects = () => {
         pin: true,
         scrub: 1,
         anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -119,7 +120,7 @@ const Projects = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative h-screen w-full overflow-hidden bg-transparent"
+      className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
       {/* Ghost watermark — decorative, transparent so particles show */}
       <span
@@ -134,12 +135,12 @@ const Projects = () => {
 
         {/* ── LEFT: Animated Project Cards ── */}
         <div className="relative w-full md:w-[52%] h-[55vh] sm:h-[60vh] md:h-[82vh] shrink-0">
-          {projectsData.projectsData.map((project, index) => (
+          {(projectsData?.projectsData ?? []).map((project, index) => (
             <div
-              key={project.name}
+              key={project.name || index}
               ref={setPanelRef(index)}
               className="absolute inset-0 flex flex-col mt-2 md:mt-0 pt-2 md:pt-20"
-              style={{ zIndex: projectsData.projectsData.length - index }}
+              style={{ zIndex: (projectsData?.projectsData?.length ?? 0) - index }}
             >
               {/* Screenshot / mockup image */}
               <div

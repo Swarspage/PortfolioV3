@@ -51,7 +51,7 @@ const Navbar = () => {
 
     // Scroll animation for compact mode
     let lastScrollY = window.scrollY;
-    
+
     const handleScroll = () => {
       if (!listRef.current) return;
       if (window.scrollY > 50) {
@@ -86,27 +86,26 @@ const Navbar = () => {
 
   return (
     <>
-      <nav 
+      <nav
         ref={navRef}
         className="fixed top-0 left-0 right-0 z-[60] w-full flex justify-center items-start pt-4 px-4 pointer-events-auto transition-transform duration-300"
       >
-        <div 
+        <div
           ref={listRef}
           className="flex items-center justify-between w-full max-w-5xl rounded-2xl border border-brand-border bg-brand-surface backdrop-blur-md py-3 px-6 md:px-8 transition-all duration-300 shadow-lg"
         >
           <div className="font-display text-xl font-bold tracking-wider text-white relative z-10 cursor-pointer" onClick={() => scrollToSection("me")}>
             SWAR
           </div>
-          
+
           {/* Desktop Menu */}
           <ul className="hidden md:flex items-center gap-6 no-scrollbar">
             {sections.map(({ id, label }) => (
-              <li 
-                key={id} 
-                onClick={() => scrollToSection(id)} 
-                className={`relative cursor-pointer text-sm transition-colors duration-300 hover:text-white whitespace-nowrap ${
-                  activeSection === id ? "text-white font-bold" : "text-brand-muted font-medium"
-                }`}
+              <li
+                key={id}
+                onClick={() => scrollToSection(id)}
+                className={`relative cursor-pointer text-sm transition-colors duration-300 hover:text-white whitespace-nowrap ${activeSection === id ? "text-white font-bold" : "text-brand-muted font-medium"
+                  }`}
               >
                 {label}
               </li>
@@ -114,7 +113,7 @@ const Navbar = () => {
           </ul>
 
           {/* Mobile Menu Toggle Button */}
-          <button 
+          <button
             className="md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-10 focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -125,26 +124,23 @@ const Navbar = () => {
       </nav>
 
       {/* Full-Screen Mobile Radial Menu */}
-      <div 
-        className={`fixed inset-0 z-[55] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none scale-105"
-        }`}
+      <div
+        className={`fixed inset-0 z-[55] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none scale-105"
+          }`}
       >
         <ul className="flex flex-col items-center gap-6 w-full px-6 text-center">
           {sections.map(({ id, label }, index) => (
-            <li 
-              key={id} 
-              onClick={() => scrollToSection(id)} 
-              className={`transform transition-all duration-500 cursor-pointer font-display text-4xl font-bold tracking-widest uppercase ${
-                isMenuOpen 
-                  ? "translate-y-0 opacity-100" 
+            <li
+              key={id}
+              onClick={() => scrollToSection(id)}
+              className={`transform transition-all duration-500 cursor-pointer font-display text-4xl font-bold tracking-widest uppercase ${isMenuOpen
+                  ? "translate-y-0 opacity-100"
                   : "translate-y-8 opacity-0"
-              }`}
+                }`}
               style={{ transitionDelay: isMenuOpen ? `${index * 50}ms` : "0ms" }}
             >
-              <span className={`transition-colors duration-300 ${
-                activeSection === id ? "text-white font-black" : "text-brand-muted hover:text-white font-semibold"
-              }`}>
+              <span className={`transition-colors duration-300 ${activeSection === id ? "text-white font-black" : "text-brand-muted hover:text-white font-semibold"
+                }`}>
                 {label}
               </span>
             </li>

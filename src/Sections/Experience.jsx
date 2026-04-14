@@ -2,6 +2,10 @@ import { useRef, useEffect } from "react";
 import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
+// Skip filter:blur on mobile — prevents expensive GPU layer compositing on low-power devices
+const IS_MOBILE = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const experienceData = [
   {
     role: "Intern / Team Member",
@@ -44,8 +48,8 @@ const Experience = () => {
     const cards = cardRefs.current.filter(Boolean);
     const nodes = nodeRefs.current.filter(Boolean);
 
-    // Initial hidden state
-    gsap.set(inner, { opacity: 0, scale: 0.92, filter: "blur(10px)" });
+    // Initial hidden state using autoAlpha to prevent Safari opacity composition bleeding
+    gsap.set(inner, { autoAlpha: 0, scale: 0.92, ...(IS_MOBILE ? {} : { filter: "blur(10px)" }) });
     gsap.set(scroll, { autoAlpha: 0 }); // hide timeline entirely
     gsap.set(lineRef.current, { scaleY: 0 });
     gsap.set(cards, { opacity: 0, x: (i) => i % 2 === 0 ? -80 : 80, scale: 0.95 });
@@ -55,21 +59,31 @@ const Experience = () => {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=300%",   // Extra massive breathing room for deeper scrub
+        end: "+=300%",
         pin: true,
         scrub: 1,
-        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          // On resize: snap everything back to initial pre-animation state
+          gsap.set(inner, { autoAlpha: 0, scale: 0.92, y: 0, clearProps: "filter" });
+          gsap.set(scroll, { autoAlpha: 0 });
+          gsap.set(lineRef.current, { scaleY: 0 });
+          gsap.set(headingRef.current, { y: 0, scale: 1 });
+        },
       },
     });
 
     // 1. Entrance: container reveals, SplitText handles its own characters
-    masterTl.to(inner, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out" });
+    masterTl.to(inner, { autoAlpha: 1, scale: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }), duration: 0.8, ease: "power3.out" });
     
     // 2. HOLD isolated heading perfectly center
     masterTl.to({}, { duration: 1.2 });
 
     // 3. ASCENT: Glide heading gracefully slightly upwards (leaves room for timeline)
-    masterTl.to(headingRef.current, { y: "-30vh", scale: 0.9, duration: 1.2, ease: "power3.inOut" });
+    masterTl.to(headingRef.current, {
+      y: () => -(window.innerHeight * 0.30),
+      scale: 0.9, duration: 1.2, ease: "power3.inOut"
+    });
 
     // 4. Reveal invisible timeline wrapper right below heading
     masterTl.to(scroll, { autoAlpha: 1, duration: 0.4 }, "-=0.4");
@@ -89,13 +103,13 @@ const Experience = () => {
     masterTl.to({}, { duration: 0.5 });
 
     // 8. DEEP SCRUB: Move inner up robustly so ALL cards come fully into view!
-    masterTl.to(inner, { y: "-70vh", duration: 2.5, ease: "power1.inOut" });
+    masterTl.to(inner, { y: () => -(window.innerHeight * 0.70), duration: 2.5, ease: "power1.inOut" });
 
     // 9. HOLD at end of content
     masterTl.to({}, { duration: 0.5 });
 
     // 10. EXIT
-    masterTl.to(inner, { opacity: 0, scale: 0.88, filter: "blur(10px)", duration: 0.8, ease: "power2.in" });
+    masterTl.to(inner, { autoAlpha: 0, scale: 0.88, ...(IS_MOBILE ? {} : { filter: "blur(10px)" }), duration: 0.8, ease: "power2.in" });
 
     return () => {
       if (masterTl.scrollTrigger) masterTl.scrollTrigger.kill();
@@ -107,7 +121,7 @@ const Experience = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className="relative h-screen w-full overflow-hidden text-brand-text"
+      className="relative h-dvh w-full overflow-hidden text-brand-text"
     >
       {/* Opacity / scale wrapper */}
       <div ref={innerRef} className="absolute inset-0 w-full h-full">
@@ -166,7 +180,7 @@ const Experience = () => {
 
                     {/* Card */}
                     <div ref={setCardRef(index)} className="w-full md:w-[45%] pl-10 md:pl-0 flex pointer-events-auto">
-                      <div className={`relative group p-6 md:p-8 rounded-2xl bg-brand-surface backdrop-blur-md transition-all duration-500 hover:bg-brand-surface-hover hover:shadow-[0_8px_30px_rgba(191,219,254,0.08)] w-full overflow-hidden`}>
+                      <div className={`relative group p-6 md:p-8 rounded-2xl bg-brand-surface backdrop-blur-sm md:backdrop-blur-md transition-all duration-500 hover:bg-brand-surface-hover hover:shadow-[0_8px_30px_rgba(191,219,254,0.08)] w-full overflow-hidden`}>
                         <p className="text-brand-accent font-medium text-xs tracking-widest uppercase mb-2 font-body">{item.duration}</p>
                         <h3 className="text-xl md:text-2xl font-display font-bold text-white mb-1.5">{item.role}</h3>
                         <p className="text-brand-muted text-sm md:text-base font-display opacity-80 mb-4">{item.org}</p>

@@ -20,7 +20,16 @@ const Loader = ({ isAppLoaded, onComplete }) => {
       });
     }, 120);
 
-    return () => clearInterval(interval);
+    // Hard fallback: if Spline never fires (ad-blocker, network error),
+    // force the loader to complete after 10 seconds so the user isn't stuck.
+    const fallbackTimeout = setTimeout(() => {
+      setProgress(100);
+    }, 10000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(fallbackTimeout);
+    };
   }, []);
 
   useEffect(() => {

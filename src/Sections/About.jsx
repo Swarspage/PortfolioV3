@@ -4,6 +4,10 @@ import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 import aboutData from "../Components/AboutData.json";
 
+// Skip filter:blur on mobile — prevents expensive GPU layer compositing on low-power devices
+const IS_MOBILE = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const About = () => {
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
@@ -27,8 +31,8 @@ const About = () => {
     gsap.set(blocks, { clearProps: "all" });
     
     // Set initial states: first block visible, others hidden below
-    gsap.set(blocks.slice(1), { y: 50, opacity: 0, filter: "blur(4px)" });
-    gsap.set(blocks[0], { y: 0, opacity: 1, filter: "blur(0px)" });
+    gsap.set(blocks.slice(1), { y: 50, opacity: 0, ...(IS_MOBILE ? {} : { filter: "blur(4px)" }) });
+    gsap.set(blocks[0], { y: 0, opacity: 1 });
 
     const isDesktop = window.innerWidth >= 768;
 
@@ -49,7 +53,7 @@ const About = () => {
         tl.to(block, {
           y: 0,
           opacity: 1,
-          filter: "blur(0px)",
+          ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
           duration: 1,
           ease: "power2.out"
         });
@@ -60,7 +64,7 @@ const About = () => {
         tl.to(block, {
           y: -50,
           opacity: 0,
-          filter: "blur(4px)",
+          ...(IS_MOBILE ? {} : { filter: "blur(4px)" }),
           duration: 1,
           ease: "power2.in"
         }, "+=0.5"); // hold it before pushing out
@@ -72,7 +76,7 @@ const About = () => {
       tl.to(innerRef.current, {
         scale: 0.88,
         opacity: 0,
-        filter: "blur(8px)",
+        ...(IS_MOBILE ? {} : { filter: "blur(8px)" }),
         duration: 1.5,
         ease: "power2.in"
       }, "+=0.3");
@@ -105,7 +109,7 @@ const About = () => {
     <section 
       ref={sectionRef} 
       id="about" 
-      className="relative h-screen w-full overflow-hidden bg-transparent"
+      className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
       <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto relative md:flex md:flex-row md:items-center md:px-12 lg:px-24 gap-12 lg:gap-20">
         
@@ -141,7 +145,7 @@ const About = () => {
                 <div 
                   key={index}
                   ref={setTextBlockRef(index)}
-                  className="absolute inset-0 flex flex-col justify-center font-body text-[clamp(1.1rem,1.5vw,1.3rem)] leading-relaxed text-brand-muted p-6 md:p-8 rounded-[2rem] bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                  className="absolute inset-0 flex flex-col justify-center font-body text-[clamp(1.1rem,1.5vw,1.3rem)] leading-relaxed text-brand-muted p-6 md:p-8 rounded-[2rem] bg-brand-surface/40 backdrop-blur md:backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
                   style={{ zIndex: aboutData.paragraphs.length - index }}
                 >
                   <p dangerouslySetInnerHTML={{ __html: para }} />

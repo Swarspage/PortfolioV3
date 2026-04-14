@@ -100,10 +100,18 @@ const Particles = ({
 }) => {
     const containerRef = useRef(null);
     const mouseRef = useRef({ x: 0, y: 0 });
+    const isVisibleRef = useRef(true); // IntersectionObserver gate
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
+
+        // Pause WebGL when completely off-screen (e.g. user scrolled past)
+        const visibilityObserver = new IntersectionObserver(
+            ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+            { threshold: 0 }
+        );
+        visibilityObserver.observe(container);
 
         const renderer = new Renderer({
             dpr: pixelRatio,
@@ -186,6 +194,8 @@ const Particles = ({
 
         const update = t => {
             animationFrameId = requestAnimationFrame(update);
+            // Skip all GPU work when scrolled off-screen
+            if (!isVisibleRef.current) return;
             const delta = t - lastTime;
             lastTime = t;
             elapsed += delta * speed;
@@ -211,8 +221,20 @@ const Particles = ({
 
         animationFrameId = requestAnimationFrame(update);
 
+        // Pause loop when user switches tabs — saves battery & GPU
+        const handleVisibility = () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrameId);
+            } else {
+                animationFrameId = requestAnimationFrame(update);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+
         return () => {
+            visibilityObserver.disconnect();
             window.removeEventListener('resize', resize);
+            document.removeEventListener('visibilitychange', handleVisibility);
             if (moveParticlesOnHover) {
                 document.removeEventListener('mousemove', handleMouseMove);
             }

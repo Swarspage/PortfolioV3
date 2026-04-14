@@ -81,3 +81,17 @@ body { overflow-y: auto; }
   scrollbar-width: none;
 }
 
+/* Dynamic viewport height — fixes iOS/Android address-bar layout-shift on pinned sections */
+.h-dvh {
+  height: 100vh; /* fallback for browsers without dvh support */
+  height: 100dvh;
+}
+
+/* Override Tailwind's min-h-screen to use dynamic viewport height where supported */
+@supports (height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
+  }
+}
+
+

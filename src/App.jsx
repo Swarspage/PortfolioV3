@@ -14,6 +14,12 @@ import Youtube from "./Sections/Youtube";
 import Navbar from "./Sections/Navbar";
 import { ScrollTrigger, syncLenisWithScrollTrigger } from "./lib/gsapScroll";
 
+// Accessibility: respect OS-level reduced motion preference
+const PREFERS_REDUCED_MOTION = typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const IS_MOBILE_TOUCH = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 function App() {
   const [splineLoaded, setSplineLoaded] = useState(false);
   const [loaderComplete, setLoaderComplete] = useState(false);
@@ -61,7 +67,7 @@ function App() {
       <div
         style={{
           width: "100%",
-          height: "100vh",
+          height: "100dvh",
           position: "fixed",
           top: 0,
           left: 0,
@@ -69,13 +75,14 @@ function App() {
           backgroundColor: "black",
         }}
       >
+        {/* Particle background — pauses on tab switch via visibilitychange */}
         <Particles
           particleColors={["#ffffff", "#ffffff"]}
-          particleCount={200}
+          particleCount={IS_MOBILE_TOUCH ? 100 : 200}
           particleSpread={10}
-          speed={0.1}
+          speed={0.04}
           particleBaseSize={100}
-          moveParticlesOnHover={true}
+          moveParticlesOnHover={!IS_MOBILE_TOUCH}
           alphaParticles={false}
           disableRotation={false}
         />
@@ -85,9 +92,9 @@ function App() {
 
       <div className="relative z-10 w-full overflow-hidden text-brand-text min-h-screen bg-transparent pointer-events-none">
         <Navbar />
-        <Me 
-          onSplineLoad={() => setSplineLoaded(true)} 
-          isAppReady={loaderComplete} 
+        <Me
+          onSplineLoad={() => setSplineLoaded(true)}
+          isAppReady={loaderComplete}
         />
         <About />
         <Projects />

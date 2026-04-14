@@ -24,8 +24,8 @@ import ProblemSolving from "../assets/problemsolving.webp";
 // ─── Card dimensions ──────────────────────────────────────────────────────────
 const DESKTOP_CARD_W = 104;
 const DESKTOP_CARD_H = 92;
-const MOBILE_CARD_W = 80; // Reduced from 88
-const MOBILE_CARD_H = 70; // Reduced from 78
+const MOBILE_CARD_W = 72; // Reduced from 80
+const MOBILE_CARD_H = 64; // Reduced from 70
 
 // ─── Physics constants ────────────────────────────────────────────────────────
 const SPRING_K = 0.038;
@@ -34,7 +34,7 @@ const COLLISION_FORCE = 0.55;
 const MIN_SEP_DESKTOP = 116;
 const MIN_SEP_MOBILE = 92; // Slightly reduced to match smaller card size
 const EDGE_PAD_DESKTOP = 68;
-const EDGE_PAD_MOBILE = 40; // Reduced to allow cards to utilize more width on small phones
+const EDGE_PAD_MOBILE = 24; // Reduced from 40 to allow more breathing room
 const BOUNDARY_FORCE = 0.45;
 const ATTRACT_RADIUS = 185;
 const ATTRACT_STRENGTH = 0.026;
@@ -85,7 +85,7 @@ function calculateGridLayout(W, usableH, topOffset, isMobile, cardsData, cardW, 
   const headerPositions = [];
 
   // Pushed down to clear the "SKILLS" title phase 3 position
-  let currentY = topOffset + (isMobile ? 180 : 180);
+  let currentY = topOffset + (isMobile ? 80 : 110);
 
   categories.forEach((cat) => {
     const items = cardsData
@@ -126,15 +126,15 @@ function calculateGridLayout(W, usableH, topOffset, isMobile, cardsData, cardW, 
   });
 
   let totalHeight = currentY - topOffset;
-  
+
   // Compression logic for smaller screens
   if (totalHeight > usableH) {
     const scaleFactor = Math.max(0.5, usableH / totalHeight);
     const scaledRowGap = rowGap * scaleFactor;
     const scaledSectionGap = sectionGap * scaleFactor;
-    
+
     // Recalculate with scaled gaps if content overflows
-    currentY = topOffset + (isMobile ? 170 : 160);
+    currentY = topOffset + (isMobile ? 70 : 100);
     categories.forEach((cat) => {
       const items = cardsData
         .map((s, idx) => ({ ...s, idx }))
@@ -173,9 +173,11 @@ function calculateGridLayout(W, usableH, topOffset, isMobile, cardsData, cardW, 
 }
 
 // ─── Physics helpers ──────────────────────────────────────────────────────────
-function applyCollisionForces(nodes, minSep) {
-  for (let i = 0; i < nodes.length; i++) {
-    for (let j = i + 1; j < nodes.length; j++) {
+function applyCollisionForces(nodes, minSep, isMobile) {
+  // On mobile, skip every other node pair to halve O(n²) collision cost
+  const step = isMobile ? 2 : 1;
+  for (let i = 0; i < nodes.length; i += step) {
+    for (let j = i + 1; j < nodes.length; j += step) {
       const dx = nodes[j].x - nodes[i].x;
       const dy = nodes[j].y - nodes[i].y;
       const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
@@ -305,11 +307,19 @@ export default function Skills() {
     return () => observer.disconnect();
   }, []);
 
-  // Detect mobile after mount (avoids SSR mismatch)
-  const [isMobile, setIsMobile] = useState(false);
+  // Detect mobile synchronously to prevent double-render and GSAP trigger offset bugs
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    }
+    return false;
+  });
+
   useEffect(() => {
     const m = window.matchMedia("(hover: none) and (pointer: coarse)");
-    setIsMobile(m.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    m.addEventListener("change", handler);
+    return () => m.removeEventListener("change", handler);
   }, []);
 
   const cardW = isMobile ? MOBILE_CARD_W : DESKTOP_CARD_W;
@@ -342,8 +352,8 @@ export default function Skills() {
     let hasTriggered = false;
 
     // Start inner hidden — will appear as pin begins
-    gsap.set(inner, { opacity: 0, scale: 0.92, filter: "blur(10px)" });
-    
+    gsap.set(inner, { opacity: 0, scale: 0.92, ...(isMobile ? {} : { filter: "blur(10px)" }) });
+
     // Preset cards with their explosion coordinates to avoid .fromTo calculation flashes
     cards.forEach((card, i) => {
       const angle = Math.random() * Math.PI * 2;
@@ -355,16 +365,17 @@ export default function Skills() {
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=250%", // Snappier overall duration
+        end: "+=250%",
         pin: true,
         scrub: 1,
         anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
     // ── Phase 1 (Entrance) ──
     masterTl.to(inner, {
-      opacity: 1, scale: 1, filter: "blur(0px)",
+      opacity: 1, scale: 1, ...(isMobile ? {} : { filter: "blur(0px)" }),
       duration: 1, ease: "power3.out",
     });
 
@@ -405,7 +416,7 @@ export default function Skills() {
     masterTl.to(headingRef.current, {
       y: isMobile ? "-38vh" : "-35vh", // Pushed higher on mobile
       scale: isMobile ? 0.55 : 0.65, // Slightly smaller on mobile to reduce visual weight
-      opacity: 0.95, 
+      opacity: 0.95,
       duration: 1.0,
       ease: "power2.inOut"
     }, "phase3");
@@ -428,14 +439,14 @@ export default function Skills() {
         const { W, H } = sizeRef.current;
         const topOffset = isMobile ? 100 : 140;
         const usableH = H - topOffset;
-        
+
         // Calculate the grid layout with headers
         const layout = calculateGridLayout(W, usableH, topOffset, isMobile, SKILLS, cardW, cardH);
         endNodes = layout.positions;
         setGridHeaders(layout.headerPositions);
         totalGridHeightRef.current = layout.totalHeight;
         usableHRef.current = usableH;
-        
+
         // Lock in current organic positions dynamically
         startNodes = physicsRef.current.map((n) => ({ x: n.x, y: n.y }));
       },
@@ -446,7 +457,7 @@ export default function Skills() {
         // Don't empty headers, just hide them via the timeline opacity to prevent null targets
         gsap.set(gridContainerRef.current, { y: 0 });
       },
-      onUpdate: function() {
+      onUpdate: function () {
         const p = this.progress();
         physicsRef.current.forEach((node, i) => {
           if (!startNodes[i] || !endNodes[i]) return;
@@ -457,7 +468,7 @@ export default function Skills() {
     }, "phase3");
 
     // Fade in Category Headers alongside the grid transition
-    masterTl.fromTo(".category-header", 
+    masterTl.fromTo(".category-header",
       { opacity: 0, y: 15 },
       { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" },
       "phase3+=0.5"
@@ -469,7 +480,7 @@ export default function Skills() {
       y: (i, target) => {
         const overflow = Math.max(0, totalGridHeightRef.current - usableHRef.current);
         if (overflow <= 0) return gsap.getProperty(target, "y");
-        
+
         // If it's the heading, we subtract the overflow from its current GSAP y transform
         if (target === headingRef.current) {
           return `-=${overflow}`;
@@ -477,7 +488,7 @@ export default function Skills() {
         // If it's the grid container, we move it to -overflow
         return -overflow;
       },
-      duration: 2, 
+      duration: 2,
       ease: "none"
     });
 
@@ -486,7 +497,7 @@ export default function Skills() {
 
     // ── EXIT Phase ──
     masterTl.to(inner, {
-      opacity: 0, scale: 0.88, filter: "blur(10px)",
+      opacity: 0, scale: 0.88, ...(isMobile ? {} : { filter: "blur(10px)" }),
       duration: 1, ease: "power2.in",
     });
 
@@ -537,6 +548,7 @@ export default function Skills() {
 
     const ctx = canvas ? canvas.getContext("2d") : null;
     let frame = 0;
+    let physicsFrame = 0; // separate counter for mobile frame-skipping
 
     const minSep = isMobile ? MIN_SEP_MOBILE : MIN_SEP_DESKTOP;
     const edgePad = isMobile ? EDGE_PAD_MOBILE : EDGE_PAD_DESKTOP;
@@ -546,6 +558,9 @@ export default function Skills() {
       rafRef.current = requestAnimationFrame(loop);
       if (!isSectionVisibleRef.current) return;
       frame++;
+      physicsFrame++;
+      // On mobile, only run heavy physics every 2nd frame to prevent thermal throttling
+      const shouldCalcPhysics = !isMobile || physicsFrame % 2 === 0;
 
       const nodes = physicsRef.current;
       const { W: cW, H: cH } = sizeRef.current;
@@ -554,7 +569,7 @@ export default function Skills() {
       if (ctx) ctx.clearRect(0, 0, cW, cH);
 
       // We only apply natural fluid dynamics and springing if grid transition is inactive
-      if (physicsActiveRef.current) {
+      if (physicsActiveRef.current && shouldCalcPhysics) {
         // Spring drift
         nodes.forEach((node) => {
           const t = frame * 0.007 + node.phase;
@@ -566,7 +581,7 @@ export default function Skills() {
           node.vy *= DAMPING;
         });
 
-        applyCollisionForces(nodes, minSep);
+        applyCollisionForces(nodes, minSep, isMobile);
 
         const currentTopOffset = isMobile ? 100 : 140;
 
@@ -640,10 +655,10 @@ export default function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative h-screen w-full overflow-hidden bg-transparent"
+      className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
       {/* Inner wrapper — exit transition animates this, not individual cards */}
-      <div ref={innerRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+      <div ref={innerRef} className="will-change-[opacity,transform,filter]" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
         {/* Canvas sits BEHIND cards; pointer-events disabled so events reach cards */}
         <canvas
           ref={canvasRef}
@@ -651,7 +666,7 @@ export default function Skills() {
         />
 
         {/* Skill cloud & Headers wrapped in a container for internal scrolling */}
-        <div ref={gridContainerRef} style={{ position: "absolute", inset: 0 }}>
+        <div ref={gridContainerRef} className="will-change-transform" style={{ position: "absolute", inset: 0 }}>
           {/* Skill cloud — z-index above canvas */}
           <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
             {SKILLS.map((s, i) => {
@@ -708,11 +723,12 @@ export default function Skills() {
         <div
           ref={headingRef}
           style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}
-          className="flex flex-col items-center justify-center select-none"
+          className="flex flex-col items-center justify-center select-none will-change-transform"
         >
           <SplitText
             text="SKILLS"
-            className="font-display text-[clamp(4rem,9vw,8rem)] font-bold text-white tracking-widest leading-none text-center drop-shadow-[0_0_40px_rgba(255,255,255,0.08)]"
+            /* Reduced mobile clamp starting point from 4rem to 3rem */
+            className="font-display text-[clamp(3rem,8vw,8rem)] font-bold text-white tracking-widest leading-none text-center drop-shadow-[0_0_40px_rgba(255,255,255,0.08)]"
             delay={0}
             duration={0.9}
             ease="power3.out"
@@ -721,7 +737,7 @@ export default function Skills() {
             to={{ opacity: 1, y: 0, scale: 1 }}
             threshold={0.4}
           />
-          <p className="text-brand-accent tracking-[0.3em] uppercase text-xs mt-5 font-body opacity-70">
+          <p className="text-brand-accent tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4 md:mt-5 font-body opacity-70">
             The tech ecosystem I thrive in
           </p>
         </div>

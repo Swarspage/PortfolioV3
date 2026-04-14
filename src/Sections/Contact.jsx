@@ -47,11 +47,16 @@ const Contact = () => {
   // Interactive Glow Effect
   const handleMouseMove = (e, ref) => {
     if (isMobile || !ref.current) return;
-    const { left, top } = ref.current.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-    ref.current.style.setProperty("--mouse-x", `${x}px`);
-    ref.current.style.setProperty("--mouse-y", `${y}px`);
+    if (ref.current.isTicking) return;
+    ref.current.isTicking = true;
+    requestAnimationFrame(() => {
+      if (ref.current) {
+        const { left, top } = ref.current.getBoundingClientRect();
+        ref.current.style.setProperty("--mouse-x", `${e.clientX - left}px`);
+        ref.current.style.setProperty("--mouse-y", `${e.clientY - top}px`);
+        ref.current.isTicking = false;
+      }
+    });
   };
 
   const formatISTTime = () =>
@@ -120,7 +125,7 @@ const Contact = () => {
     const scrubY = isMobile ? "-80vh" : "-15vh";
 
     // Reset styles for GSAP
-    gsap.set(inner, { opacity: 0, scale: 0.95, filter: "blur(4px)" });
+    gsap.set(inner, { opacity: 0, scale: 0.95, ...(isMobile ? {} : { filter: "blur(4px)" }) });
     gsap.set(formRef.current, { opacity: 0, x: -moveX, scale: 0.9 });
     gsap.set(infoRef.current, { opacity: 0, x: moveX, scale: 0.9 });
     
@@ -145,7 +150,7 @@ const Contact = () => {
     masterTl.to(inner, { 
       opacity: 1, 
       scale: 1, 
-      filter: "blur(0px)", 
+      ...(isMobile ? {} : { filter: "blur(0px)" }), 
       duration: 1, 
       ease: "expo.out" 
     });
@@ -230,7 +235,7 @@ const Contact = () => {
               <div 
                 ref={formCardRef}
                 onMouseMove={(e) => handleMouseMove(e, formCardRef)}
-                className="group relative p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-2xl border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] h-full overflow-hidden transition-all duration-500 hover:border-brand-accent/20"
+                className="group relative p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-sm md:backdrop-blur-2xl border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] h-full overflow-hidden transition-all duration-500 hover:border-brand-accent/20"
                 style={{
                   '--mouse-x': '50%',
                   '--mouse-y': '50%'
@@ -249,8 +254,8 @@ const Contact = () => {
                   Send a Message
                 </h3>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6 sm:gap-8">
-                  <div className="animate-stagger group/input relative">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5 sm:gap-8">
+                  <div className="animate-stagger group/input relative will-change-transform">
                     <input
                       id="name"
                       name="name"
@@ -258,18 +263,17 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder=" "
-                      className="w-full bg-black/20 border border-white/10 rounded-xl px-5 sm:px-6 py-3.5 sm:py-4 text-white font-body text-base sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer"
+                      className="w-full bg-black/20 border border-white/10 rounded-xl px-4 sm:px-6 py-4 sm:py-4 text-white font-body text-sm sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer"
                     />
                     <label
                       htmlFor="name"
-                      className="absolute left-5 sm:left-6 top-3.5 sm:top-4 text-brand-muted text-base sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3.5 sm:peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:left-4 peer-focus:text-brand-accent peer-focus:text-sm font-body
-                      ${formData.name ? '-top-3 left-4 text-sm text-brand-accent' : ''}"
+                      className={`absolute left-4 sm:left-6 top-4 sm:top-4 text-brand-muted text-sm sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-brand-accent peer-focus:text-xs font-body ${formData.name ? '-top-2.5 left-3 text-xs text-brand-accent' : ''}`}
                     >
                       Your Name
                     </label>
                   </div>
 
-                  <div className="animate-stagger group/input relative">
+                  <div className="animate-stagger group/input relative will-change-transform">
                     <input
                       id="email"
                       name="email"
@@ -277,17 +281,17 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder=" "
-                      className="w-full bg-black/20 border border-white/10 rounded-xl px-5 sm:px-6 py-3.5 sm:py-4 text-white font-body text-base sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer"
+                      className="w-full bg-black/20 border border-white/10 rounded-xl px-4 sm:px-6 py-4 sm:py-4 text-white font-body text-sm sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer"
                     />
                     <label
                       htmlFor="email"
-                      className="absolute left-5 sm:left-6 top-3.5 sm:top-4 text-brand-muted text-base sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3.5 sm:peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:left-4 peer-focus:text-brand-accent peer-focus:text-sm font-body"
+                      className={`absolute left-4 sm:left-6 top-4 sm:top-4 text-brand-muted text-sm sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-brand-accent peer-focus:text-xs font-body ${formData.email ? '-top-2.5 left-3 text-xs text-brand-accent' : ''}`}
                     >
                       Your Email
                     </label>
                   </div>
 
-                  <div className="animate-stagger group/input relative">
+                  <div className="animate-stagger group/input relative will-change-transform">
                     <textarea
                       id="message"
                       name="message"
@@ -295,11 +299,11 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder=" "
-                      className="w-full bg-black/20 border border-white/10 rounded-xl px-5 sm:px-6 py-3.5 sm:py-4 text-white font-body text-base sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer resize-none"
+                      className="w-full bg-black/20 border border-white/10 rounded-xl px-4 sm:px-6 py-4 sm:py-4 text-white font-body text-sm sm:text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/50 transition-all duration-300 peer resize-none"
                     />
                     <label
                       htmlFor="message"
-                      className="absolute left-5 sm:left-6 top-3.5 sm:top-4 text-brand-muted text-base sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-3.5 sm:peer-placeholder-shown:top-4 peer-focus:-top-3 peer-focus:left-4 peer-focus:text-brand-accent peer-focus:text-sm font-body"
+                      className={`absolute left-4 sm:left-6 top-4 sm:top-4 text-brand-muted text-sm sm:text-lg transition-all duration-300 pointer-events-none peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-brand-accent peer-focus:text-xs font-body ${formData.message ? '-top-2.5 left-3 text-xs text-brand-accent' : ''}`}
                     >
                       Your Message
                     </label>
@@ -325,7 +329,7 @@ const Contact = () => {
               <div 
                 ref={infoCardRef}
                 onMouseMove={(e) => handleMouseMove(e, infoCardRef)}
-                className="group relative p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-2xl border border-white/5 shadow-2xl flex flex-col overflow-hidden transition-all duration-500 hover:border-brand-accent/20"
+                className="group relative p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-sm md:backdrop-blur-2xl border border-white/5 shadow-2xl flex flex-col overflow-hidden transition-all duration-500 hover:border-brand-accent/20"
                 style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
               >
                 {!isMobile && (
@@ -369,7 +373,7 @@ const Contact = () => {
               </div>
 
               {/* Status HUD Widget */}
-              <div className="hud-animate p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-2xl border border-white/5 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-8 relative overflow-hidden group">
+              <div className="hud-animate p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-brand-surface/40 backdrop-blur-2xl border border-white/5 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-8 relative overflow-hidden group will-change-transform">
                 <div className="absolute inset-0 bg-brand-accent/[0.02] pointer-events-none" />
                 <div className="relative z-10 flex flex-col gap-1.5 text-center sm:text-left w-full sm:w-auto">
                     <div className="flex items-center justify-center sm:justify-start gap-2.5 mb-0.5">
@@ -380,11 +384,11 @@ const Contact = () => {
                         <span className="text-[9px] sm:text-xs font-mono text-brand-accent tracking-[.25em] sm:tracking-[.3em] uppercase">Status: Live</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xl sm:text-3xl font-mono font-bold text-white tabular-nums tracking-wider leading-none sm:leading-normal">
+                        <span className="text-lg sm:text-3xl font-mono font-bold text-white tabular-nums tracking-wider leading-none">
                             {formatISTTime()}
                         </span>
-                        <span className="text-[7px] sm:text-[10px] font-mono text-brand-muted uppercase tracking-[.15em] sm:tracking-[.2em] mt-1 sm:mt-1 opacity-70">
-                            Navi Mumbai // GPS: 19.03N, 73.02E
+                        <span className="text-[8px] sm:text-[10px] font-mono text-brand-muted uppercase tracking-[.1em] sm:tracking-[.2em] mt-2 opacity-70 break-words">
+                            Navi Mumbai // 19.03N, 73.02E
                         </span>
                     </div>
                 </div>
