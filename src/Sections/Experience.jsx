@@ -75,7 +75,7 @@ const Experience = () => {
 
     // 1. Entrance: container reveals, SplitText handles its own characters
     masterTl.to(inner, { autoAlpha: 1, scale: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }), duration: 0.8, ease: "power3.out" });
-    
+
     // 2. HOLD isolated heading perfectly center
     masterTl.to({}, { duration: 1.2 });
 
@@ -96,7 +96,7 @@ const Experience = () => {
       masterTl.to([nodes[i], card], {
         opacity: 1, scale: 1, x: 0,
         duration: 0.6, ease: "power3.out",
-      }, "-=0.65"); 
+      }, "-=0.65");
     });
 
     // 7. HOLD before scrub
@@ -127,8 +127,8 @@ const Experience = () => {
       <div ref={innerRef} className="absolute inset-0 w-full h-full">
 
         {/* Heading: Starts perfectly centered */}
-        <div 
-          ref={headingRef} 
+        <div
+          ref={headingRef}
           className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex flex-col items-center z-30 will-change-transform"
         >
           <div className="text-center">
@@ -142,14 +142,14 @@ const Experience = () => {
               threshold={0.5}
             />
             <div className="text-brand-accent tracking-widest uppercase text-sm mt-3 font-body opacity-80">
-              What I've been building and contributing to
+              What I've been building and <br />contributing to
             </div>
           </div>
         </div>
 
         {/* Scrub-scroll container for TIMELINE ONLY */}
-        <div 
-          ref={scrollRef} 
+        <div
+          ref={scrollRef}
           className="absolute left-0 right-0 top-[28vh] px-6 md:px-12 lg:px-24 pb-[60vh] flex flex-col items-center will-change-transform z-20"
         >
           {/* Timeline */}

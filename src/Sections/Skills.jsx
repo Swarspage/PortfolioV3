@@ -141,6 +141,7 @@ export default function Skills() {
   const innerRef       = useRef(null);
   const headingWrapRef = useRef(null);
   const gridRef        = useRef(null);
+  const contentRef     = useRef(null);
   const categoryRefs   = useRef([]);
   const cardRefs       = useRef([]);
 
@@ -161,7 +162,8 @@ export default function Skills() {
     const section = sectionRef.current;
     const inner   = innerRef.current;
     const grid    = gridRef.current;
-    if (!section || !inner || !grid) return;
+    const content = contentRef.current;
+    if (!section || !inner || !grid || !content) return;
 
     const categories = categoryRefs.current.filter(Boolean);
     const cards      = cardRefs.current.filter(Boolean);
@@ -185,7 +187,7 @@ export default function Skills() {
           gsap.set(inner,      { autoAlpha: 0, scale: 0.96, y: 0, clearProps: "filter" });
           gsap.set(categories, { autoAlpha: 0, y: 32 });
           gsap.set(cards,      { autoAlpha: 0, y: 16 });
-          gsap.set(grid,       { y: 0 });
+          gsap.set(content,    { y: 0 });
         },
       },
     });
@@ -211,14 +213,9 @@ export default function Skills() {
     // ── Phase 4: Hold – user reads the full grid ──────────────────────────────
     masterTl.to({}, { duration: 0.5 });
 
-    // ── Phase 5: Scroll grid upward to reveal overflow content on small screens
-    masterTl.to(grid, {
-      y: () => {
-        const gridH    = grid.scrollHeight;
-        const headH    = headingWrapRef.current?.offsetHeight ?? 120;
-        const available = window.innerHeight - headH - 40; // 40px breathing room
-        return -Math.max(0, gridH - available);
-      },
+    // ── Phase 5: Scroll heading + grid upward together (no overlap)
+    masterTl.to(content, {
+      y: () => -Math.max(0, content.scrollHeight - window.innerHeight + 40),
       ease:     "none",
       duration: 1.5,
     });
@@ -275,16 +272,12 @@ export default function Skills() {
         TECH
       </span>
 
-      {/* ── Top & bottom edge fades (hide grid overflow cleanly) ── */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 inset-x-0 h-32 z-20 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, #050508 0%, transparent 100%)" }}
-      />
+
 
 
       {/* ── Inner wrapper — GSAP drives entrance / exit on this layer ── */}
-      <div ref={innerRef} className="absolute inset-0 flex flex-col z-10">
+      <div ref={innerRef} className="absolute inset-0 z-10 overflow-hidden">
+        <div ref={contentRef} className="flex flex-col will-change-transform">
 
         {/* ── Heading ──────────────────────────────────────────────────────── */}
         <div
@@ -363,6 +356,7 @@ export default function Skills() {
             ))}
           </div>
         </div>
+        </div>{/* contentRef */}
       </div>
     </section>
   );
