@@ -94,4 +94,18 @@ body { overflow-y: auto; }
   }
 }
 
-
+/* ── Browser autofill background override ─────────────────────────────────────
+   Browsers ignore background-color on autofilled inputs; the only reliable fix
+   is an inset box-shadow that visually replaces the white fill.                */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.35) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  /* Delay the transition so the override doesn't flicker during page load */
+  transition: background-color 9999s ease-in-out 0s;
+}

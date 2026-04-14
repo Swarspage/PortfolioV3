@@ -51,18 +51,23 @@ const Education = () => {
     // Reset styles
     gsap.set(cards, { clearProps: "all" });
 
-    // Initial states: Card 0 up and ready, rest tucked below
+    // Initial states: Card 0 visible at front, rest waiting below the viewport
     gsap.set(cards[0], { y: 0, opacity: 1, scale: 1 });
-    gsap.set(cards.slice(1), { y: "60vh", opacity: 0, ...(IS_MOBILE ? {} : { filter: "blur(8px)" }), scale: 0.8 });
-    gsap.set(texts, { opacity: 0, y: 30 }); // hide left text
+    gsap.set(cards.slice(1), {
+      y: "75vh",
+      opacity: 0,
+      scale: 0.85,
+      ...(IS_MOBILE ? {} : { filter: "blur(12px)" }),
+    });
+    gsap.set(texts, { opacity: 0, y: 30 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: `+=${cards.length * 75}%`,
+        end: `+=${cards.length * 80}%`,
         pin: true,
-        scrub: 1,
+        scrub: 1.5,
         anticipatePin: 1,
         invalidateOnRefresh: true,
       }
@@ -72,8 +77,8 @@ const Education = () => {
     tl.to(texts, {
       y: 0,
       opacity: 1,
-      duration: 0.8,
-      stagger: 0.15,
+      duration: 0.4,
+      stagger: 0.1,
       ease: "power2.out"
     }, 0);
 
@@ -83,14 +88,14 @@ const Education = () => {
 
       const stepTl = gsap.timeline();
 
-      // Dim and push ALL previous cards back
+      // Dim and push ALL previous cards back into the deck
       for (let j = 0; j < i; j++) {
         const depth = i - j; // how deep this card is now
         stepTl.to(cards[j], {
-          y: -depth * 40,              // drift upwards slightly
-          scale: 1 - depth * 0.055,    // shrink down
-          opacity: 1 - depth * 0.45,   // aggressively darken
-          filter: IS_MOBILE ? "none" : `blur(${depth * 2.5}px)`, // blur it
+          y: -depth * 45,             // drift up into deck
+          scale: 1 - depth * 0.06,   // shrink
+          opacity: 1 - depth * 0.5,  // fade aggressively
+          filter: IS_MOBILE ? "none" : `blur(${depth * 5}px)`, // strong blur
           duration: 1,
           ease: "power2.inOut"
         }, 0);
@@ -102,11 +107,11 @@ const Education = () => {
         opacity: 1,
         scale: 1,
         ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
-        duration: 1.2,
+        duration: 1.1,
         ease: "power3.out"
-      }, 0); // sync with pushback
+      }, 0);
 
-      tl.add(stepTl, `+=${0.1}`); // tiny hold between card swaps
+      tl.add(stepTl, `+=0.2`); // brief hold between swaps
     });
 
     // Hold at end
@@ -122,9 +127,9 @@ const Education = () => {
     <section
       ref={sectionRef}
       id="education"
-      className="relative flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 text-brand-text overflow-hidden h-dvh min-h-[650px] w-full"
+      className="relative flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 text-brand-text overflow-hidden h-dvh min-h-[700px] w-full"
     >
-      <div ref={innerRef} className="z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-20 items-center justify-between pt-24 md:pt-0 will-change-[opacity,transform,filter]">
+      <div ref={innerRef} className="z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-20 items-center justify-between pt-28 md:pt-20 lg:pt-0 will-change-[opacity,transform,filter]">
 
         {/* Left column: Heading and Copy */}
         <div className="w-full lg:w-5/12 flex flex-col items-start gap-4 md:gap-8">
@@ -154,41 +159,62 @@ const Education = () => {
         </div>
 
         {/* Right column: Animated Progression Cards */}
-        <div className="w-full lg:w-[45%] relative min-h-[300px] h-[45vh] sm:h-[40vh] lg:h-[38vh] pointer-events-auto mt-8 lg:mt-0 perspective-1000 shrink-0">
+        <div className="w-full lg:w-[45%] relative min-h-[300px] h-[42vh] sm:h-[40vh] lg:h-[44vh] max-h-[420px] pointer-events-auto mt-8 lg:mt-0 perspective-1000 shrink-0">
           {educationData.map((item, index) => {
             return (
               <div
                 key={index}
                 ref={setCardRef(index)}
-                className="absolute inset-0 flex flex-col justify-center p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-brand-surface/80 backdrop-blur-sm md:backdrop-blur-xl border border-brand-border/60 shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-colors duration-500 hover:border-brand-accent/50 hover:bg-brand-surface-hover"
+                className="absolute inset-0 flex flex-col justify-center p-7 md:p-10 rounded-[2rem] bg-brand-surface/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)] transition-all duration-500 hover:border-brand-accent/30 overflow-hidden"
                 style={{
-                  zIndex: educationData.length - index,
+                  // Cards added LATER in the array get HIGHER zIndex so they
+                  // render on top when they slide into the front position
+                  zIndex: index + 1,
                   transformOrigin: "top center",
                 }}
               >
-                {/* Academic Grid Pattern modified for richer depth */}
-                <div className="absolute inset-0 rounded-[1.5rem] md:rounded-[2rem] bg-[linear-gradient(to_right,#ffffff05_2px,transparent_2px),linear-gradient(to_bottom,#ffffff05_2px,transparent_2px)] bg-[size:40px_40px] opacity-30 pointer-events-none"></div>
+                {/* Top accent hairline */}
+                <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-brand-accent/35 to-transparent pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col gap-2 md:gap-3">
-                  <div className="flex justify-between items-start flex-wrap gap-2 md:gap-3 mb-1">
-                    <h3 className="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-3">
-                      {/* Subtly Animated Glowing Ring */}
-                      <span className="relative flex h-4 w-4 md:h-5 md:w-5 justify-center items-center shrink-0">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-30"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-brand-accent shadow-[0_0_12px_rgba(191,219,254,0.8)]"></span>
+                {/* Subtle grid watermark */}
+                <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+
+                {/* Hover inner glow */}
+                <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-brand-accent/[0.06] to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col gap-4 md:gap-5">
+
+                  {/* Row 1: ping dot + institution name + year badge */}
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="relative flex h-4 w-4 shrink-0 items-center justify-center">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-30" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent shadow-[0_0_10px_rgba(191,219,254,0.85)]" />
                       </span>
-                      <span className="leading-tight">{item.institution}</span>
-                    </h3>
-                    <span className="px-3 py-1 md:px-4 md:py-1.5 rounded-full border border-brand-border bg-brand-bg/60 text-xs md:text-sm font-medium tracking-wider text-brand-accent whitespace-nowrap shadow-inner">
+                      <h3 className="font-display text-base md:text-lg font-semibold text-white/75 leading-snug tracking-wide truncate">
+                        {item.institution}
+                      </h3>
+                    </div>
+                    <span className="flex-shrink-0 inline-flex items-center px-3 py-1 rounded-full border border-brand-accent/20 bg-brand-accent/[0.07] font-mono text-[10px] tracking-[0.2em] text-brand-accent/80 whitespace-nowrap">
                       {item.years}
                     </span>
                   </div>
-                  <p className="text-lg md:text-xl text-white/95 font-medium font-body tracking-tight">
+
+                  {/* Row 2: Degree as hero text */}
+                  <p className="font-display text-2xl md:text-3xl font-bold text-white leading-tight">
                     {item.degree}
                   </p>
-                  <p className="text-brand-muted text-sm md:text-base font-body tracking-wide opacity-90 line-clamp-3 md:line-clamp-none">
-                    {item.details}
-                  </p>
+
+                  {/* Divider */}
+                  <div className="h-px w-full bg-white/[0.06]" />
+
+                  {/* Row 3: Result details */}
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-brand-accent/55">Result</span>
+                    <div className="h-px flex-1 bg-white/5" />
+                    <span className="font-mono text-sm font-semibold text-white/65">{item.details}</span>
+                  </div>
+
                 </div>
               </div>
             );
