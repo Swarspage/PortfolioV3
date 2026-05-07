@@ -116,9 +116,9 @@ const About = () => {
         {/* --- Left Column Wrapper (Desktop: Bundles Title + Bios) --- */}
         <div className="md:flex md:flex-col md:justify-center md:flex-1 relative h-full">
           
-          {/* 1. Sticky Title: Bottom card on mobile, Top-Left on desktop */}
-          <div className="absolute bottom-0 left-0 right-0 md:relative flex flex-col justify-end md:justify-start pointer-events-none md:pointer-events-auto z-10 w-full mb-0">
-            <div ref={headingRef} className="bg-brand-bg/60 md:bg-transparent backdrop-blur-2xl md:backdrop-blur-none p-6 pb-8 md:p-0 rounded-t-[2.5rem] md:rounded-none border-t border-brand-border md:border-none flex flex-col items-center md:items-start text-center md:text-left w-full">
+          {/* 1. Sticky Title: Top card on mobile, Top-Left on desktop */}
+          <div className="absolute top-0 left-0 right-0 md:relative flex flex-col justify-start pointer-events-none md:pointer-events-auto z-20 w-full mt-0">
+            <div ref={headingRef} className="bg-transparent md:bg-transparent p-6 pt-24 pb-6 md:p-0 flex flex-col items-center md:items-start text-center md:text-left w-full drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] md:drop-shadow-none">
               <SplitText 
                 text="ABOUT" 
                 className="font-display text-[clamp(3.5rem,10vw,5rem)] font-bold text-white tracking-widest leading-[0.8] drop-shadow-2xl" 
@@ -130,14 +130,14 @@ const About = () => {
                 to={{ opacity: 1, y: 0 }} 
                 threshold={0.3} 
               />
-              <div className="text-brand-accent tracking-[0.2em] uppercase text-[10px] md:text-xs mt-3 md:mt-2 ml-0 md:ml-1 font-body opacity-80">
+              <div className="text-brand-accent tracking-[0.2em] uppercase text-[10px] md:text-xs mt-3 md:mt-2 ml-0 md:ml-1 font-body opacity-90 drop-shadow-lg">
                 The person behind the code
               </div>
             </div>
           </div>
 
-          {/* 2. Text Bio Container: Top/Middle on mobile, Bottom-Left on desktop */}
-          <div className="absolute top-24 bottom-[140px] left-4 right-4 md:relative md:inset-auto flex flex-col pointer-events-auto z-0 pb-4 md:pb-0 h-[60vh] md:h-[45vh] lg:h-[40vh]">
+          {/* 2. Text Bio Container: Middle/Bottom on mobile, Bottom-Left on desktop */}
+          <div className="absolute top-[260px] bottom-4 left-4 right-4 md:relative md:inset-auto flex flex-col pointer-events-auto z-0 pb-4 md:pb-0 h-[50vh] md:h-[45vh] lg:h-[40vh]">
             
             {/* Animated Paragraphs Stack */}
             <div className="relative flex-1 w-full perspective-1000">
@@ -145,7 +145,7 @@ const About = () => {
                 <div 
                   key={index}
                   ref={setTextBlockRef(index)}
-                  className="absolute inset-0 flex flex-col justify-center font-body text-[clamp(1.1rem,1.5vw,1.3rem)] leading-relaxed text-brand-muted p-6 md:p-8 rounded-[2rem] bg-brand-surface/40 backdrop-blur md:backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                  className="absolute inset-0 flex flex-col justify-end md:justify-center font-body text-[clamp(1.1rem,1.5vw,1.3rem)] leading-relaxed text-white md:text-brand-muted p-4 md:p-8 rounded-none md:rounded-[2rem] bg-transparent md:bg-brand-surface/40 backdrop-blur-none md:backdrop-blur-xl shadow-none md:shadow-[0_8px_32px_rgba(0,0,0,0.4)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] md:drop-shadow-none"
                   style={{ zIndex: aboutData.paragraphs.length - index }}
                 >
                   <p dangerouslySetInnerHTML={{ __html: para }} />
@@ -168,18 +168,18 @@ const About = () => {
           </div>
         </div>
 
-        {/* 3. Portrait Image: Right side on desktop (hidden on mobile) */}
-        <div className="hidden md:block shrink-0 w-[38%] lg:w-[35%] h-[65vh] aspect-[3/4]">
+        {/* 3. Portrait Image: Background on mobile, Right side on desktop */}
+        <div className="absolute inset-0 md:relative md:block shrink-0 w-full md:w-[38%] lg:w-[35%] h-full md:h-[65vh] md:aspect-[3/4] z-[-1] md:z-0">
           <div 
             ref={imageContainerRef} 
-            className="w-full h-full relative rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-black"
+            className="w-full h-full relative md:rounded-[2.5rem] overflow-hidden md:border border-white/10 md:shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-black"
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-brand-bg/80 to-brand-bg/20 md:from-black/80 md:via-transparent md:to-transparent z-10 pointer-events-none"></div>
             <div className="absolute inset-0 bg-brand-accent/10 z-[1] mix-blend-overlay"></div>
             <img 
               src={image} 
               alt="Swar Shinde" 
-              className="absolute inset-0 w-full h-full object-cover object-center scale-[1.02]"
+              className="absolute inset-0 w-full h-full object-cover object-top scale-[1.02]"
             />
           </div>
         </div>

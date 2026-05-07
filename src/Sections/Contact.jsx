@@ -163,26 +163,28 @@ const Contact = () => {
       {/* ── Full-height inner flex column ── */}
       <div
         ref={innerRef}
-        className="relative z-10 w-full h-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-20 flex flex-col pt-20 md:pt-24 lg:pt-20 pb-8 lg:pb-10"
+        className="relative z-10 w-full h-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-20 flex flex-col lg:justify-center pt-20 md:pt-24 lg:pt-0 pb-8 lg:pb-0"
       >
 
-        {/* ── Heading (shrinks on desktop to give panels more room) ── */}
-        <div className="flex-shrink-0 text-center mb-5 md:mb-7 lg:mb-5">
-          <SplitText
-            text="CONTACT"
-            className="font-display text-[clamp(2.5rem,8vw,6.5rem)] font-bold text-white tracking-[0.15em] leading-none"
-            delay={0} duration={1.1} ease="expo.out" splitType="chars"
-            from={{ opacity: 0, y: 80, rotateX: -80, scale: 0.85 }}
-            to={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-            threshold={0.5}
-          />
-          <p className="text-brand-accent tracking-[0.3em] uppercase text-[10px] sm:text-xs mt-3 font-body opacity-75">
-            Initiate Connection Sequence
-          </p>
+        {/* ── Heading (Absolute on mobile for consistent layout and space, relative on desktop) ── */}
+        <div className="absolute top-0 left-0 right-0 md:relative flex-shrink-0 text-center mb-0 md:mb-7 lg:mb-10 z-20 pointer-events-none">
+          <div className="p-6 pt-24 pb-6 md:p-0 flex flex-col items-center drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] md:drop-shadow-none">
+            <SplitText
+              text="CONTACT"
+              className="font-display text-[clamp(2.5rem,8vw,6.5rem)] font-bold text-white tracking-[0.15em] leading-none drop-shadow-2xl md:drop-shadow-none"
+              delay={0} duration={1.1} ease="expo.out" splitType="chars"
+              from={{ opacity: 0, y: 80, rotateX: -80, scale: 0.85 }}
+              to={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+              threshold={0.5}
+            />
+            <p className="text-brand-accent tracking-[0.3em] uppercase text-[10px] sm:text-xs mt-3 font-body opacity-90 drop-shadow-lg md:drop-shadow-none md:opacity-75">
+              Initiate Connection Sequence
+            </p>
+          </div>
         </div>
 
-        {/* ── Two panels — flex-1 fills remaining height on desktop ── */}
-        <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 md:gap-5 pointer-events-auto items-stretch">
+        {/* ── Two panels — centered instead of stretched ── */}
+        <div className="mt-28 md:mt-0 w-full flex flex-col lg:flex-row gap-4 md:gap-5 pointer-events-auto items-stretch">
 
           {/* ═══════════ LEFT: Form Panel ═══════════ */}
           <div ref={formRef} className="w-full lg:w-[58%] flex flex-col">
@@ -204,22 +206,22 @@ const Contact = () => {
                 Send a Message
               </h3>
 
-              {/* form fills remaining card height on desktop */}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 flex-1 min-h-0">
+              {/* form uses natural height */}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 flex-1">
                 <Field id="name"    label="Your Name"    type="text"  value={formData.name}    onChange={handleChange} />
                 <Field id="email"   label="Your Email"   type="email" value={formData.email}   onChange={handleChange} />
 
-                {/* Message textarea flex-1 on desktop so it fills the remaining space */}
-                <div className="animate-stagger flex flex-col gap-1.5 flex-1 min-h-0">
+                {/* Message textarea uses fixed rows instead of flex-1 stretch */}
+                <div className="animate-stagger flex flex-col gap-1.5 flex-1">
                   <label htmlFor="message" className="flex-shrink-0 text-[10px] font-body font-semibold tracking-[0.25em] uppercase text-brand-accent/70 select-none">
                     Your Message
                   </label>
                   <textarea
                     id="message" name="message"
                     value={formData.message} onChange={handleChange}
-                    rows={isMobile ? 4 : undefined}
+                    rows={isMobile ? 4 : 5}
                     placeholder="Enter your message"
-                    className="flex-1 w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white font-body text-sm focus:outline-none focus:border-brand-accent/60 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/25 transition-all duration-300 placeholder:text-white/20 resize-none"
+                    className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white font-body text-sm focus:outline-none focus:border-brand-accent/60 focus:bg-brand-accent/5 focus:ring-1 focus:ring-brand-accent/25 transition-all duration-300 placeholder:text-white/20 resize-none"
                   />
                 </div>
 

@@ -131,10 +131,68 @@ const Projects = () => {
         WORK
       </span>
 
-      <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-16 lg:gap-24 relative pt-20 md:pt-0 pb-6 md:pb-0">
+      <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto px-0 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-16 lg:gap-24 relative">
+        
+        {/* ── RIGHT: Section Label + Heading (Moved to top for mobile layout) ── */}
+        <div className="absolute top-0 left-0 right-0 md:relative flex-1 flex flex-col justify-start md:justify-center items-center md:items-start pointer-events-none select-none w-full mt-0 z-20 shrink-0">
+          <div className="bg-transparent p-6 pt-24 pb-6 md:p-0 flex flex-col items-center md:items-start text-center md:text-left w-full drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] md:drop-shadow-none">
+            {/* Label */}
+            <p
+              className="font-body font-semibold tracking-[0.3em] uppercase mb-2 md:mb-6 text-brand-accent opacity-70 drop-shadow-lg md:drop-shadow-none"
+              style={{ fontSize: "clamp(0.6rem,0.9vw,0.75rem)" }}
+            >
+              Latest Ventures
+            </p>
+
+            {/* Heading */}
+            <h2
+              className="font-display font-black text-white leading-[1.0] mb-3 md:mb-6 drop-shadow-2xl md:drop-shadow-none"
+              style={{ fontSize: "clamp(2.5rem,6vw,5.5rem)" }}
+            >
+              Selected&nbsp;
+              <br className="hidden md:block" />
+              <span className="text-brand-muted" style={{ fontStyle: "italic" }}>
+                Stories
+              </span>
+            </h2>
+
+            {/* Divider */}
+            <div className="w-full mb-3 md:mb-5 border-t border-brand-border hidden md:block" />
+
+            {/* Subtext */}
+            <p
+              className="font-body leading-relaxed text-brand-muted hidden md:block"
+              style={{
+                fontSize: "clamp(0.75rem,1.1vw,0.9rem)",
+                maxWidth: "32ch",
+              }}
+            >
+              Things I built and shipped — where engineering meets design.
+            </p>
+
+            {/* Project dots counter */}
+            <div className="mt-4 md:mt-8 items-center gap-3 hidden md:flex">
+              {projectsData.projectsData.map((_, i) => (
+                <span
+                  key={i}
+                  ref={setDotRef(i)}
+                  className="block rounded-full"
+                  style={{
+                    width: i === 0 ? "2rem" : "0.5rem",
+                    height: "0.5rem",
+                    background:
+                      i === 0
+                        ? "var(--color-brand-accent)"
+                        : "rgba(255,255,255,0.15)",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* ── LEFT: Animated Project Cards ── */}
-        <div className="relative w-full md:w-[52%] h-[55vh] sm:h-[60vh] md:h-[82vh] shrink-0">
+        <div className="absolute top-[220px] sm:top-[240px] bottom-10 left-6 right-6 md:relative md:inset-auto w-auto md:w-[52%] h-auto md:h-[82vh] shrink-0 pointer-events-auto z-10">
           {(projectsData?.projectsData ?? []).map((project, index) => (
             <div
               key={project.name || index}
@@ -146,7 +204,7 @@ const Projects = () => {
               <div
                 className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10"
                 style={{
-                  height: "52%",
+                  height: "45%",
                   background: "rgba(255,255,255,0.04)",
                   boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
                 }}
@@ -232,64 +290,6 @@ const Projects = () => {
             </div>
           ))}
         </div>
-
-        {/* ── RIGHT: Section Label + Heading ── */}
-        <div className="flex-1 flex flex-col justify-center items-center md:items-start pointer-events-none select-none w-full text-center md:text-left mt-4 md:mt-0 shrink-0">
-
-          {/* Label */}
-          <p
-            className="font-body font-semibold tracking-[0.3em] uppercase mb-2 md:mb-6 text-brand-accent opacity-70"
-            style={{ fontSize: "clamp(0.6rem,0.9vw,0.75rem)" }}
-          >
-            Latest Ventures
-          </p>
-
-          {/* Heading */}
-          <h2
-            className="font-display font-black text-white leading-[1.0] mb-3 md:mb-6"
-            style={{ fontSize: "clamp(2.5rem,6vw,5.5rem)" }}
-          >
-            Selected&nbsp;
-            <br className="hidden md:block" />
-            <span className="text-brand-muted" style={{ fontStyle: "italic" }}>
-              Stories
-            </span>
-          </h2>
-
-          {/* Divider */}
-          <div className="w-full mb-3 md:mb-5 border-t border-brand-border md:block hidden" />
-
-          {/* Subtext */}
-          <p
-            className="font-body leading-relaxed text-brand-muted hidden md:block"
-            style={{
-              fontSize: "clamp(0.75rem,1.1vw,0.9rem)",
-              maxWidth: "32ch",
-            }}
-          >
-            Things I built and shipped — where engineering meets design.
-          </p>
-
-          {/* Project dots counter */}
-          <div className="mt-4 md:mt-8 flex items-center gap-3 hidden md:flex">
-            {projectsData.projectsData.map((_, i) => (
-              <span
-                key={i}
-                ref={setDotRef(i)}
-                className="block rounded-full"
-                style={{
-                  width: i === 0 ? "2rem" : "0.5rem",
-                  height: "0.5rem",
-                  background:
-                    i === 0
-                      ? "var(--color-brand-accent)"
-                      : "rgba(255,255,255,0.15)",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
       </div>
     </section>
   );
