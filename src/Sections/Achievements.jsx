@@ -219,13 +219,13 @@ const Achievements = () => {
         <div className="flex-1 min-h-0 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 xl:px-20 max-w-[1400px] mx-auto w-full pb-4 lg:pb-12">
 
           {/* ═══ LEFT: Info Panel ═══ */}
-          <div className="w-full lg:w-[420px] xl:w-[460px] flex-shrink-0 flex flex-col order-2 lg:order-1 pt-4 lg:pt-0 lg:self-center">
+          <div className="w-full lg:w-[480px] xl:w-[540px] flex-shrink-0 flex flex-col order-2 lg:order-1 pt-4 lg:pt-0 lg:self-center">
             <div
               ref={infoPanelRef}
               className="w-full"
             >
               <div
-                className="relative rounded-[2rem] p-5 sm:p-8 overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                className="relative rounded-[2rem] p-5 sm:p-8 overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] lg:min-h-[450px] xl:min-h-[500px] flex flex-col justify-center"
               >
                 {/* Top accent hairline */}
                 <div
