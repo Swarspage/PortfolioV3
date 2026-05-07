@@ -184,14 +184,14 @@ const CardSwap = ({
     return (
         <div
             ref={container}
-            className="group perspective-[900px] overflow-visible lg:absolute lg:bottom-0 lg:right-0 lg:translate-x-[5%] lg:translate-y-[20%] relative mx-auto -translate-x-4 sm:-translate-x-8 lg:transform-none origin-bottom-right pointer-events-auto"
+            className="group perspective-[900px] overflow-visible lg:absolute lg:bottom-0 lg:right-0 lg:translate-x-[-5%] lg:translate-y-[-10%] relative mx-auto -translate-x-4 sm:-translate-x-8 lg:transform-none origin-bottom-right pointer-events-auto"
             style={{ width, height }}
         >
             {rendered}
             {pauseOnHover && (
                 <div className="absolute top-5 right-5 z-[100] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
                     <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                     </svg>
                     <span className="text-[9px] font-mono text-white tracking-widest font-bold mt-[1px]">PAUSED</span>
                 </div>

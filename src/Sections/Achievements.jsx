@@ -111,13 +111,25 @@ const Achievements = () => {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches
   );
+  const [isLaptop, setIsLaptop] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1025px) and (max-width: 1440px)").matches
+  );
 
   // ── Responsive listener ────────────────────────────────────────────────
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1024px)");
-    const handler = (e) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    const mqMobile = window.matchMedia("(max-width: 1024px)");
+    const mqLaptop = window.matchMedia("(min-width: 1025px) and (max-width: 1440px)");
+    
+    const handlerMobile = (e) => setIsMobile(e.matches);
+    const handlerLaptop = (e) => setIsLaptop(e.matches);
+    
+    mqMobile.addEventListener("change", handlerMobile);
+    mqLaptop.addEventListener("change", handlerLaptop);
+    
+    return () => {
+      mqMobile.removeEventListener("change", handlerMobile);
+      mqLaptop.removeEventListener("change", handlerLaptop);
+    };
   }, []);
 
   // ── GSAP entrance / exit ───────────────────────────────────────────────
@@ -170,11 +182,11 @@ const Achievements = () => {
   const active = ACHIEVEMENTS[activeIndex] || ACHIEVEMENTS[0];
   const accentStyle = ACCENT_COLORS[active.accent] || ACCENT_COLORS["#BFDBFE"];
 
-  // CardSwap sizing — significantly reduced for mobile to prevent clipping inside the pinned viewport
-  const cardW = isMobile ? 260 : 580;
-  const cardH = isMobile ? 180 : 450;
-  const cardDist = isMobile ? 30 : 60;
-  const vertDist = isMobile ? 12 : 30;
+  // CardSwap sizing — explicitly adjusted for laptops to prevent clipping
+  const cardW = isMobile ? 260 : isLaptop ? 340 : 580;
+  const cardH = isMobile ? 180 : isLaptop ? 240 : 450;
+  const cardDist = isMobile ? 30 : isLaptop ? 20 : 60;
+  const vertDist = isMobile ? 12 : isLaptop ? 15 : 30;
 
   // ── JSX ────────────────────────────────────────────────────────────────
   return (
@@ -216,16 +228,16 @@ const Achievements = () => {
         </div>
 
         {/* ── Main Content: LEFT = info, RIGHT = CardSwap ── */}
-        <div className="flex-1 min-h-0 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 xl:px-20 max-w-[1400px] mx-auto w-full pb-4 lg:pb-12">
+        <div className="flex-1 min-h-0 flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 xl:px-20 max-w-[1400px] mx-auto w-full pb-4 lg:pb-12">
 
           {/* ═══ LEFT: Info Panel ═══ */}
-          <div className="w-full lg:w-[480px] xl:w-[540px] flex-shrink-0 flex flex-col order-2 lg:order-1 pt-4 lg:pt-0 lg:self-center">
+          <div className="w-full lg:w-[380px] xl:w-[480px] 2xl:w-[540px] flex-shrink-0 flex flex-col order-2 lg:order-1 pt-4 lg:pt-0">
             <div
               ref={infoPanelRef}
               className="w-full"
             >
               <div
-                className="relative rounded-[2rem] p-5 sm:p-8 overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] lg:min-h-[450px] xl:min-h-[500px] flex flex-col justify-center"
+                className="relative rounded-[2rem] p-5 sm:p-8 overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] lg:min-h-[350px] xl:min-h-[450px] 2xl:min-h-[500px] flex flex-col justify-center"
               >
                 {/* Top accent hairline */}
                 <div
@@ -296,7 +308,7 @@ const Achievements = () => {
           <div
             className="relative w-full lg:flex-1 order-1 lg:order-2 flex items-end justify-center lg:block pb-4 lg:pb-0 pointer-events-auto z-50"
             style={{
-              minHeight: isMobile ? cardH + (ACHIEVEMENTS.length - 1) * vertDist + 20 : 550
+              minHeight: isMobile ? cardH + (ACHIEVEMENTS.length - 1) * vertDist + 20 : isLaptop ? 380 : 550
             }}
           >
             <CardSwap
