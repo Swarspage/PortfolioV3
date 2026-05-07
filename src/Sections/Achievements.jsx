@@ -1,98 +1,159 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "../lib/gsapScroll";
 import SplitText from "../Components/SplitText";
-import achievementsData from "../Components/AchievementsData.json";
-import { HiTrophy, HiRocketLaunch, HiUsers, HiAcademicCap, HiStar, HiSparkles } from "react-icons/hi2";
+import CardSwap, { Card } from "../Components/CardSwap";
+
+// ─── Asset imports ──────────────────────────────────────────────────────────
+import codeAThon from "../assets/Achievements/CodeAThonehackthon.webp";
+import codeAThonTeam from "../assets/Achievements/codeAThon2.0withTeam.webp";
+import soloInternHOD from "../assets/Achievements/soloInternHODPic.webp";
+import internGroup from "../assets/Achievements/internshipGroupPhoto.webp";
+import internCert from "../assets/Achievements/InternCertificate.webp";
+import LOA from "../assets/Achievements/LOA.webp";
+import letterOfAppreciation from "../assets/Achievements/LetterofAppreciationInternship.webp";
+import ttDoubles from "../assets/Achievements/Tabletennisdoubles2ndprize.webp";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
-const ICON_MAP = {
-  trophy:    HiTrophy,
-  rocket:    HiRocketLaunch,
-  volunteer: HiUsers,
-  academic:  HiAcademicCap,
-  star:      HiStar,
-  award:     HiSparkles,
-};
-
-// Per-card accent palette
-const CARD_ACCENTS = [
-  { glow: "rgba(251,191,36,0.10)",  border: "rgba(251,191,36,0.30)",  icon: "#FBB924" },
-  { glow: "rgba(191,219,254,0.10)", border: "rgba(191,219,254,0.28)", icon: "#BFDBFE" },
-  { glow: "rgba(134,239,172,0.10)", border: "rgba(134,239,172,0.25)", icon: "#86EFAC" },
-  { glow: "rgba(216,180,254,0.10)", border: "rgba(216,180,254,0.25)", icon: "#D8B4FE" },
+// ─── Achievement Data ───────────────────────────────────────────────────────
+const ACHIEVEMENTS = [
+  {
+    img: codeAThon,
+    title: "Top 8 Finalist · Code-A-Thon 2.0",
+    category: "Competition",
+    date: "2026",
+    description:
+      "Out of 100+ submissions, Singularity placed Top 8. Built over 1.5 months — not a weekend sprint — it pulled real-time telemetry from NASA, SpaceX, and ISRO into a single mission control. Orbital mechanics, 3D globe rendering, AI integration, live ISS tracking.",
+    accent: "#FBB924",
+  },
+  {
+    img: codeAThonTeam,
+    title: "The Team Behind Singularity",
+    category: "Competition",
+    date: "2026",
+    description:
+      "Code-A-Thon 2.0 wasn't a solo mission. The team that built Singularity — each member owning a critical subsystem. From backend architecture to 3D rendering, the project came together through late nights and relentless iteration.",
+    accent: "#BFDBFE",
+  },
+  {
+    img: soloInternHOD,
+    title: "Shipped to 500+ Users · SIMS",
+    category: "Deployment",
+    date: "2026",
+    description:
+      "Most portfolio projects live on localhost. SIMS lives at a college domain and gets used by over 500 students every day. Built during my internship under the HOD — I owned the entire frontend. Seeing something you built actually get used is a different kind of validation.",
+    accent: "#86EFAC",
+  },
+  {
+    img: internGroup,
+    title: "Internship · Full Dev Team",
+    category: "Deployment",
+    date: "2026",
+    description:
+      "The full development team behind the Student Information Management System. A real-world deployment serving an entire college — built from scratch during a structured internship program under direct mentorship of the Head of Department.",
+    accent: "#D8B4FE",
+  },
+  {
+    img: internCert,
+    title: "Internship Certificate · DMCE",
+    category: "Recognition",
+    date: "2026",
+    description:
+      "Official internship completion certificate from Datta Meghe College of Engineering. Formal recognition of the full-stack development work and contribution to the SIMS platform deployed across the institution.",
+    accent: "#BFDBFE",
+  },
+  {
+    img: LOA,
+    title: "Letter of Appreciation",
+    category: "Recognition",
+    date: "2026",
+    description:
+      "Received an official Letter of Appreciation for outstanding contribution during the internship. A formal acknowledgment from the institution for the quality and impact of the development work delivered.",
+    accent: "#FBB924",
+  },
+  {
+    img: letterOfAppreciation,
+    title: "Official Certificate · TT Doubles",
+    category: "Sports",
+    date: "2025",
+    description:
+      "The official certificate for securing 2nd place in the DMCE Milestone 2025 Table Tennis Doubles. A reminder that agility and strategy apply just as much on the table as they do in code.",
+    accent: "#86EFAC",
+  },
+  {
+    img: ttDoubles,
+    title: "2nd Place · Table Tennis Doubles",
+    category: "Sports",
+    date: "2025",
+    description:
+      "Partnered with a senior and competed in the DMCE Milestone 2025 Table Tennis Doubles tournament. Fought our way to the finals and secured 2nd place — as a first-year in Sem 2. Proof that competitive drive isn't limited to a keyboard.",
+    accent: "#D8B4FE",
+  },
 ];
+
+// Per-card accent palette derived from achievement data
+const ACCENT_COLORS = {
+  "#FBB924": { glow: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.35)", text: "#FBB924" },
+  "#BFDBFE": { glow: "rgba(191,219,254,0.12)", border: "rgba(191,219,254,0.30)", text: "#BFDBFE" },
+  "#86EFAC": { glow: "rgba(134,239,172,0.12)", border: "rgba(134,239,172,0.30)", text: "#86EFAC" },
+  "#D8B4FE": { glow: "rgba(216,180,254,0.12)", border: "rgba(216,180,254,0.30)", text: "#D8B4FE" },
+};
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const Achievements = () => {
   const sectionRef = useRef(null);
-  const innerRef   = useRef(null);
-  const contentRef = useRef(null); // heading + grid — scroll as one unit
-  const gridRef    = useRef(null);
-  const cardRefs   = useRef([]);
+  const innerRef = useRef(null);
+  const infoPanelRef = useRef(null);
 
-  const setCardRef = (i) => (el) => { cardRefs.current[i] = el; };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches
+  );
 
-  // ── GSAP ─────────────────────────────────────────────────────────────────
+  // ── Responsive listener ────────────────────────────────────────────────
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1024px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // ── GSAP entrance / exit ───────────────────────────────────────────────
   useEffect(() => {
     const section = sectionRef.current;
-    const inner   = innerRef.current;
-    const content = contentRef.current;
-    const grid    = gridRef.current;
-    if (!section || !inner || !content || !grid) return;
-
-    const cards = cardRefs.current.filter(Boolean);
+    const inner = innerRef.current;
+    if (!section || !inner) return;
 
     gsap.set(inner, { autoAlpha: 0, scale: 0.96, ...(IS_MOBILE ? {} : { filter: "blur(12px)" }) });
-    gsap.set(cards, { autoAlpha: 0, y: 32 });
 
     const masterTl = gsap.timeline({
       scrollTrigger: {
-        trigger:            section,
-        start:              "top top",
-        end:                "+=260%",
-        pin:                true,
-        scrub:              1,
-        anticipatePin:      1,
+        trigger: section,
+        start: "top top",
+        end: "+=180%",
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
         invalidateOnRefresh: true,
         onRefresh: () => {
-          gsap.set(inner,   { autoAlpha: 0, scale: 0.96, y: 0, clearProps: "filter" });
-          gsap.set(cards,   { autoAlpha: 0, y: 32 });
-          gsap.set(content, { y: 0 });
+          gsap.set(inner, { autoAlpha: 0, scale: 0.96, y: 0, clearProps: "filter" });
         },
       },
     });
 
-    // Phase 1: Section entrance — heading is perfectly centered
+    // Phase 1: Entrance
     masterTl.to(inner, {
       autoAlpha: 1, scale: 1,
       ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
       duration: 0.8, ease: "power3.out",
     });
 
-    // Phase 2: Achievement cards stagger in (heading visible at top, cards below)
-    masterTl.fromTo(cards,
-      { autoAlpha: 0, y: 32 },
-      { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.65, ease: "power2.out" },
-      "-=0.3"
-    );
+    // Phase 2: Hold — user watches cards cycle and reads info
+    masterTl.to({}, { duration: 1.8 });
 
-    // Phase 3: Hold — user reads all cards
-    masterTl.to({}, { duration: 0.6 });
-
-    // Phase 4: Scroll contentRef (heading + grid) upward together.
-    // Heading exits top, cards remain readable. Top-edge-fade masks the transition.
-    masterTl.to(content, {
-      y: () => -Math.max(0, content.scrollHeight - window.innerHeight + 40),
-      ease: "none", duration: 1.5,
-    });
-
-    // Phase 5: Hold at full scroll
-    masterTl.to({}, { duration: 0.4 });
-
-    // Phase 6: Cinematic exit
+    // Phase 3: Cinematic exit
     masterTl.to(inner, {
       autoAlpha: 0, scale: 0.9,
       ...(IS_MOBILE ? {} : { filter: "blur(10px)" }),
@@ -105,23 +166,23 @@ const Achievements = () => {
     };
   }, []);
 
-  // ── JSX ──────────────────────────────────────────────────────────────────
+  // ── Derived state ─────────────────────────────────────────────────────
+  const active = ACHIEVEMENTS[activeIndex] || ACHIEVEMENTS[0];
+  const accentStyle = ACCENT_COLORS[active.accent] || ACCENT_COLORS["#BFDBFE"];
+
+  // CardSwap sizing — significantly reduced for mobile to prevent clipping inside the pinned viewport
+  const cardW = isMobile ? 260 : 580;
+  const cardH = isMobile ? 180 : 450;
+  const cardDist = isMobile ? 30 : 60;
+  const vertDist = isMobile ? 12 : 30;
+
+  // ── JSX ────────────────────────────────────────────────────────────────
   return (
     <section
       ref={sectionRef}
       id="achievements"
       className="relative h-dvh w-full overflow-hidden text-brand-text bg-transparent"
     >
-      {/* Ambient dot-grid */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none z-0"
-        style={{
-          backgroundImage: "radial-gradient(rgba(191,219,254,0.07) 1px, transparent 1px)",
-          backgroundSize:  "28px 28px",
-        }}
-      />
-
       {/* Decorative watermark */}
       <span
         aria-hidden="true"
@@ -131,123 +192,156 @@ const Achievements = () => {
         WINS
       </span>
 
-      {/* Top edge fade */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 inset-x-0 h-28 z-20 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, #050508 0%, transparent 100%)" }}
-      />
-
       {/* ── GSAP entrance / exit wrapper ── */}
-      <div ref={innerRef} className="absolute inset-0 z-10 overflow-hidden">
+      <div
+        ref={innerRef}
+        className="absolute inset-0 z-10 flex flex-col"
+      >
+        <div className="w-full px-4 sm:px-8 pt-20 md:pt-28 lg:pt-32 pb-2 md:pb-8 text-center relative z-20">
+          <SplitText
+            text="ACHIEVEMENTS"
+            className="font-display text-[clamp(2.2rem,7vw,5rem)] font-bold text-white tracking-widest leading-none"
+            delay={0}
+            duration={0.8}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 50, scale: 0.9 }}
+            to={{ opacity: 1, y: 0, scale: 1 }}
+            threshold={0.5}
+          />
+          <div className="mt-3 h-px w-14 bg-gradient-to-r from-transparent via-brand-accent/70 to-transparent mx-auto" />
+          <p className="mt-2.5 font-mono text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-brand-accent/60 opacity-70">
+            Recognitions, milestones &amp; technical wins
+          </p>
+        </div>
 
-        {/* ── contentRef: heading + grid scroll as one unit ── */}
-        <div ref={contentRef} className="flex flex-col will-change-transform">
+        {/* ── Main Content: LEFT = info, RIGHT = CardSwap ── */}
+        <div className="flex-1 min-h-0 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-8 px-4 sm:px-8 lg:px-16 xl:px-20 max-w-[1400px] mx-auto w-full pb-4 lg:pb-12">
 
-          {/* ══ Heading — at the top, same pattern as Skills section ══ */}
-          <div className="flex-none text-center pt-20 md:pt-24 pb-4 md:pb-6 px-6">
-            <SplitText
-              text="ACHIEVEMENTS"
-              className="font-display text-[clamp(2.4rem,7vw,6rem)] font-bold text-white tracking-widest leading-none"
-              delay={0}
-              duration={0.8}
-              ease="power3.out"
-              splitType="chars"
-              from={{ opacity: 0, y: 50, scale: 0.9 }}
-              to={{ opacity: 1, y: 0, scale: 1 }}
-              threshold={0.5}
-            />
-            <div className="mt-3 h-px w-14 bg-gradient-to-r from-brand-accent/70 to-transparent mx-auto" />
-            <p className="mt-2.5 font-mono text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-brand-accent/60 opacity-70">
-              Recognitions, milestones &amp; technical wins
-            </p>
-          </div>
+          {/* ═══ LEFT: Info Panel ═══ */}
+          <div className="w-full lg:w-[420px] xl:w-[460px] flex-shrink-0 flex flex-col order-2 lg:order-1 pt-4 lg:pt-0 lg:self-center">
+            <div
+              ref={infoPanelRef}
+              className="w-full"
+            >
+              <div
+                className="relative rounded-[2rem] p-5 sm:p-8 overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+              >
+                {/* Top accent hairline */}
+                <div
+                  className="absolute top-0 left-10 right-10 h-px pointer-events-none transition-all duration-700"
+                  style={{ background: `linear-gradient(to right, transparent, ${accentStyle.border}, transparent)` }}
+                />
 
-          {/* ══ Cards Grid — flows below the heading viewport ══ */}
-          <div
-            ref={gridRef}
-            className="px-5 sm:px-8 md:px-12 lg:px-20 pb-28"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 lg:gap-6 max-w-7xl mx-auto">
-              {(achievementsData ?? []).map((item, index) => {
-                const Icon   = ICON_MAP[item.iconName] || HiSparkles;
-                const accent = CARD_ACCENTS[index % CARD_ACCENTS.length];
+                {/* Corner glow */}
+                <div
+                  className="absolute -bottom-8 -right-8 w-36 h-36 rounded-full blur-[56px] pointer-events-none transition-all duration-700"
+                  style={{ background: accentStyle.glow }}
+                />
 
-                return (
-                  <div
-                    key={index}
-                    ref={setCardRef(index)}
-                    className="group relative flex flex-col gap-4 p-6 sm:p-8 rounded-[2rem] overflow-hidden border border-white/10 bg-brand-surface/40 backdrop-blur-xl transition-colors duration-500 hover:border-white/[0.18]"
-                    style={{ willChange: "transform, opacity" }}
-                  >
-                    {/* Per-card top accent hairline */}
-                    <div
-                      className="absolute top-0 left-10 right-10 h-px pointer-events-none"
-                      style={{ background: `linear-gradient(to right, transparent, ${accent.border}, transparent)` }}
-                    />
-
-                    {/* Circuit grid watermark */}
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        backgroundImage: "linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)",
-                        backgroundSize:  "36px 36px",
-                      }}
-                    />
-
-                    {/* Corner glow on hover */}
-                    <div
-                      className="absolute -bottom-8 -right-8 w-36 h-36 rounded-full blur-[56px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                      style={{ background: accent.glow }}
-                    />
-
-                    {/* Card content */}
-                    <div className="relative z-10 flex flex-col gap-4">
-
-                      {/* Row 1: Icon + meta */}
-                      <div className="flex items-start justify-between gap-4">
-                        <div
-                          className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl border shrink-0 transition-transform duration-500 group-hover:scale-110"
-                          style={{ background: accent.glow, borderColor: accent.border }}
-                        >
-                          <Icon size={IS_MOBILE ? 20 : 22} style={{ color: accent.icon }} />
-                        </div>
-                        <div className="flex flex-col items-end gap-1.5">
-                          <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/35">
-                            {item.date}
-                          </span>
-                          <span
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full border font-mono text-[8px] tracking-[0.18em] uppercase"
-                            style={{ borderColor: accent.border, color: accent.icon, background: accent.glow }}
-                          >
-                            {item.category}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Row 2: Title */}
-                      <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug">
-                        {item.title}
-                      </h3>
-
-                      {/* Divider */}
-                      <div className="h-px bg-white/[0.07]" />
-
-                      {/* Row 3: Description */}
-                      <p className="font-body text-[13px] sm:text-sm leading-relaxed text-brand-muted opacity-80 group-hover:opacity-100 transition-opacity duration-300 line-clamp-4 md:line-clamp-none">
-                        {item.description}
-                      </p>
-
-                    </div>
+                <div className="relative z-10 flex flex-col gap-3 sm:gap-4">
+                  {/* Category + Date */}
+                  <div className="flex items-center justify-between gap-3">
+                    <span
+                      className="inline-flex items-center px-3 py-1 rounded-full border font-mono text-[8px] tracking-[0.2em] uppercase transition-all duration-500"
+                      style={{ borderColor: accentStyle.border, color: accentStyle.text, background: accentStyle.glow }}
+                    >
+                      {active.category}
+                    </span>
+                    <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-white/35">
+                      {active.date}
+                    </span>
                   </div>
-                );
-              })}
+
+                  {/* Title */}
+                  <h3
+                    key={activeIndex}
+                    className="font-display text-xl sm:text-2xl font-bold text-white leading-snug animate-fade-in"
+                  >
+                    {active.title}
+                  </h3>
+
+                  {/* Divider */}
+                  <div className="h-px bg-white/[0.07]" />
+
+                  {/* Description */}
+                  <p
+                    key={`desc-${activeIndex}`}
+                    className="font-body text-[13px] sm:text-sm leading-relaxed text-brand-muted opacity-80 animate-fade-in"
+                  >
+                    {active.description}
+                  </p>
+
+                  {/* Card counter */}
+                  <div className="flex items-center gap-2 pt-2">
+                    {ACHIEVEMENTS.map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-1 rounded-full transition-all duration-500"
+                        style={{
+                          width: i === activeIndex ? 24 : 8,
+                          background: i === activeIndex ? accentStyle.text : "rgba(255,255,255,0.15)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
+            {/* end info panel */}
+          </div>
+          {/* end LEFT column */}
+
+          {/* ═══ RIGHT: CardSwap Area ═══ */}
+          <div
+            className="relative w-full lg:flex-1 order-1 lg:order-2 flex items-end justify-center lg:block pb-4 lg:pb-0 pointer-events-auto z-50"
+            style={{
+              minHeight: isMobile ? cardH + (ACHIEVEMENTS.length - 1) * vertDist + 20 : 550
+            }}
+          >
+            <CardSwap
+              width={cardW}
+              height={cardH}
+              cardDistance={cardDist}
+              verticalDistance={vertDist}
+              delay={5000}
+              easing="elastic"
+              skewAmount={isMobile ? 0 : 1}
+              pauseOnHover={!isMobile}
+              onSwap={(nextIndex) => setActiveIndex(nextIndex)}
+            >
+              {ACHIEVEMENTS.map((item, i) => (
+                <Card key={i}>
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    draggable={false}
+                    className="absolute inset-0 w-full h-full object-cover select-none"
+                  />
+                  {/* Bottom gradient overlay with title */}
+                  <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex items-end p-4 sm:p-5">
+                    <span className="font-display text-sm sm:text-base font-bold text-white tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                      {item.title}
+                    </span>
+                  </div>
+                </Card>
+              ))}
+            </CardSwap>
           </div>
 
         </div>
       </div>
+
+      {/* Fade-in animation keyframe */}
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fadeSlideIn 0.5s ease-out both;
+        }
+      `}</style>
     </section>
   );
 };
