@@ -173,7 +173,7 @@ function App() {
 
         {/* Contact is the last section — use a tighter margin so it loads
             promptly without waiting for a full scroll */}
-        <LazySection rootMargin="500px">
+        <LazySection rootMargin="500px" height="auto">
           <Contact />
         </LazySection>
       </div>

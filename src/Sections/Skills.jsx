@@ -248,14 +248,6 @@ export default function Skills() {
       id="skills"
       className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
-      {/* ── Float keyframe — self-contained so no external CSS file needed ── */}
-      <style>{`
-        @keyframes skillFloat {
-          0%, 100% { transform: translateY(0px);  }
-          50%       { transform: translateY(-5px); }
-        }
-      `}</style>
-
       {/* ── Decorative watermark ── */}
       <span
         aria-hidden="true"

@@ -141,6 +141,8 @@ const Education = () => {
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
+      // Release stale compositor hints so the GPU can reclaim VRAM
+      gsap.set(cards, { clearProps: "willChange" });
     };
   }, []);
 

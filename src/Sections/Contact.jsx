@@ -52,6 +52,12 @@ const Contact = () => {
   const [isMobile,    setIsMobile]    = useState(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches
   );
+  // Toast notification — replaces window.alert() which froze all animations
+  const [toast, setToast] = useState(null); // { msg: string, type: 'error'|'success' }
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
 
   const sectionRef  = useRef(null);
   const innerRef    = useRef(null);
@@ -60,13 +66,37 @@ const Contact = () => {
   const formCardRef = useRef(null);
   const infoCardRef = useRef(null);
 
-  // ── Clock + responsive listener ────────────────────────────────────────────
+  // ── Responsive listener ────────────────────────────────────────────────
   useEffect(() => {
-    const timer   = window.setInterval(() => setCurrentTime(new Date()), 1000);
     const mq      = window.matchMedia("(max-width: 1024px)");
     const handler = (e) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
-    return () => { window.clearInterval(timer); mq.removeEventListener("change", handler); };
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // ── Clock — only ticks while Contact section is visible ────────────────
+  // Prevents a setCurrentTime re-render every second while the user is
+  // reading the hero or any other section above.
+  useEffect(() => {
+    const section = sectionRef.current;
+    let timer = null;
+
+    const startClock = () => {
+      if (timer) return; // already running
+      timer = window.setInterval(() => setCurrentTime(new Date()), 1000);
+    };
+    const stopClock = () => {
+      window.clearInterval(timer);
+      timer = null;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => { entry.isIntersecting ? startClock() : stopClock(); },
+      { threshold: 0.05 }
+    );
+
+    if (section) observer.observe(section);
+    return () => { observer.disconnect(); stopClock(); };
   }, []);
 
   // ── Mouse radial glow (desktop only, rAF-throttled) ────────────────────────
@@ -93,7 +123,10 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) { window.alert("Please fill out all the fields."); return; }
+    if (!formData.name || !formData.email || !formData.message) {
+      showToast("Please fill out all fields.", "error");
+      return;
+    }
     emailjs
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -101,8 +134,14 @@ const Contact = () => {
         { from_name: formData.name, from_email: formData.email, message: formData.message },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
-      .then(() => { window.alert("Message sent successfully."); setFormData({ name: "", email: "", message: "" }); })
-      .catch((err) => { console.error("EmailJS Error:", err); window.alert("Something went wrong while sending the message."); });
+      .then(() => {
+        showToast("Message sent successfully! I'll be in touch.", "success");
+        setFormData({ name: "", email: "", message: "" });
+      })
+      .catch((err) => {
+        console.error("EmailJS Error:", err);
+        showToast("Something went wrong. Please try again.", "error");
+      });
   };
 
   const handleResumeDownload = () => {
@@ -318,6 +357,42 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      {/* ── Toast notification (replaces window.alert) ────────────────── */}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            gap: "0.6rem",
+            padding: "0.75rem 1.4rem",
+            borderRadius: "999px",
+            background: toast.type === "error"
+              ? "rgba(239,68,68,0.18)"
+              : "rgba(34,197,94,0.18)",
+            border: `1px solid ${toast.type === "error" ? "rgba(239,68,68,0.4)" : "rgba(34,197,94,0.4)"}`,
+            backdropFilter: "blur(16px)",
+            color: "#fff",
+            fontSize: "0.875rem",
+            fontFamily: "var(--font-body)",
+            letterSpacing: "0.01em",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+            pointerEvents: "none",
+            animation: "fadeSlideIn 0.35s ease-out both",
+          }}
+        >
+          <span style={{ fontSize: "1rem" }}>
+            {toast.type === "error" ? "✕" : "✓"}
+          </span>
+          {toast.msg}
+        </div>
+      )}
     </section>
   );
 };

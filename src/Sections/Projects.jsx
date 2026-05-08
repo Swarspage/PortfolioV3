@@ -7,6 +7,10 @@ import RecipeAi from "../assets/RecipeAi.webp";
 import projectsData from "../Components/ProjectsData.json";
 import { gsap } from "../lib/gsapScroll";
 
+// Skip filter:blur on mobile — prevents 5 simultaneous compositor layers tanking framerate
+const IS_MOBILE = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const imageMap = {
   "Singularity": Singularity,
   "SIMS": sims,
@@ -37,8 +41,8 @@ const Projects = () => {
 
     // Same pattern as About.jsx: first card visible, rest blurred below
     gsap.set(cards, { clearProps: "all" });
-    gsap.set(cards.slice(1), { y: 60, autoAlpha: 0, filter: "blur(6px)" });
-    gsap.set(cards[0], { y: 0, autoAlpha: 1, filter: "blur(0px)" });
+    gsap.set(cards.slice(1), { y: 60, autoAlpha: 0, ...(IS_MOBILE ? {} : { filter: "blur(6px)" }) });
+    gsap.set(cards[0], { y: 0, autoAlpha: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }) });
 
     const dots = dotsRef.current.filter(Boolean);
     gsap.set(dots, { width: "0.5rem", background: "rgba(255,255,255,0.15)" });
@@ -62,7 +66,7 @@ const Projects = () => {
         tl.to(card, {
           y: 0,
           autoAlpha: 1,
-          filter: "blur(0px)",
+          ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
           duration: 1,
           ease: "power2.out",
         });
@@ -82,7 +86,7 @@ const Projects = () => {
           {
             y: -60,
             autoAlpha: 0,
-            filter: "blur(6px)",
+            ...(IS_MOBILE ? {} : { filter: "blur(6px)" }),
             duration: 1,
             ease: "power2.in",
           },
@@ -104,7 +108,7 @@ const Projects = () => {
       tl.to(innerRef.current, {
         opacity: 0,
         scale: 0.92,
-        filter: "blur(12px)",
+        ...(IS_MOBILE ? {} : { filter: "blur(12px)" }),
         duration: 1.5,
         ease: "power2.in"
       }, "+=0.3");

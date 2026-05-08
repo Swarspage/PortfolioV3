@@ -30,6 +30,7 @@ const LazySection = ({
   rootMargin = "300px",
   fallback = <SectionSkeleton />,
   placeholder,
+  height = "100dvh",
 }) => {
   const sentinelRef = useRef(null);
   const [shouldRender, setShouldRender] = useState(false);
@@ -59,7 +60,7 @@ const LazySection = ({
       <div
         ref={sentinelRef}
         aria-hidden="true"
-        style={{ width: "100%", height: "100dvh", background: "transparent" }}
+        style={{ width: "100%", height, background: "transparent" }}
       />
     );
   }

@@ -29,7 +29,12 @@ const GridMotion = ({
             mouseXRef.current = e.clientX;
         };
 
+        // Frame counter: process only every other tick (~30fps instead of 60fps).
+        // The motion is slow and organic — 30fps is imperceptible for this animation.
+        let frameCount = 0;
         const updateMotion = () => {
+            frameCount++;
+            if (frameCount % 2 !== 0) return; // skip odd frames
             // Early return when off-screen: near-zero CPU cost
             if (!isVisible.current) return;
 

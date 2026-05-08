@@ -21,7 +21,8 @@
 
 @font-face {
   font-family: "Gasdrifo";
-  src: url("/fonts/NCLGasdrifo-Demo.otf") format("opentype");
+  src: url("/fonts/NCLGasdrifo-Demo.woff2") format("woff2"),
+       url("/fonts/NCLGasdrifo-Demo.otf")   format("opentype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -29,7 +30,8 @@
 
 @font-face {
   font-family: "Outfit";
-  src: url("/fonts/Outfit-VariableFont_wght.ttf") format("truetype");
+  src: url("/fonts/Outfit-VariableFont_wght.woff2") format("woff2"),
+       url("/fonts/Outfit-VariableFont_wght.ttf")   format("truetype");
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -108,4 +110,21 @@ textarea:-webkit-autofill:focus {
   caret-color: #ffffff;
   /* Delay the transition so the override doesn't flicker during page load */
   transition: background-color 9999s ease-in-out 0s;
+}
+
+/* ── Keyframe: skill card organic float (Skills section) ──────────────────────
+   Defined here once so React's Skills component doesn't inject a <style>
+   element on every re-render triggered by ScrollTrigger scrubbing.           */
+@keyframes skillFloat {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ── Keyframe: achievement info panel fade-slide (Achievements section) ───── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeSlideIn 0.5s ease-out both;
 }

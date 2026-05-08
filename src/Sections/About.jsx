@@ -91,7 +91,8 @@ const About = () => {
   // Entrance animation for image when reaching section
   useEffect(() => {
     if (!imageContainerRef.current) return;
-    gsap.fromTo(
+    // Store the returned animation so its ScrollTrigger can be killed on cleanup
+    const anim = gsap.fromTo(
       imageContainerRef.current,
       { scale: 0.9, opacity: 0, rotationY: 15 },
       { 
@@ -103,6 +104,10 @@ const About = () => {
         }
       }
     );
+    return () => {
+      if (anim.scrollTrigger) anim.scrollTrigger.kill();
+      anim.kill();
+    };
   }, []);
 
   return (

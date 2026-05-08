@@ -7,6 +7,8 @@ const MagneticWrapper = ({ children, className = "" }) => {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Respect the OS-level reduced-motion preference — skip all hover physics
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     
     // Create quickTo functions for x and y
     const xTo = gsap.quickTo(el, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });

@@ -82,6 +82,10 @@ const CardSwap = ({
         const swap = () => {
             if (order.current.length < 2) return;
 
+            // Kill previous timeline before creating a new one so GSAP's
+            // global ticker doesn't accumulate orphaned timeline references.
+            tlRef.current?.kill();
+
             const [front, ...rest] = order.current;
             const elFront = refs[front].current;
             const tl = gsap.timeline();

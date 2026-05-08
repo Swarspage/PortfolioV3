@@ -9,15 +9,33 @@ const IS_MOBILE_TOUCH = typeof window !== 'undefined' &&
 export function SplineScene({ scene, className, onSplineLoad, isAppReady, isVisible = true }) {
   const [splineApp, setSplineApp] = useState(null);
 
+  // ── Mobile bypass ────────────────────────────────────────────────────────
+  // On touch/mobile devices: skip the entire Spline scene (saves ~4.5 MB of JS chunks —
+  // physics engine, navmesh, gaussian-splat renderer, howler audio, etc.).
+  // Signal the Loader immediately so it can complete its sequence.
+  useEffect(() => {
+    if (IS_MOBILE_TOUCH && onSplineLoad) {
+      onSplineLoad();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // On mobile: render a lightweight CSS visual so the hero isn't completely empty
+  if (IS_MOBILE_TOUCH) {
+    return (
+      <div
+        className={className}
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(ellipse 80% 60% at 70% 40%, rgba(191,219,254,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
+    );
+  }
+
+  // ── Desktop: full Spline scene ───────────────────────────────────────────
   const handleLoad = (app) => {
     app.stop(); // Freeze instantly upon load to wait for Loader.jsx cinematic!
-
-    // On mobile: mark canvas so it renders at native resolution (no DPR upscaling)
-    // This reduces GPU memory pressure on lower-end devices without breaking the scene
-    if (IS_MOBILE_TOUCH && app.canvas) {
-      app.canvas.style.imageRendering = 'auto';
-    }
-
     setSplineApp(app);
     if (onSplineLoad) onSplineLoad();
   };

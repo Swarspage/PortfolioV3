@@ -51,21 +51,30 @@ const Navbar = () => {
 
     // Scroll animation for compact mode
     let lastScrollY = window.scrollY;
+    let rafId = null;
 
     const handleScroll = () => {
-      if (!listRef.current) return;
-      if (window.scrollY > 50) {
-        listRef.current.classList.add("py-2", "px-6", "bg-brand-surface-hover", "backdrop-blur-xl");
-        listRef.current.classList.remove("py-3", "px-8", "bg-brand-surface", "backdrop-blur-md");
-      } else {
-        listRef.current.classList.add("py-3", "px-8", "bg-brand-surface", "backdrop-blur-md");
-        listRef.current.classList.remove("py-2", "px-6", "bg-brand-surface-hover", "backdrop-blur-xl");
-      }
-      lastScrollY = window.scrollY;
+      // rAF-throttle: classList mutation fires at most once per animation frame
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!listRef.current) return;
+        if (window.scrollY > 50) {
+          listRef.current.classList.add("py-2", "px-6", "bg-brand-surface-hover", "backdrop-blur-xl");
+          listRef.current.classList.remove("py-3", "px-8", "bg-brand-surface", "backdrop-blur-md");
+        } else {
+          listRef.current.classList.add("py-3", "px-8", "bg-brand-surface", "backdrop-blur-md");
+          listRef.current.classList.remove("py-2", "px-6", "bg-brand-surface-hover", "backdrop-blur-xl");
+        }
+        lastScrollY = window.scrollY;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Lock body scroll when mobile menu is open
