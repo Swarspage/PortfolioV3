@@ -5,7 +5,7 @@ import linkedin from "../assets/linkedin-logo.webp";
 import github from "../assets/github.webp";
 import x from "../assets/X.webp";
 import emailIcon from "../assets/email.webp";
-import SplitText from "../Components/SplitText";
+import SplitText from "../components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -216,7 +216,6 @@ const Contact = () => {
     */
     <section
       ref={sectionRef}
-      id="contact"
       className="relative w-full lg:h-dvh bg-transparent text-brand-text"
     >
       {/* Decorative ambient glow */}

@@ -4,7 +4,7 @@ import Vayu from "../assets/Vayu.webp";
 import Singularity from "../assets/Singularity.webp";
 import sims from "../assets/sims.webp";
 import RecipeAi from "../assets/RecipeAi.webp";
-import projectsData from "../Components/ProjectsData.json";
+import projectsData from "../data/ProjectsData.json";
 import { gsap } from "../lib/gsapScroll";
 
 // Skip filter:blur on mobile — prevents 5 simultaneous compositor layers tanking framerate
@@ -105,9 +105,9 @@ const Projects = () => {
           start: "top 85%",
         }
       });
-      
-      tl.fromTo(cards, 
-        { opacity: 0, x: 20 }, 
+
+      tl.fromTo(cards,
+        { opacity: 0, x: 20 },
         { opacity: 1, x: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" }
       );
 
@@ -123,7 +123,6 @@ const Projects = () => {
   return (
     <section
       ref={sectionRef}
-      id="projects"
       className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
       <style>{`
@@ -157,10 +156,10 @@ const Projects = () => {
               className={`font-display font-black text-white leading-[1.0] ${isTouchMode ? 'mb-3 drop-shadow-2xl' : 'mb-6 drop-shadow-none'}`}
               style={{ fontSize: "clamp(2.5rem,6vw,5.5rem)" }}
             >
-              Selected&nbsp;
+              My&nbsp;
               <br className={`${isTouchMode ? 'hidden' : 'block'}`} />
               <span className="text-brand-muted" style={{ fontStyle: "italic" }}>
-                Stories
+                Creations
               </span>
             </h2>
 
@@ -209,95 +208,95 @@ const Projects = () => {
                 className={`flex flex-col ${isTouchMode ? 'w-[85vw] md:w-[55vw] lg:w-[45vw] max-w-[600px] shrink-0 snap-center mt-2 pt-2' : 'absolute inset-0 w-full pt-20'}`}
                 style={{ zIndex: (projectsData?.projectsData?.length ?? 0) - index }}
               >
-              {/* Screenshot / mockup image */}
-              <div
-                className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10"
-                style={{
-                  height: "45%",
-                  background: "rgba(255,255,255,0.04)",
-                  boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-                }}
-              >
-                <img
-                  className="w-full h-full object-cover object-top"
-                  src={imageMap[project.name]}
-                  alt={project.name}
-                  draggable={false}
-                />
-              </div>
-
-              {/* Card text content */}
-              <div className="flex flex-col flex-1 overflow-hidden">
-                {/* Tech tag pill */}
-                <div className="mb-2 md:mb-3">
-                  <span
-                    className="inline-block text-[10px] md:text-[11px] font-semibold tracking-[0.25em] uppercase px-3 py-1 rounded-full border font-body"
-                    style={{
-                      color: "var(--color-brand-accent)",
-                      borderColor: "rgba(191,219,254,0.25)",
-                      background: "rgba(191,219,254,0.06)",
-                    }}
-                  >
-                    {project.technologies.join(" · ")}
-                  </span>
-                </div>
-
-                {/* Project name */}
-                <h3
-                  className="font-display font-black leading-[1] text-white mb-2 md:mb-3"
-                  style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}
-                >
-                  {project.name}
-                </h3>
-
-                {/* Description */}
-                <p
-                  className="font-body leading-relaxed mb-3 md:mb-5 line-clamp-3 md:line-clamp-none flex-shrink"
+                {/* Screenshot / mockup image */}
+                <div
+                  className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10"
                   style={{
-                    color: "var(--color-brand-muted)",
-                    fontSize: "clamp(0.8rem,1.2vw,0.95rem)",
-                    maxWidth: "44ch",
+                    height: "45%",
+                    background: "rgba(255,255,255,0.04)",
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
                   }}
                 >
-                  {project.description}
-                </p>
+                  <img
+                    className="w-full h-full object-cover object-top"
+                    src={imageMap[project.name]}
+                    alt={project.name}
+                    draggable={false}
+                  />
+                </div>
 
-                {/* CTA links */}
-                <div className="flex flex-wrap items-center gap-6 mt-auto pt-2 relative z-50">
-                  {project.githubLink && (
-                    <a
-                      href={project.githubLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
-                      style={{ color: "var(--color-brand-accent)", pointerEvents: "auto", position: "relative", zIndex: 50 }}
+                {/* Card text content */}
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  {/* Tech tag pill */}
+                  <div className="mb-2 md:mb-3">
+                    <span
+                      className="inline-block text-[10px] md:text-[11px] font-semibold tracking-[0.25em] uppercase px-3 py-1 rounded-full border font-body"
+                      style={{
+                        color: "var(--color-brand-accent)",
+                        borderColor: "rgba(191,219,254,0.25)",
+                        background: "rgba(191,219,254,0.06)",
+                      }}
                     >
-                      View Code
-                      <span
-                        className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
-                        style={{ background: "var(--color-brand-accent)" }}
-                      />
-                    </a>
-                  )}
-                  {project.liveLink && (
-                    <a
-                      href={project.liveLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
-                      style={{ color: "rgb(209, 213, 219)", pointerEvents: "auto", position: "relative", zIndex: 50 }} // gray-300
-                    >
-                      Live Demo
-                      <span
-                        className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
-                        style={{ background: "rgb(209, 213, 219)" }}
-                      />
-                    </a>
-                  )}
+                      {project.technologies.join(" · ")}
+                    </span>
+                  </div>
+
+                  {/* Project name */}
+                  <h3
+                    className="font-display font-black leading-[1] text-white mb-2 md:mb-3"
+                    style={{ fontSize: "clamp(2rem,4vw,3.25rem)" }}
+                  >
+                    {project.name}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="font-body leading-relaxed mb-3 md:mb-5 line-clamp-3 md:line-clamp-none flex-shrink"
+                    style={{
+                      color: "var(--color-brand-muted)",
+                      fontSize: "clamp(0.8rem,1.2vw,0.95rem)",
+                      maxWidth: "44ch",
+                    }}
+                  >
+                    {project.description}
+                  </p>
+
+                  {/* CTA links */}
+                  <div className="flex flex-wrap items-center gap-6 mt-auto pt-2 relative z-50">
+                    {project.githubLink && (
+                      <a
+                        href={project.githubLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
+                        style={{ color: "var(--color-brand-accent)", pointerEvents: "auto", position: "relative", zIndex: 50 }}
+                      >
+                        View Code
+                        <span
+                          className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
+                          style={{ background: "var(--color-brand-accent)" }}
+                        />
+                      </a>
+                    )}
+                    {project.liveLink && (
+                      <a
+                        href={project.liveLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[11px] md:text-[12px] transition-all duration-300 cursor-pointer"
+                        style={{ color: "rgb(209, 213, 219)", pointerEvents: "auto", position: "relative", zIndex: 50 }} // gray-300
+                      >
+                        Live Demo
+                        <span
+                          className="inline-block h-px w-8 group-hover:w-14 transition-all duration-300 rounded-full"
+                          style={{ background: "rgb(209, 213, 219)" }}
+                        />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         </div>
       </div>

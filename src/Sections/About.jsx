@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import image from "../assets/image.webp";
-import SplitText from "../Components/SplitText";
+import SplitText from "../components/SplitText";
 import { gsap } from "../lib/gsapScroll";
-import aboutData from "../Components/AboutData.json";
+import aboutData from "../data/AboutData.json";
 
 // Skip filter:blur on mobile — prevents expensive GPU layer compositing on low-power devices
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
@@ -125,7 +125,7 @@ const About = () => {
   }, [isMobile]);
 
   return (
-    <section ref={sectionRef} id="about" className="relative h-dvh w-full overflow-hidden bg-transparent">
+    <section ref={sectionRef} className="relative h-dvh w-full overflow-hidden bg-transparent">
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

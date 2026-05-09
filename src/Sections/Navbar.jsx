@@ -20,7 +20,7 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const observerOptions = { root: null, rootMargin: "-50% 0px -50% 0px", threshold: 0 };
+    const observerOptions = { root: null, rootMargin: "-45% 0px -45% 0px", threshold: 0 };
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

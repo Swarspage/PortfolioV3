@@ -2,29 +2,29 @@ import { useEffect, useState, Suspense, lazy } from "react";
 import Lenis from "lenis";
 
 // ─── Eagerly loaded (critical path) ──────────────────────────────────────────
-import Loader  from "./Components/Loader";
-import Navbar  from "./Sections/Navbar";
-import Me      from "./Sections/Me";
+import Loader  from "./components/Loader";
+import Navbar  from "./sections/Navbar";
+import Me      from "./sections/Me";
 
 // ─── Lazy: Particles ──────────────────────────────────────────────────────────
 // Deferred so the heavy `ogl` WebGL bundle doesn't block the initial parse.
 // A 100 ms render-gate prevents any background flash while the chunk downloads.
-const Particles = lazy(() => import("./Components/Particles"));
+const Particles = lazy(() => import("./components/Particles"));
 
 // ─── Lazy: Sections (below-the-fold) ─────────────────────────────────────────
 // Each section's chunk is fetched only when LazySection's IntersectionObserver
 // fires (300px before the section enters the viewport).
-const About       = lazy(() => import("./Sections/About"));
-const Projects    = lazy(() => import("./Sections/Projects"));
-const Skills      = lazy(() => import("./Sections/Skills"));
-const Experience  = lazy(() => import("./Sections/Experience"));
-const Education   = lazy(() => import("./Sections/Education"));
-const Achievements = lazy(() => import("./Sections/Achievements"));
-const Youtube     = lazy(() => import("./Sections/Youtube"));
-const Contact     = lazy(() => import("./Sections/Contact"));
+const About       = lazy(() => import("./sections/About"));
+const Projects    = lazy(() => import("./sections/Projects"));
+const Skills      = lazy(() => import("./sections/Skills"));
+const Experience  = lazy(() => import("./sections/Experience"));
+const Education   = lazy(() => import("./sections/Education"));
+const Achievements = lazy(() => import("./sections/Achievements"));
+const Youtube     = lazy(() => import("./sections/Youtube"));
+const Contact     = lazy(() => import("./sections/Contact"));
 
 // ─── Lazy-section infrastructure ─────────────────────────────────────────────
-import LazySection from "./Components/LazySection";
+import LazySection from "./components/LazySection";
 
 // ─── GSAP scroll setup ────────────────────────────────────────────────────────
 import { gsap, ScrollTrigger, syncLenisWithScrollTrigger } from "./lib/gsapScroll";
@@ -159,31 +159,31 @@ function App() {
 
         {/* ── Below-the-fold sections — each mounted on first viewport entry ── */}
 
-        <LazySection>
+        <LazySection id="about">
           <About />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="projects">
           <Projects />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="skills">
           <Skills />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="experience">
           <Experience />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="education">
           <Education />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="achievements">
           <Achievements />
         </LazySection>
 
-        <LazySection>
+        <LazySection id="youtube">
           <Youtube />
         </LazySection>
 

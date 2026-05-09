@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "../lib/gsapScroll";
-import SplitText from "../Components/SplitText";
-import CoverFlow from "../Components/CoverFlow";
+import SplitText from "../components/SplitText";
+import CoverFlow from "../components/CoverFlow";
 
 // ─── Asset imports ──────────────────────────────────────────────────────────
 import codeAThon from "../assets/Achievements/CodeAThonehackthon.webp";
@@ -156,8 +156,7 @@ const Achievements = () => {
   return (
     <section
       ref={sectionRef}
-      id="achievements"
-      className="relative min-h-dvh w-full overflow-hidden text-brand-text bg-transparent flex flex-col pt-24 pb-12 lg:pt-32 lg:pb-16"
+      className="relative min-h-dvh w-full overflow-hidden text-brand-text bg-transparent flex flex-col pt-20 pb-8 lg:pt-24 lg:pb-10"
     >
       {/* Decorative watermark */}
       <span
@@ -168,13 +167,13 @@ const Achievements = () => {
         WINS
       </span>
 
-      <div ref={innerRef} className="relative z-10 w-full h-full flex flex-col flex-1 max-w-[1600px] mx-auto">
+      <div ref={innerRef} className="relative z-10 w-full h-full flex flex-col flex-1 max-w-[1600px] mx-auto justify-center">
 
         {/* ══════════ TOP: Heading ══════════ */}
-        <div className="w-full px-4 sm:px-8 text-center shrink-0 mb-6 sm:mb-10 lg:mb-14">
+        <div className="w-full px-4 sm:px-8 text-center shrink-0 mb-4 sm:mb-6 lg:mb-8">
           <SplitText
             text="ACHIEVEMENTS"
-            className="font-display text-[clamp(2.2rem,7vw,5rem)] font-bold text-white tracking-widest leading-none drop-shadow-2xl"
+            className="font-display text-[clamp(2.2rem,7vw,4.5rem)] font-bold text-white tracking-widest leading-none drop-shadow-2xl"
             delay={0}
             duration={0.8}
             ease="power3.out"
@@ -183,14 +182,14 @@ const Achievements = () => {
             to={{ opacity: 1, y: 0, scale: 1 }}
             threshold={0.5}
           />
-          <div className="mt-3 sm:mt-4 h-px w-16 bg-gradient-to-r from-transparent via-brand-accent/70 to-transparent mx-auto" />
-          <p className="mt-3 font-mono text-[9px] sm:text-[11px] tracking-[0.3em] uppercase text-brand-accent/60 opacity-80">
+          <div className="mt-2 sm:mt-3 h-px w-16 bg-gradient-to-r from-transparent via-brand-accent/70 to-transparent mx-auto" />
+          <p className="mt-2 font-mono text-[9px] sm:text-[11px] tracking-[0.3em] uppercase text-brand-accent/60 opacity-80">
             Recognitions, milestones & technical wins
           </p>
         </div>
 
         {/* ══════════ MIDDLE: Cover Flow Carousel ══════════ */}
-        <div className="relative flex-1 w-full min-h-[250px] sm:min-h-[350px] lg:min-h-[450px] z-30 flex items-center justify-center">
+        <div className="relative flex-1 w-full min-h-[200px] sm:min-h-[280px] lg:min-h-[380px] z-30 flex items-center justify-center">
           <CoverFlow
             items={ACHIEVEMENTS}
             activeIndex={activeIndex}
@@ -199,15 +198,15 @@ const Achievements = () => {
         </div>
 
         {/* ══════════ BOTTOM: Interactive Info Panel ══════════ */}
-        <div className="w-full max-w-[800px] mx-auto px-4 sm:px-8 shrink-0 z-40 mt-6 sm:mt-12 lg:mt-16">
+        <div className="w-full max-w-[800px] mx-auto px-4 sm:px-8 shrink-0 z-40 mt-4 sm:mt-6 lg:mt-8">
           <div
-            className="relative rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 lg:p-10 overflow-hidden border bg-brand-surface/30 backdrop-blur-xl transition-colors duration-700 mx-auto"
+            className="relative rounded-2xl sm:rounded-[1.5rem] p-4 sm:p-6 lg:p-8 overflow-hidden border bg-brand-surface/30 backdrop-blur-xl transition-colors duration-700 mx-auto"
             style={{ borderColor: accentStyle.border, boxShadow: `0 8px 32px rgba(0,0,0,0.4), inset 0 0 40px ${accentStyle.glow}` }}
           >
-            <div ref={infoRef} className="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
+            <div ref={infoRef} className="relative z-10 flex flex-col items-center text-center gap-2 sm:gap-3">
 
               {/* Category + Date */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <span
                   className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase transition-all duration-700"
                   style={{ borderColor: accentStyle.border, color: accentStyle.text, background: accentStyle.glow }}
@@ -220,20 +219,20 @@ const Achievements = () => {
               </div>
 
               {/* Title */}
-              <h3 className="font-display text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-tight mt-1">
+              <h3 className="font-display text-lg sm:text-xl lg:text-2xl font-bold text-white leading-tight mt-0.5">
                 {active.title}
               </h3>
 
               {/* Divider */}
-              <div className="h-px w-24 bg-white/10 my-1" />
+              <div className="h-px w-20 bg-white/10 my-0.5" />
 
               {/* Description */}
-              <p className="font-body text-[13px] sm:text-[15px] lg:text-base leading-relaxed text-brand-muted opacity-90 max-w-[650px]">
+              <p className="font-body text-xs sm:text-sm lg:text-[15px] leading-relaxed text-brand-muted opacity-90 max-w-[700px]">
                 {active.description}
               </p>
 
               {/* Card Pagination Indicators */}
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2 pt-4">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 pt-2 sm:pt-3">
                 {ACHIEVEMENTS.map((_, i) => (
                   <button
                     key={i}

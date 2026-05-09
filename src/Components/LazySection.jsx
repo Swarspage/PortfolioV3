@@ -33,18 +33,17 @@ const LazySection = ({
   height = "100dvh",
   id,
 }) => {
-  const sentinelRef = useRef(null);
+  const containerRef = useRef(null);
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
+    const el = containerRef.current;
+    if (!el || shouldRender) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setShouldRender(true);
-          observer.disconnect(); // Only need to trigger once
         }
       },
       { rootMargin, threshold: 0 }
@@ -52,22 +51,22 @@ const LazySection = ({
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [rootMargin]);
+  }, [rootMargin, shouldRender]);
 
-  if (!shouldRender) {
-    // Keep a placeholder with the same height so scroll positions
-    // don't shift when the real section mounts
-    return placeholder ?? (
-      <div
-        id={id}
-        ref={sentinelRef}
-        aria-hidden="true"
-        style={{ width: "100%", height, background: "transparent" }}
-      />
-    );
-  }
-
-  return <Suspense fallback={fallback}>{children}</Suspense>;
+  return (
+    <div 
+      id={id} 
+      ref={containerRef} 
+      className="w-full relative" 
+      style={{ minHeight: height }}
+    >
+      {shouldRender ? (
+        <Suspense fallback={fallback}>{children}</Suspense>
+      ) : (
+        placeholder ?? <div style={{ width: "100%", height, background: "transparent" }} aria-hidden="true" />
+      )}
+    </div>
+  );
 };
 
 export default LazySection;

@@ -8,7 +8,7 @@ const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-import youtubeData from "../Components/YoutubeData.json";
+import youtubeData from "../data/YoutubeData.json";
 const { featuredVideo, recentVideos } = youtubeData;
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -72,7 +72,6 @@ const Youtube = () => {
   return (
     <section
       ref={sectionRef}
-      id="youtube"
       className="relative h-dvh w-full overflow-hidden text-brand-text"
     >
       {/* Subtle red glow */}

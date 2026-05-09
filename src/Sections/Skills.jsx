@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState, forwardRef } from "react";
 import { gsap } from "../lib/gsapScroll";
-import SplitText from "../Components/SplitText";
+import SplitText from "../components/SplitText";
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
-import SKILLS_DATA from "../Components/SkillsData.json";
+import SKILLS_DATA from "../data/SkillsData.json";
 
 const icons = import.meta.glob('../assets/*.{webp,svg}', { eager: true, import: 'default' });
 
@@ -258,7 +258,6 @@ export default function Skills() {
   return (
     <section
       ref={sectionRef}
-      id="skills"
       className="relative flex items-center justify-center w-full h-dvh overflow-hidden bg-transparent text-brand-text"
     >
       {/* ── Decorative Background Text ── */}

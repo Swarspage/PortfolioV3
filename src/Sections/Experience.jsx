@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import SplitText from "../Components/SplitText";
+import SplitText from "../components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -7,7 +7,7 @@ const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-import experienceData from "../Components/ExperienceData.json";
+import experienceData from "../data/ExperienceData.json";
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const Experience = () => {
@@ -130,7 +130,6 @@ const Experience = () => {
   return (
     <section
       ref={sectionRef}
-      id="experience"
       className="relative flex items-center justify-center w-full min-h-dvh overflow-hidden text-brand-text px-5 sm:px-8 md:px-12 lg:px-20 py-20 lg:py-0"
     >
       {/* Ambient dot-grid */}
