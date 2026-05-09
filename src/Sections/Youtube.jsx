@@ -8,31 +8,8 @@ const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-const recentVideos = [
-  {
-    title: "Project Showcase",
-    label: "Live Stream",
-    thumbnail: "https://img.youtube.com/vi/lDWuxWCVywc/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=lDWuxWCVywc",
-  },
-  {
-    title: "Building Session #1",
-    label: "Past Stream",
-    thumbnail: "https://img.youtube.com/vi/ZVaLEBNFlzc/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=ZVaLEBNFlzc",
-  },
-  {
-    title: "Building Session #2",
-    label: "Past Stream",
-    thumbnail: "https://img.youtube.com/vi/5Y-RAEXeUjU/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=5Y-RAEXeUjU",
-  },
-];
-
-const featuredVideo = {
-  id: "lDWuxWCVywc",
-  link: "https://www.youtube.com/watch?v=lDWuxWCVywc",
-};
+import youtubeData from "../Components/YoutubeData.json";
+const { featuredVideo, recentVideos } = youtubeData;
 
 // ─── Component ──────────────────────────────────────────────────────────────
 const Youtube = () => {

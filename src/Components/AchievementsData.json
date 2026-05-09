@@ -3,28 +3,28 @@
     "title": "Top 8 Finalist · Code-A-Thon 2.0",
     "category": "Competition",
     "date": "2025",
-    "description": "Out of 100+ submissions, Singularity placed Top 8. Built over 1.5 months — not a weekend sprint — it pulled real-time telemetry from NASA, SpaceX, and ISRO into a single mission control. Orbital mechanics, 3D globe rendering, AI integration, live ISS tracking. The kind of project you build when you actually care about what you're making.",
+    "description": "Out of 100+ teams, Singularity placed Top 8. Not a weekend sprint — built over 1.5 months. Real-time telemetry from NASA, SpaceX, and ISRO. Orbital mechanics, 3D globe, live ISS tracking, AI integration. The kind of project you build when you actually give a damn.",
     "iconName": "trophy"
   },
   {
     "title": "Shipped to 500+ Users · SIMS",
     "category": "Deployment",
     "date": "2024",
-    "description": "Most portfolio projects live on localhost. SIMS lives at a college domain and gets used by over 500 students every day. Built during my internship under the HOD — I owned the entire frontend. Seeing something you built actually get used is a different kind of validation.",
+    "description": "Most portfolio projects live on localhost. SIMS lives at a real domain and gets opened by 500+ students every day. Built during my internship under the HOD — I owned the entire frontend. Seeing something you built actually get used hits different.",
     "iconName": "rocket"
   },
   {
     "title": "GitHub Workshop · Volunteer",
     "category": "Workshop",
     "date": "2024",
-    "description": "Volunteered at a Git & GitHub workshop for third-year students. Helped them get comfortable with version control, branching, and collaborative development. Teaching something is the fastest way to find out how well you actually know it.",
+    "description": "Ran a Git & GitHub workshop for third-year students — version control, branching, collaborative workflows. Teaching something is the fastest stress-test for how well you actually know it.",
     "iconName": "volunteer"
   },
   {
     "title": "8.365 GPA · B.Tech",
     "category": "Academic",
     "date": "2023 – Present",
-    "description": "Balancing active development, hackathons, freelance work, and an internship — while holding an 8.365. The academics and the building happen in parallel, not instead of each other.",
+    "description": "Hackathons, internship, freelance, active projects — and still an 8.365. The academics and the building happen in parallel, not instead of each other.",
     "iconName": "academic"
   }
 ]

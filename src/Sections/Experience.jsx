@@ -7,29 +7,7 @@ const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-const experienceData = [
-  {
-    role: "Intern / Team Member",
-    org: "Datta Meghe College",
-    duration: "2023 - Present",
-    active: true,
-    description: "Building and maintaining features across the stack — React on the front, Express and MongoDB in the back. Integrated real-world APIs like OpenWeather and Leaflet into student-facing applications that actually get used.",
-  },
-  {
-    role: "Contributor",
-    org: "CSI-CATT Tech Team",
-    duration: "2023 - Present",
-    active: true,
-    description: "Fast-paced collaboration, rapid prototyping, and hackathon-mode shipping. Worked across frontend and backend, and genuinely enjoy the pressure of building something meaningful under a deadline.",
-  },
-  {
-    role: "Freelance / Personal Projects",
-    org: "Self-employed",
-    duration: "2022 - Present",
-    active: false,
-    description: "End-to-end ownership: design decisions, MERN stack development, deployment, and polish. Every project has been a lesson in what it actually takes to ship something you're proud of.",
-  }
-];
+import experienceData from "../Components/ExperienceData.json";
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const Experience = () => {

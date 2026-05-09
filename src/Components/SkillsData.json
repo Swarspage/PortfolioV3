@@ -1,0 +1,128 @@
+[
+  {
+    "skill": "React",
+    "glow": "#61DAFB",
+    "category": "Frontend",
+    "icon": "react.webp"
+  },
+  {
+    "skill": "JavaScript",
+    "glow": "#F7DF1E",
+    "category": "Frontend",
+    "icon": "js.webp"
+  },
+  {
+    "skill": "HTML",
+    "glow": "#E34F26",
+    "category": "Frontend",
+    "icon": "html.webp"
+  },
+  {
+    "skill": "CSS",
+    "glow": "#1572B6",
+    "category": "Frontend",
+    "icon": "css.webp"
+  },
+  {
+    "skill": "Tailwind",
+    "glow": "#38BDF8",
+    "category": "Frontend",
+    "icon": "tailwind.svg"
+  },
+  {
+    "skill": "GSAP",
+    "glow": "#88CE02",
+    "category": "Frontend",
+    "icon": "gsap.svg"
+  },
+  {
+    "skill": "Framer Motion",
+    "glow": "#BB4FFF",
+    "category": "Frontend",
+    "icon": "framer-motion.svg"
+  },
+  {
+    "skill": "Three.js",
+    "glow": "#FFFFFF",
+    "category": "Frontend",
+    "icon": "threejs.svg"
+  },
+  {
+    "skill": "Node.js",
+    "glow": "#339933",
+    "category": "Backend",
+    "icon": "node-js.webp"
+  },
+  {
+    "skill": "Express",
+    "glow": "#AAAAAA",
+    "category": "Backend",
+    "icon": "express.webp"
+  },
+  {
+    "skill": "Python",
+    "glow": "#4B8BBE",
+    "category": "Backend",
+    "icon": "Python.webp"
+  },
+  {
+    "skill": "Java",
+    "glow": "#ED8B00",
+    "category": "Backend",
+    "icon": "java.webp"
+  },
+  {
+    "skill": "MongoDB",
+    "glow": "#47A248",
+    "category": "Database",
+    "icon": "MongoDB.webp"
+  },
+  {
+    "skill": "MySQL",
+    "glow": "#00618A",
+    "category": "Database",
+    "icon": "MySQL.webp"
+  },
+  {
+    "skill": "C++",
+    "glow": "#00599C",
+    "category": "Languages",
+    "icon": "cpp.webp"
+  },
+  {
+    "skill": "C",
+    "glow": "#A8B9CC",
+    "category": "Languages",
+    "icon": "C.webp"
+  },
+  {
+    "skill": "Git",
+    "glow": "#F05032",
+    "category": "Tools",
+    "icon": "Git.webp"
+  },
+  {
+    "skill": "GitHub",
+    "glow": "#D0D0D0",
+    "category": "Tools",
+    "icon": "github.webp"
+  },
+  {
+    "skill": "Vite",
+    "glow": "#BD34FE",
+    "category": "Tools",
+    "icon": "vite.svg"
+  },
+  {
+    "skill": "Postman",
+    "glow": "#FF6C37",
+    "category": "Tools",
+    "icon": "postman.webp"
+  },
+  {
+    "skill": "VS Code",
+    "glow": "#007ACC",
+    "category": "Tools",
+    "icon": "VS.webp"
+  }
+]

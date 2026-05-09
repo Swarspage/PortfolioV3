@@ -1,0 +1,23 @@
+[
+  {
+    "institution": "Datta Meghe College of Eng.",
+    "degree": "B.Tech Computer Engineering",
+    "details": "GPA: 8.365 / 10 · Ongoing",
+    "years": "2023 – Present",
+    "active": true
+  },
+  {
+    "institution": "Abhishek Vidyalayam",
+    "degree": "HSC · Classes 11–12",
+    "details": "Science Stream",
+    "years": "2021 – 2023",
+    "active": false
+  },
+  {
+    "institution": "Elpro International School",
+    "degree": "CBSE · Classes 7–10",
+    "details": "89%",
+    "years": "2017 – 2021",
+    "active": false
+  }
+]

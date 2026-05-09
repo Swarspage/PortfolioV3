@@ -7,29 +7,7 @@ const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-const educationData = [
-  {
-    institution: "Datta Meghe College of Eng.",
-    degree: "B.Tech Computer Engineering",
-    details: "GPA: 8.365 / 10",
-    years: "2023 – Present",
-    active: true,
-  },
-  {
-    institution: "Abhishek Vidyalayam",
-    degree: "Classes 11–12, HSC",
-    details: "Science Stream",
-    years: "2021 – 2023",
-    active: false,
-  },
-  {
-    institution: "Elpro International School",
-    degree: "Classes 7–10, CBSE",
-    details: "89%",
-    years: "2017 – 2021",
-    active: false,
-  },
-];
+import educationData from "../Components/EducationData.json";
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const Education = () => {
