@@ -20,24 +20,6 @@ const IS_MOBILE = typeof window !== "undefined" &&
 // ─── Achievement Data ───────────────────────────────────────────────────────
 const ACHIEVEMENTS = [
   {
-    img: codeAThon,
-    title: "Top 8 Finalist · Code-A-Thon 2.0",
-    category: "Competition",
-    date: "2026",
-    description:
-      "Out of 100+ submissions, Singularity placed Top 8. Built over 1.5 months — not a weekend sprint — it pulled real-time telemetry from NASA, SpaceX, and ISRO into a single mission control. Orbital mechanics, 3D globe rendering, AI integration, live ISS tracking.",
-    accent: "#FBB924",
-  },
-  {
-    img: codeAThonTeam,
-    title: "The Team Behind Singularity",
-    category: "Competition",
-    date: "2026",
-    description:
-      "Code-A-Thon 2.0 wasn't a solo mission. The team that built Singularity — each member owning a critical subsystem. From backend architecture to 3D rendering, the project came together through late nights and relentless iteration.",
-    accent: "#BFDBFE",
-  },
-  {
     img: soloInternHOD,
     title: "Shipped to 500+ Users · SIMS",
     category: "Deployment",
@@ -81,6 +63,23 @@ const ACHIEVEMENTS = [
     description:
       "The official certificate for securing 2nd place in the DMCE Milestone 2025 Table Tennis Doubles. A reminder that agility and strategy apply just as much on the table as they do in code.",
     accent: "#86EFAC",
+  }, {
+    img: codeAThon,
+    title: "Top 8 Finalist · Code-A-Thon 2.0",
+    category: "Competition",
+    date: "2026",
+    description:
+      "Out of 100+ submissions, Singularity placed Top 8. Built over 1.5 months — not a weekend sprint — it pulled real-time telemetry from NASA, SpaceX, and ISRO into a single mission control. Orbital mechanics, 3D globe rendering, AI integration, live ISS tracking.",
+    accent: "#FBB924",
+  },
+  {
+    img: codeAThonTeam,
+    title: "The Team Behind Singularity",
+    category: "Competition",
+    date: "2026",
+    description:
+      "Code-A-Thon 2.0 wasn't a solo mission. The team that built Singularity — each member owning a critical subsystem. From backend architecture to 3D rendering, the project came together through late nights and relentless iteration.",
+    accent: "#BFDBFE",
   },
   {
     img: ttDoubles,
@@ -105,7 +104,7 @@ const Achievements = () => {
   const sectionRef = useRef(null);
   const innerRef = useRef(null);
   const infoRef = useRef(null);
-  
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   // GSAP Entrance Animation (No Pinning, just elegant entrance)
@@ -126,10 +125,10 @@ const Achievements = () => {
     });
 
     tl.to(inner, {
-      autoAlpha: 1, 
+      autoAlpha: 1,
       y: 0,
       ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
-      duration: 1.2, 
+      duration: 1.2,
       ease: "power3.out",
     });
 
@@ -142,11 +141,11 @@ const Achievements = () => {
   // Animate Info Panel on Data Change
   useEffect(() => {
     if (!infoRef.current) return;
-    
+
     // Smooth crossfade/slide effect for the text when activeIndex changes
     const el = infoRef.current;
-    gsap.fromTo(el, 
-      { opacity: 0, y: 15, filter: "blur(4px)" }, 
+    gsap.fromTo(el,
+      { opacity: 0, y: 15, filter: "blur(4px)" },
       { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power2.out" }
     );
   }, [activeIndex]);
@@ -170,7 +169,7 @@ const Achievements = () => {
       </span>
 
       <div ref={innerRef} className="relative z-10 w-full h-full flex flex-col flex-1 max-w-[1600px] mx-auto">
-        
+
         {/* ══════════ TOP: Heading ══════════ */}
         <div className="w-full px-4 sm:px-8 text-center shrink-0 mb-6 sm:mb-10 lg:mb-14">
           <SplitText
@@ -192,21 +191,21 @@ const Achievements = () => {
 
         {/* ══════════ MIDDLE: Cover Flow Carousel ══════════ */}
         <div className="relative flex-1 w-full min-h-[250px] sm:min-h-[350px] lg:min-h-[450px] z-30 flex items-center justify-center">
-          <CoverFlow 
-            items={ACHIEVEMENTS} 
-            activeIndex={activeIndex} 
-            setActiveIndex={setActiveIndex} 
+          <CoverFlow
+            items={ACHIEVEMENTS}
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
           />
         </div>
 
         {/* ══════════ BOTTOM: Interactive Info Panel ══════════ */}
         <div className="w-full max-w-[800px] mx-auto px-4 sm:px-8 shrink-0 z-40 mt-6 sm:mt-12 lg:mt-16">
-          <div 
+          <div
             className="relative rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 lg:p-10 overflow-hidden border bg-brand-surface/30 backdrop-blur-xl transition-colors duration-700 mx-auto"
             style={{ borderColor: accentStyle.border, boxShadow: `0 8px 32px rgba(0,0,0,0.4), inset 0 0 40px ${accentStyle.glow}` }}
           >
             <div ref={infoRef} className="relative z-10 flex flex-col items-center text-center gap-3 sm:gap-4">
-              
+
               {/* Category + Date */}
               <div className="flex items-center gap-3">
                 <span
