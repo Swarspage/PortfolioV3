@@ -1,6 +1,10 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "../lib/gsapScroll";
 
+// Evaluated once — never re-computes on re-render
+const PREFERS_REDUCED = typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const MagneticWrapper = ({ children, className = "" }) => {
   const ref = useRef(null);
   
@@ -8,7 +12,7 @@ const MagneticWrapper = ({ children, className = "" }) => {
     const el = ref.current;
     if (!el) return;
     // Respect the OS-level reduced-motion preference — skip all hover physics
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (PREFERS_REDUCED) return;
     
     // Create quickTo functions for x and y
     const xTo = gsap.quickTo(el, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
@@ -47,7 +51,7 @@ const MagneticWrapper = ({ children, className = "" }) => {
   return (
     <div
       ref={ref}
-      className={`relative ${className} will-change-transform inline-block`}
+      className={`relative ${className} ${PREFERS_REDUCED ? '' : 'will-change-transform'} inline-block`.trim()}
     >
       {children}
     </div>

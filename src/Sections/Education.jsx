@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import SplitText from "../Components/SplitText";
-import { gsap }  from "../lib/gsapScroll";
+import { gsap } from "../lib/gsapScroll";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const IS_MOBILE = typeof window !== "undefined" &&
@@ -10,34 +10,34 @@ const IS_MOBILE = typeof window !== "undefined" &&
 const educationData = [
   {
     institution: "Datta Meghe College of Eng.",
-    degree:      "B.Tech Computer Engineering",
-    details:     "GPA: 8.365 / 10",
-    years:       "2023 – Present",
-    active:      true,
+    degree: "B.Tech Computer Engineering",
+    details: "GPA: 8.365 / 10",
+    years: "2023 – Present",
+    active: true,
   },
   {
     institution: "Abhishek Vidyalayam",
-    degree:      "Classes 11–12, HSC",
-    details:     "Science Stream",
-    years:       "2021 – 2023",
-    active:      false,
+    degree: "Classes 11–12, HSC",
+    details: "Science Stream",
+    years: "2021 – 2023",
+    active: false,
   },
   {
     institution: "Elpro International School",
-    degree:      "Classes 7–10, CBSE",
-    details:     "89%",
-    years:       "2017 – 2021",
-    active:      false,
+    degree: "Classes 7–10, CBSE",
+    details: "89%",
+    years: "2017 – 2021",
+    active: false,
   },
 ];
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const Education = () => {
-  const sectionRef  = useRef(null);
-  const innerRef    = useRef(null);
-  const headingRef  = useRef(null);
-  const cardsRef    = useRef([]);
-  const textRefs    = useRef([]);
+  const sectionRef = useRef(null);
+  const innerRef = useRef(null);
+  const headingRef = useRef(null);
+  const cardsRef = useRef([]);
+  const textRefs = useRef([]);
 
   const setCardRef = (i) => (el) => { cardsRef.current[i] = el; };
   const setTextRef = (i) => (el) => { textRefs.current[i] = el; };
@@ -64,12 +64,12 @@ const Education = () => {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger:          section,
-        start:            "top top",
-        end:              `+=${cards.length * 80}%`,
-        pin:              true,
-        scrub:            1.5,
-        anticipatePin:    1,
+        trigger: section,
+        start: "top top",
+        end: `+=${cards.length * 80}%`,
+        pin: true,
+        scrub: 1.5,
+        anticipatePin: 1,
         invalidateOnRefresh: true,
       },
     });
@@ -91,23 +91,23 @@ const Education = () => {
       // Push every card already on-screen deeper into the deck
       for (let j = 0; j < i; j++) {
         const prevDepth = i - 1 - j;
-        const newDepth  = i - j;
+        const newDepth = i - j;
 
         stepTl.fromTo(
           cards[j],
           {
-            y:       -prevDepth * 45,
-            scale:    1 - prevDepth * 0.06,
-            opacity:  1 - prevDepth * 0.5,
+            y: -prevDepth * 45,
+            scale: 1 - prevDepth * 0.06,
+            opacity: 1 - prevDepth * 0.5,
             ...(IS_MOBILE ? {} : { filter: `blur(${prevDepth * 5}px)` }),
           },
           {
-            y:       -newDepth * 45,
-            scale:    1 - newDepth * 0.06,
-            opacity:  1 - newDepth * 0.5,
+            y: -newDepth * 45,
+            scale: 1 - newDepth * 0.06,
+            opacity: 1 - newDepth * 0.5,
             ...(IS_MOBILE ? {} : { filter: `blur(${newDepth * 5}px)` }),
             duration: 1,
-            ease:     "power2.inOut",
+            ease: "power2.inOut",
           },
           0
         );
@@ -117,18 +117,18 @@ const Education = () => {
       stepTl.fromTo(
         card,
         {
-          y:       "70vh",
+          y: "70vh",
           opacity: 0,
-          scale:   0.85,
+          scale: 0.85,
           ...(IS_MOBILE ? {} : { filter: "blur(12px)" }),
         },
         {
-          y:       0,
+          y: 0,
           opacity: 1,
-          scale:   1,
+          scale: 1,
           ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
           duration: 1.1,
-          ease:     "power3.out",
+          ease: "power3.out",
         },
         0
       );
@@ -159,7 +159,7 @@ const Education = () => {
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{
           backgroundImage: "radial-gradient(rgba(191,219,254,0.07) 1px, transparent 1px)",
-          backgroundSize:  "28px 28px",
+          backgroundSize: "28px 28px",
         }}
       />
 
@@ -245,9 +245,9 @@ const Education = () => {
               ref={setCardRef(index)}
               className="absolute inset-0 flex flex-col justify-between p-5 sm:p-7 md:p-10 rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.5)] bg-brand-surface/40 backdrop-blur-xl"
               style={{
-                zIndex:          index + 1,
+                zIndex: index + 1,
                 transformOrigin: "top center",
-                willChange:      "transform, opacity, filter",
+                willChange: "transform, opacity, filter",
               }}
             >
               {/* Top accent hairline */}

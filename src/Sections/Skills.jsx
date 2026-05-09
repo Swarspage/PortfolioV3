@@ -91,8 +91,8 @@ const SkillCard = forwardRef(function SkillCard({ skill, floatDelay, floatDurati
           boxShadow: hovered
             ? `0 0 24px ${skill.glow}30, 0 8px 24px rgba(0,0,0,0.4)`
             : "0 2px 10px rgba(0,0,0,0.2)",
-          backdropFilter: IS_MOBILE ? "blur(4px)" : "blur(14px)",
-          WebkitBackdropFilter: IS_MOBILE ? "blur(4px)" : "blur(14px)",
+          backdropFilter: IS_MOBILE ? "blur(4px)" : "blur(4px)",
+          WebkitBackdropFilter: IS_MOBILE ? "blur(4px)" : "blur(4px)",
           transition: "background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease",
           // Hover lift — pure CSS transform doesn't interfere with the CSS animation
           // because we wrap in translate inside the animation cycle
@@ -282,7 +282,7 @@ export default function Skills() {
         </div>
 
         {/* ── Scrollable grid Mask (Mobile only) ── */}
-        <div 
+        <div
           className="w-full flex-1 min-h-0 relative overflow-hidden lg:overflow-visible lg:flex-none"
           style={{
             WebkitMaskImage: IS_MOBILE ? 'linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)' : 'none',
@@ -294,55 +294,54 @@ export default function Skills() {
             ref={gridRef}
             className="will-change-transform px-4 sm:px-8 md:px-12 lg:px-20 pb-24 lg:pb-0"
           >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-6xl mx-auto">
-            {categoriesData.map((cat, catIndex) => (
-              <div
-                key={cat.name}
-                ref={setCategoryRef(catIndex)}
-                className={`rounded-2xl overflow-hidden ${
-                  cat.name === "Tools & Languages" ? "md:col-span-2 lg:col-span-3" : ""
-                }`}
-                style={{
-                  background: "rgba(255,255,255,0.025)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  backdropFilter: IS_MOBILE ? "none" : "blur(8px)",
-                  WebkitBackdropFilter: IS_MOBILE ? "none" : "blur(8px)",
-                }}
-              >
-                {/* Category label row */}
-                <div className="flex items-center gap-3 px-4 md:px-5 pt-4 md:pt-5 pb-2.5 md:pb-3.5">
-                  <div
-                    className="h-px w-6 flex-shrink-0"
-                    style={{ background: "linear-gradient(to right, transparent, rgba(191,219,254,0.45))" }}
-                  />
-                  <span className="font-body text-[9px] md:text-[10px] font-semibold tracking-[0.35em] uppercase text-brand-accent/50 whitespace-nowrap">
-                    {cat.name}
-                  </span>
-                  <div
-                    className="h-px flex-1"
-                    style={{ background: "linear-gradient(to right, rgba(191,219,254,0.15), transparent)" }}
-                  />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-6xl mx-auto">
+              {categoriesData.map((cat, catIndex) => (
+                <div
+                  key={cat.name}
+                  ref={setCategoryRef(catIndex)}
+                  className={`rounded-2xl overflow-hidden ${cat.name === "Tools & Languages" ? "md:col-span-2 lg:col-span-3" : ""
+                    }`}
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    backdropFilter: IS_MOBILE ? "none" : "blur(8px)",
+                    WebkitBackdropFilter: IS_MOBILE ? "none" : "blur(8px)",
+                  }}
+                >
+                  {/* Category label row */}
+                  <div className="flex items-center gap-3 px-4 md:px-5 pt-4 md:pt-5 pb-2.5 md:pb-3.5">
+                    <div
+                      className="h-px w-6 flex-shrink-0"
+                      style={{ background: "linear-gradient(to right, transparent, rgba(191,219,254,0.45))" }}
+                    />
+                    <span className="font-body text-[9px] md:text-[10px] font-semibold tracking-[0.35em] uppercase text-brand-accent/50 whitespace-nowrap">
+                      {cat.name}
+                    </span>
+                    <div
+                      className="h-px flex-1"
+                      style={{ background: "linear-gradient(to right, rgba(191,219,254,0.15), transparent)" }}
+                    />
+                  </div>
 
-                {/* Skill card flex-wrap */}
-                <div className="flex flex-wrap gap-2 md:gap-2.5 px-4 md:px-5 pb-4 md:pb-5">
-                  {cat.skills.map((skill) => {
-                    const ci = cardIndex++;
-                    return (
-                      <SkillCard
-                        key={skill.skill}
-                        ref={setCardRef(ci)}
-                        skill={skill}
-                        floatDelay={FLOAT_DATA[skill._idx].delay}
-                        floatDuration={FLOAT_DATA[skill._idx].duration}
-                      />
-                    );
-                  })}
+                  {/* Skill card flex-wrap */}
+                  <div className="flex flex-wrap gap-2 md:gap-2.5 px-4 md:px-5 pb-4 md:pb-5">
+                    {cat.skills.map((skill) => {
+                      const ci = cardIndex++;
+                      return (
+                        <SkillCard
+                          key={skill.skill}
+                          ref={setCardRef(ci)}
+                          skill={skill}
+                          floatDelay={FLOAT_DATA[skill._idx].delay}
+                          floatDuration={FLOAT_DATA[skill._idx].duration}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import SplitText from "../Components/SplitText";
 import { gsap } from "../lib/gsapScroll";
 
@@ -36,8 +36,8 @@ const Experience = () => {
   const nodeRefs = useRef([]);
   const cardRefs = useRef([]);
 
-  const setNodeRef = (index) => (el) => { nodeRefs.current[index] = el; };
-  const setCardRef = (index) => (el) => { cardRefs.current[index] = el; };
+  const setNodeRef = useCallback((index) => (el) => { nodeRefs.current[index] = el; }, []);
+  const setCardRef = useCallback((index) => (el) => { cardRefs.current[index] = el; }, []);
 
   useEffect(() => {
     const section = sectionRef.current;

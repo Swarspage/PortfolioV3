@@ -1,6 +1,11 @@
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 
+// Skip blur animations on touch — prevents 10+ simultaneous GPU compositor layers
+// during word-by-word entrance animations (e.g. About section heading).
+const IS_MOBILE_TOUCH = typeof window !== 'undefined' &&
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 const buildKeyframes = (from, steps) => {
     const keys = new Set([...Object.keys(from), ...steps.flatMap(s => Object.keys(s))]);
 
@@ -47,18 +52,20 @@ const BlurText = ({
 
     const defaultFrom = useMemo(
         () =>
-            direction === 'top' ? { filter: 'blur(10px)', opacity: 0, y: -50 } : { filter: 'blur(10px)', opacity: 0, y: 50 },
+            direction === 'top'
+                ? { ...(IS_MOBILE_TOUCH ? {} : { filter: 'blur(10px)' }), opacity: 0, y: -50 }
+                : { ...(IS_MOBILE_TOUCH ? {} : { filter: 'blur(10px)' }), opacity: 0, y:  50 },
         [direction]
     );
 
     const defaultTo = useMemo(
         () => [
             {
-                filter: 'blur(5px)',
+                ...(IS_MOBILE_TOUCH ? {} : { filter: 'blur(5px)' }),
                 opacity: 0.5,
                 y: direction === 'top' ? 5 : -5
             },
-            { filter: 'blur(0px)', opacity: 1, y: 0 }
+            { ...(IS_MOBILE_TOUCH ? {} : { filter: 'blur(0px)' }), opacity: 1, y: 0 }
         ],
         [direction]
     );

@@ -27,7 +27,7 @@ const Contact     = lazy(() => import("./Sections/Contact"));
 import LazySection from "./Components/LazySection";
 
 // ─── GSAP scroll setup ────────────────────────────────────────────────────────
-import { ScrollTrigger, syncLenisWithScrollTrigger } from "./lib/gsapScroll";
+import { gsap, ScrollTrigger, syncLenisWithScrollTrigger } from "./lib/gsapScroll";
 
 // ─── Accessibility / device flags ─────────────────────────────────────────────
 const PREFERS_REDUCED_MOTION =
@@ -57,7 +57,15 @@ function App() {
   }, [loaderComplete]);
 
   // Lenis smooth-scroll setup
+  // Skipped on touch devices — native iOS/Android momentum scroll is faster
+  // and consumes 0 JS. Lenis on mobile also fights native overscroll/inertia.
   useEffect(() => {
+    if (IS_MOBILE_TOUCH) {
+      if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+      ScrollTrigger.refresh();
+      return;
+    }
+
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
@@ -67,24 +75,32 @@ function App() {
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 2,
       infinite: false,
       wheelMultiplier: 1,
       lerp: 0.1,
-      syncTouch: true,
-      syncTouchLerp: 0.075,
     });
 
     const cleanupScrollSync = syncLenisWithScrollTrigger(lenis);
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    // Piggyback on GSAP’s existing RAF ticker instead of creating a competing
+    // requestAnimationFrame loop. This guarantees Lenis and GSAP always share
+    // the same animation frame and never step on each other.
+    const tickerFn = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tickerFn);
+    gsap.ticker.lagSmoothing(0);
+
+    // Pause when the tab is backgrounded — stops Lenis burning CPU/battery
+    // in tabs the user can’t see.
+    const handleVisibility = () => {
+      document.hidden ? lenis.stop() : lenis.start();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
     ScrollTrigger.refresh();
 
     return () => {
+      gsap.ticker.remove(tickerFn);
+      document.removeEventListener("visibilitychange", handleVisibility);
       cleanupScrollSync();
       lenis.destroy();
     };

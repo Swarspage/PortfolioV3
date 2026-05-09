@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "../lib/gsapScroll";
 import pfp from "../assets/image.webp";
 import bannerImg from "../assets/utubebanner.webp";
@@ -24,7 +24,7 @@ const recentVideos = [
   {
     title: "Building Session #2",
     label: "Past Stream",
-    thumbnail: "https://img.youtube.com/vi/5Y-RAEXeUjU/hqdefault.jpg",
+    thumbnail: "https://img.youtube.com/vi/5Y-RAEXeUjU/maxresdefault.jpg",
     link: "https://www.youtube.com/watch?v=5Y-RAEXeUjU",
   },
 ];
@@ -41,6 +41,9 @@ const Youtube = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const videoListRef = useRef([]);
+  // Click-to-play: defer iframe (and all YouTube JS/analytics) until user interaction
+  const [playing, setPlaying] = useState(false);
+  const featuredThumb = `https://img.youtube.com/vi/${featuredVideo.id}/maxresdefault.jpg`;
 
   const setVideoRef = (i) => (el) => { videoListRef.current[i] = el; };
 
@@ -130,15 +133,39 @@ const Youtube = () => {
               </a>
             </div>
 
-            {/* Featured video embed */}
+            {/* Featured video — iframe deferred until user clicks play */}
             <div className="relative w-full aspect-video lg:h-full lg:aspect-auto rounded-xl lg:rounded-[2rem] overflow-hidden bg-black ring-1 ring-brand-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] pointer-events-auto shrink-0 will-change-transform">
-              <iframe
-                src={`https://www.youtube.com/embed/${featuredVideo.id}?rel=0&modestbranding=1`}
-                title="Featured Video"
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              {playing ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${featuredVideo.id}?rel=0&modestbranding=1&autoplay=1`}
+                  title="Featured Video"
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  onClick={() => setPlaying(true)}
+                  aria-label="Play featured video"
+                  className="absolute inset-0 w-full h-full group"
+                >
+                  <img
+                    src={featuredThumb}
+                    alt="Featured video thumbnail"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {/* Play button overlay */}
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/90 group-hover:bg-white flex items-center justify-center shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:scale-110">
+                      <svg className="w-6 h-6 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              )}
             </div>
 
             {/* Stats row / bottom padding */}

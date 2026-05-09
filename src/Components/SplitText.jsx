@@ -96,6 +96,9 @@ const SplitText = ({
                             },
                             onComplete: () => {
                                 animationCompletedRef.current = true;
+                                // Release GPU compositor hints — chars are now
+                                // static text, no longer animating.
+                                if (targets) gsap.set(targets, { clearProps: 'willChange,force3D' });
                                 onLetterAnimationComplete?.();
                             },
                             willChange: 'transform, opacity',

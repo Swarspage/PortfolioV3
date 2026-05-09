@@ -46,7 +46,7 @@ const Projects = () => {
 
     const dots = dotsRef.current.filter(Boolean);
     gsap.set(dots, { width: "0.5rem", background: "rgba(255,255,255,0.15)" });
-    if(dots[0]) gsap.set(dots[0], { width: "2rem", background: "var(--color-brand-accent)" });
+    if (dots[0]) gsap.set(dots[0], { width: "2rem", background: "var(--color-brand-accent)" });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -70,7 +70,7 @@ const Projects = () => {
           duration: 1,
           ease: "power2.out",
         });
-        if(dots[index]) {
+        if (dots[index]) {
           tl.to(dots[index], {
             width: "2rem",
             background: "var(--color-brand-accent)",
@@ -92,7 +92,7 @@ const Projects = () => {
           },
           "+=0.5"
         );
-        if(dots[index]) {
+        if (dots[index]) {
           tl.to(dots[index], {
             width: "0.5rem",
             background: "rgba(255,255,255,0.15)",
@@ -136,7 +136,7 @@ const Projects = () => {
       </span>
 
       <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto px-0 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-16 lg:gap-24 relative">
-        
+
         {/* ── RIGHT: Section Label + Heading (Moved to top for mobile layout) ── */}
         <div className="absolute top-0 left-0 right-0 md:relative flex-1 flex flex-col justify-start md:justify-center items-center md:items-start pointer-events-none select-none w-full mt-0 z-20 shrink-0">
           <div className="bg-transparent p-6 pt-24 pb-6 md:p-0 flex flex-col items-center md:items-start text-center md:text-left w-full drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] md:drop-shadow-none">

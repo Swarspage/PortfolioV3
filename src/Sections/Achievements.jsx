@@ -14,6 +14,9 @@ import letterOfAppreciation from "../assets/Achievements/LetterofAppreciationInt
 import ttDoubles from "../assets/Achievements/Tabletennisdoubles2ndprize.webp";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
+// IS_MOBILE (pointer-type query) — used for GPU effect guards (filter:blur).
+// A stylus/touch tablet at 1200px would have IS_MOBILE=true but isMobile=false.
+// This is intentional: GPU guards follow input capability, layout follows screen width.
 const IS_MOBILE = typeof window !== "undefined" &&
   window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 

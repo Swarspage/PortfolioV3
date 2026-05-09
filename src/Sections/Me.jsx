@@ -3,6 +3,11 @@ import { SplineScene } from "../Components/SplineScene";
 import { Spotlight } from "../Components/Spotlight";
 import { gsap } from "../lib/gsapScroll";
 
+// Skip blur on mobile — filter:blur(12px) on a full-width heading is the
+// most expensive single GPU op at startup on low-end mobile devices.
+const IS_MOBILE_TOUCH = typeof window !== "undefined" &&
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
 const Me = ({ onSplineLoad, isAppReady }) => {
   const leftRef = useRef(null);
   const headingRef = useRef(null);
@@ -26,8 +31,8 @@ const Me = ({ onSplineLoad, isAppReady }) => {
 
     tl.fromTo(
       headingRef.current,
-      { y: 40, opacity: 0, filter: "blur(12px)" },
-      { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, delay: 0.4 }
+      { y: 40, opacity: 0, ...(IS_MOBILE_TOUCH ? {} : { filter: "blur(12px)" }) },
+      { y: 0, opacity: 1, ...(IS_MOBILE_TOUCH ? {} : { filter: "blur(0px)" }), duration: 1, delay: 0.4 }
     )
       .fromTo(
         subtitleRef.current,
