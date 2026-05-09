@@ -187,9 +187,8 @@ function App() {
           <Youtube />
         </LazySection>
 
-        {/* Contact is the last section — use a tighter margin so it loads
-            promptly without waiting for a full scroll */}
-        <LazySection rootMargin="500px" height="auto">
+        {/* Contact is the last section */}
+        <LazySection id="contact" rootMargin="500px" height="100dvh">
           <Contact />
         </LazySection>
       </div>

@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
-import discord   from "../assets/discord.webp";
-import linkedin  from "../assets/linkedin-logo.webp";
-import github    from "../assets/github.webp";
-import x         from "../assets/X.webp";
+import discord from "../assets/discord.webp";
+import linkedin from "../assets/linkedin-logo.webp";
+import github from "../assets/github.webp";
+import x from "../assets/X.webp";
 import emailIcon from "../assets/email.webp";
 import SplitText from "../Components/SplitText";
-import { gsap }  from "../lib/gsapScroll";
+import { gsap } from "../lib/gsapScroll";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const IS_COARSE = typeof window !== "undefined" &&
@@ -14,11 +14,11 @@ const IS_COARSE = typeof window !== "undefined" &&
 
 // ─── Social data ──────────────────────────────────────────────────────────────
 const SOCIALS = [
-  { label: "Discord",  icon: discord,    val: "itsme.3974",           onClick: () => { navigator.clipboard.writeText("itsme.3974"); alert("Copied Discord ID!"); } },
-  { label: "LinkedIn", icon: linkedin,   val: "swar-shinde",          onClick: () => window.open("https://www.linkedin.com/in/swar-shinde-91131a2b9/", "_blank") },
-  { label: "Github",   icon: github,     val: "Swarspage",            onClick: () => window.open("https://github.com/Swarspage", "_blank") },
-  { label: "X",        icon: x,          val: "@Swars_page",          onClick: () => window.open("https://x.com/Swars_page", "_blank") },
-  { label: "Email",    icon: emailIcon,  val: "shindeswar@hotmail.com", onClick: () => window.open("mailto:shindeswar@hotmail.com", "_blank") },
+  { label: "Discord", icon: discord, val: "itsme.3974", onClick: () => { navigator.clipboard.writeText("itsme.3974"); alert("Copied Discord ID!"); } },
+  { label: "LinkedIn", icon: linkedin, val: "swar-shinde", onClick: () => window.open("https://www.linkedin.com/in/swar-shinde-91131a2b9/", "_blank") },
+  { label: "Github", icon: github, val: "Swarspage", onClick: () => window.open("https://github.com/Swarspage", "_blank") },
+  { label: "X", icon: x, val: "@Swars_page", onClick: () => window.open("https://x.com/Swars_page", "_blank") },
+  { label: "Email", icon: emailIcon, val: "shindeswar@hotmail.com", onClick: () => window.open("mailto:shindeswar@hotmail.com", "_blank") },
 ];
 
 // ─── Reusable input field (static label above — reliable across all browsers) ─
@@ -47,9 +47,13 @@ function Field({ id, label, as: Tag = "input", type = "text", value, onChange, r
 
 // ─── Component ────────────────────────────────────────────────────────────────
 const Contact = () => {
-  const [formData,    setFormData]    = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const COOLDOWN_MINUTES = 5;
+  const COOLDOWN_MS = COOLDOWN_MINUTES * 60 * 1000;
+  
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isMobile,    setIsMobile]    = useState(
+  const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches
   );
   // Toast notification — replaces window.alert() which froze all animations
@@ -59,16 +63,16 @@ const Contact = () => {
     setTimeout(() => setToast(null), 3500);
   };
 
-  const sectionRef  = useRef(null);
-  const innerRef    = useRef(null);
-  const formRef     = useRef(null);
-  const infoRef     = useRef(null);
+  const sectionRef = useRef(null);
+  const innerRef = useRef(null);
+  const formRef = useRef(null);
+  const infoRef = useRef(null);
   const formCardRef = useRef(null);
   const infoCardRef = useRef(null);
 
   // ── Responsive listener ────────────────────────────────────────────────
   useEffect(() => {
-    const mq      = window.matchMedia("(max-width: 1024px)");
+    const mq = window.matchMedia("(max-width: 1024px)");
     const handler = (e) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
@@ -123,10 +127,29 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (isSubmitting) return;
+
+    // 1. LocalStorage Cooldown Check
+    const lastSent = localStorage.getItem("lastEmailSent");
+    if (lastSent) {
+      const timeElapsed = Date.now() - parseInt(lastSent, 10);
+      if (timeElapsed < COOLDOWN_MS) {
+        const minutesLeft = Math.ceil((COOLDOWN_MS - timeElapsed) / 60000);
+        showToast(`Please wait ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} before sending another message.`, "error");
+        return;
+      }
+    }
+
+    // 2. Validation
     if (!formData.name || !formData.email || !formData.message) {
       showToast("Please fill out all fields.", "error");
       return;
     }
+
+    // 3. Lock UI
+    setIsSubmitting(true);
+
     emailjs
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -137,10 +160,14 @@ const Contact = () => {
       .then(() => {
         showToast("Message sent successfully! I'll be in touch.", "success");
         setFormData({ name: "", email: "", message: "" });
+        localStorage.setItem("lastEmailSent", Date.now().toString());
       })
       .catch((err) => {
         console.error("EmailJS Error:", err);
         showToast("Something went wrong. Please try again.", "error");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -153,18 +180,18 @@ const Contact = () => {
   // ── One-time entrance animation ────────────────────────────────────────────
   useEffect(() => {
     const section = sectionRef.current;
-    const inner   = innerRef.current;
-    const form    = formRef.current;
-    const info    = infoRef.current;
+    const inner = innerRef.current;
+    const form = formRef.current;
+    const info = infoRef.current;
     if (!section || !inner || !form || !info) return;
 
-    const formItems   = [...form.querySelectorAll(".animate-stagger")];
+    const formItems = [...form.querySelectorAll(".animate-stagger")];
     const socialItems = [...info.querySelectorAll(".social-stagger")];
-    const hudItem     = info.querySelector(".hud-animate");
+    const hudItem = info.querySelector(".hud-animate");
 
     gsap.set(inner, { autoAlpha: 0 });
-    gsap.set(form,  { autoAlpha: 0, x: -50 });
-    gsap.set(info,  { autoAlpha: 0, x:  50 });
+    gsap.set(form, { autoAlpha: 0, x: -50 });
+    gsap.set(info, { autoAlpha: 0, x: 50 });
     gsap.set([...formItems, ...socialItems, hudItem].filter(Boolean), { autoAlpha: 0, y: 20 });
 
     const tl = gsap.timeline({
@@ -172,11 +199,11 @@ const Contact = () => {
     });
 
     tl.to(inner, { autoAlpha: 1, duration: 0.5, ease: "power3.out" })
-      .to(form,  { autoAlpha: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.2")
-      .to(info,  { autoAlpha: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.6")
-      .to(formItems,   { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.45, ease: "power2.out" }, "-=0.3")
-      .to(socialItems, { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.4,  ease: "power2.out" }, "-=0.4")
-      .to(hudItem,     { autoAlpha: 1, y: 0, duration: 0.55, ease: "back.out(1.7)"             }, "-=0.15");
+      .to(form, { autoAlpha: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.2")
+      .to(info, { autoAlpha: 1, x: 0, duration: 0.7, ease: "power3.out" }, "-=0.6")
+      .to(formItems, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.45, ease: "power2.out" }, "-=0.3")
+      .to(socialItems, { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.4, ease: "power2.out" }, "-=0.4")
+      .to(hudItem, { autoAlpha: 1, y: 0, duration: 0.55, ease: "back.out(1.7)" }, "-=0.15");
 
     return () => { if (tl.scrollTrigger) tl.scrollTrigger.kill(); tl.kill(); };
   }, []);
@@ -247,8 +274,8 @@ const Contact = () => {
 
               {/* form uses natural height */}
               <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4 flex-1">
-                <Field id="name"    label="Your Name"    type="text"  value={formData.name}    onChange={handleChange} />
-                <Field id="email"   label="Your Email"   type="email" value={formData.email}   onChange={handleChange} />
+                <Field id="name" label="Your Name" type="text" value={formData.name} onChange={handleChange} />
+                <Field id="email" label="Your Email" type="email" value={formData.email} onChange={handleChange} />
 
                 {/* Message textarea uses fixed rows instead of flex-1 stretch */}
                 <div className="animate-stagger flex flex-col gap-1.5 flex-1">
@@ -266,11 +293,19 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="animate-stagger flex-shrink-0 group relative overflow-hidden rounded-xl border border-white/15 px-7 py-3 transition-all duration-300 hover:border-brand-accent/50 hover:shadow-[0_0_24px_rgba(191,219,254,0.15)] active:scale-95 w-full sm:w-auto"
+                  disabled={isSubmitting}
+                  className={`animate-stagger flex-shrink-0 group relative overflow-hidden rounded-xl border border-white/15 px-7 py-3 transition-all duration-300 w-full sm:w-auto ${isSubmitting ? 'opacity-50 cursor-not-allowed bg-white/5' : 'hover:border-brand-accent/50 hover:shadow-[0_0_24px_rgba(191,219,254,0.15)] active:scale-95'}`}
                 >
-                  <div className="absolute inset-0 bg-brand-accent/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <span className="relative z-10 font-display text-sm tracking-widest uppercase font-bold text-white group-hover:text-brand-accent transition-colors duration-300">
-                    Deploy Message
+                  {!isSubmitting && <div className="absolute inset-0 bg-brand-accent/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />}
+                  <span className={`relative z-10 font-display text-sm tracking-widest uppercase font-bold transition-colors duration-300 flex items-center justify-center gap-2 ${isSubmitting ? 'text-white' : 'text-white group-hover:text-brand-accent'}`}>
+                    {isSubmitting ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Deploying...
+                      </>
+                    ) : (
+                      "Deploy Message"
+                    )}
                   </span>
                 </button>
               </form>
@@ -336,7 +371,7 @@ const Contact = () => {
                   {formatISTTime()}
                 </span>
                 <span className="text-[8px] font-mono text-brand-muted uppercase tracking-[0.12em] mt-0.5 opacity-60">
-                  Navi Mumbai // 19.03N, 73.02E
+                  Navi Mumbai | Pune
                 </span>
               </div>
 

@@ -31,6 +31,7 @@ const LazySection = ({
   fallback = <SectionSkeleton />,
   placeholder,
   height = "100dvh",
+  id,
 }) => {
   const sentinelRef = useRef(null);
   const [shouldRender, setShouldRender] = useState(false);
@@ -58,6 +59,7 @@ const LazySection = ({
     // don't shift when the real section mounts
     return placeholder ?? (
       <div
+        id={id}
         ref={sentinelRef}
         aria-hidden="true"
         style={{ width: "100%", height, background: "transparent" }}
