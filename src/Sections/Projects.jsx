@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Skilltube from "../assets/Skilltube.webp";
 import Vayu from "../assets/Vayu.webp";
 import Singularity from "../assets/Singularity.webp";
@@ -24,6 +24,16 @@ const Projects = () => {
   const innerRef = useRef(null);
   const panelsRef = useRef([]);
   const dotsRef = useRef([]);
+  const [isTouchMode, setIsTouchMode] = useState(IS_MOBILE);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTouchMode(window.matchMedia("(hover: none) and (pointer: coarse)").matches || window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const setPanelRef = (index) => (el) => {
     if (el) panelsRef.current[index] = el;
@@ -38,86 +48,76 @@ const Projects = () => {
     if (!section || panelsRef.current.length === 0) return;
 
     const cards = panelsRef.current.filter(Boolean);
-
-    // Same pattern as About.jsx: first card visible, rest blurred below
-    gsap.set(cards, { clearProps: "all" });
-    gsap.set(cards.slice(1), { y: 60, autoAlpha: 0, ...(IS_MOBILE ? {} : { filter: "blur(6px)" }) });
-    gsap.set(cards[0], { y: 0, autoAlpha: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }) });
-
     const dots = dotsRef.current.filter(Boolean);
-    gsap.set(dots, { width: "0.5rem", background: "rgba(255,255,255,0.15)" });
-    if (dots[0]) gsap.set(dots[0], { width: "2rem", background: "var(--color-brand-accent)" });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: `+=${(cards.length + 1) * 50}%`,
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
+    let mm = gsap.matchMedia();
+
+    // Desktop Animation
+    mm.add("(hover: hover) and (min-width: 768px)", () => {
+      gsap.set(cards, { clearProps: "all" });
+      gsap.set(cards.slice(1), { y: 60, autoAlpha: 0, ...(IS_MOBILE ? {} : { filter: "blur(6px)" }) });
+      gsap.set(cards[0], { y: 0, autoAlpha: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }) });
+
+      gsap.set(dots, { width: "0.5rem", background: "rgba(255,255,255,0.15)" });
+      if (dots[0]) gsap.set(dots[0], { width: "2rem", background: "var(--color-brand-accent)" });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: `+=${(cards.length + 1) * 50}%`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      cards.forEach((card, index) => {
+        if (index > 0) {
+          tl.to(card, { y: 0, autoAlpha: 1, ...(IS_MOBILE ? {} : { filter: "blur(0px)" }), duration: 1, ease: "power2.out" });
+          if (dots[index]) tl.to(dots[index], { width: "2rem", background: "var(--color-brand-accent)", duration: 1, ease: "power2.out" }, "<");
+        }
+        if (index < cards.length - 1) {
+          tl.to(card, { y: -60, autoAlpha: 0, ...(IS_MOBILE ? {} : { filter: "blur(6px)" }), duration: 1, ease: "power2.in" }, "+=0.5");
+          if (dots[index]) tl.to(dots[index], { width: "0.5rem", background: "rgba(255,255,255,0.15)", duration: 1, ease: "power2.in" }, "<");
+        }
+      });
+
+      if (innerRef.current) {
+        tl.to(innerRef.current, { opacity: 0, scale: 0.92, ...(IS_MOBILE ? {} : { filter: "blur(12px)" }), duration: 1.5, ease: "power2.in" }, "+=0.3");
+      }
+
+      return () => {
+        if (tl.scrollTrigger) tl.scrollTrigger.kill();
+        tl.kill();
+      };
     });
 
-    cards.forEach((card, index) => {
-      // Entrance: slide up from below, clear blur
-      if (index > 0) {
-        tl.to(card, {
-          y: 0,
-          autoAlpha: 1,
-          ...(IS_MOBILE ? {} : { filter: "blur(0px)" }),
-          duration: 1,
-          ease: "power2.out",
-        });
-        if (dots[index]) {
-          tl.to(dots[index], {
-            width: "2rem",
-            background: "var(--color-brand-accent)",
-            duration: 1,
-            ease: "power2.out",
-          }, "<");
+    // Mobile Animation
+    mm.add("(hover: none), (max-width: 767px)", () => {
+      gsap.set(cards, { clearProps: "all" });
+      gsap.set(innerRef.current, { clearProps: "all" });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 85%",
         }
-      }
-      // Exit: float upward, blur out
-      if (index < cards.length - 1) {
-        tl.to(
-          card,
-          {
-            y: -60,
-            autoAlpha: 0,
-            ...(IS_MOBILE ? {} : { filter: "blur(6px)" }),
-            duration: 1,
-            ease: "power2.in",
-          },
-          "+=0.5"
-        );
-        if (dots[index]) {
-          tl.to(dots[index], {
-            width: "0.5rem",
-            background: "rgba(255,255,255,0.15)",
-            duration: 1,
-            ease: "power2.in",
-          }, "<");
-        }
-      }
+      });
+      
+      tl.fromTo(cards, 
+        { opacity: 0, x: 20 }, 
+        { opacity: 1, x: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+      );
+
+      return () => {
+        if (tl.scrollTrigger) tl.scrollTrigger.kill();
+        tl.kill();
+      };
     });
 
-    // EXIT: Projects dissolves out to reveal Skills
-    if (innerRef.current) {
-      tl.to(innerRef.current, {
-        opacity: 0,
-        scale: 0.92,
-        ...(IS_MOBILE ? {} : { filter: "blur(12px)" }),
-        duration: 1.5,
-        ease: "power2.in"
-      }, "+=0.3");
-    }
-
-    return () => {
-      if (tl.scrollTrigger) tl.scrollTrigger.kill();
-      tl.kill();
-    };
+    return () => mm.revert();
   }, []);
 
   return (
@@ -126,6 +126,10 @@ const Projects = () => {
       id="projects"
       className="relative h-dvh w-full overflow-hidden bg-transparent"
     >
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
       {/* Ghost watermark — decorative, transparent so particles show */}
       <span
         aria-hidden="true"
@@ -135,14 +139,14 @@ const Projects = () => {
         WORK
       </span>
 
-      <div ref={innerRef} className="w-full h-full max-w-7xl mx-auto px-0 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between gap-6 md:gap-16 lg:gap-24 relative">
+      <div ref={innerRef} className={`w-full h-full max-w-7xl mx-auto relative flex items-center gap-6 lg:gap-24 ${isTouchMode ? 'flex-col justify-center px-0' : 'flex-row justify-between px-12 lg:px-20 gap-16'}`}>
 
         {/* ── RIGHT: Section Label + Heading (Moved to top for mobile layout) ── */}
-        <div className="absolute top-0 left-0 right-0 md:relative flex-1 flex flex-col justify-start md:justify-center items-center md:items-start pointer-events-none select-none w-full mt-0 z-20 shrink-0">
-          <div className="bg-transparent p-6 pt-24 pb-6 md:p-0 flex flex-col items-center md:items-start text-center md:text-left w-full drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] md:drop-shadow-none">
+        <div className={`flex flex-col select-none w-full mt-0 z-20 shrink-0 ${isTouchMode ? 'absolute top-0 left-0 right-0 justify-start items-center pointer-events-none' : 'relative flex-1 justify-center items-start pointer-events-auto'}`}>
+          <div className={`bg-transparent flex flex-col w-full ${isTouchMode ? 'p-6 pt-24 pb-6 items-center text-center drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]' : 'p-0 items-start text-left drop-shadow-none'}`}>
             {/* Label */}
             <p
-              className="font-body font-semibold tracking-[0.3em] uppercase mb-2 md:mb-6 text-brand-accent opacity-70 drop-shadow-lg md:drop-shadow-none"
+              className={`font-body font-semibold tracking-[0.3em] uppercase text-brand-accent opacity-70 ${isTouchMode ? 'mb-2 drop-shadow-lg' : 'mb-6 drop-shadow-none'}`}
               style={{ fontSize: "clamp(0.6rem,0.9vw,0.75rem)" }}
             >
               Latest Ventures
@@ -150,22 +154,22 @@ const Projects = () => {
 
             {/* Heading */}
             <h2
-              className="font-display font-black text-white leading-[1.0] mb-3 md:mb-6 drop-shadow-2xl md:drop-shadow-none"
+              className={`font-display font-black text-white leading-[1.0] ${isTouchMode ? 'mb-3 drop-shadow-2xl' : 'mb-6 drop-shadow-none'}`}
               style={{ fontSize: "clamp(2.5rem,6vw,5.5rem)" }}
             >
               Selected&nbsp;
-              <br className="hidden md:block" />
+              <br className={`${isTouchMode ? 'hidden' : 'block'}`} />
               <span className="text-brand-muted" style={{ fontStyle: "italic" }}>
                 Stories
               </span>
             </h2>
 
             {/* Divider */}
-            <div className="w-full mb-3 md:mb-5 border-t border-brand-border hidden md:block" />
+            <div className={`w-full border-t border-brand-border ${isTouchMode ? 'hidden mb-3' : 'block mb-5'}`} />
 
             {/* Subtext */}
             <p
-              className="font-body leading-relaxed text-brand-muted hidden md:block"
+              className={`font-body leading-relaxed text-brand-muted ${isTouchMode ? 'hidden' : 'block'}`}
               style={{
                 fontSize: "clamp(0.75rem,1.1vw,0.9rem)",
                 maxWidth: "32ch",
@@ -175,7 +179,7 @@ const Projects = () => {
             </p>
 
             {/* Project dots counter */}
-            <div className="mt-4 md:mt-8 items-center gap-3 hidden md:flex">
+            <div className={`items-center gap-3 ${isTouchMode ? 'hidden mt-4' : 'flex mt-8'}`}>
               {projectsData.projectsData.map((_, i) => (
                 <span
                   key={i}
@@ -196,14 +200,15 @@ const Projects = () => {
         </div>
 
         {/* ── LEFT: Animated Project Cards ── */}
-        <div className="absolute top-[220px] sm:top-[240px] bottom-10 left-6 right-6 md:relative md:inset-auto w-auto md:w-[52%] h-auto md:h-[82vh] shrink-0 pointer-events-auto z-10">
-          {(projectsData?.projectsData ?? []).map((project, index) => (
-            <div
-              key={project.name || index}
-              ref={setPanelRef(index)}
-              className="absolute inset-0 flex flex-col mt-2 md:mt-0 pt-2 md:pt-20"
-              style={{ zIndex: (projectsData?.projectsData?.length ?? 0) - index }}
-            >
+        <div className={`absolute pointer-events-auto z-10 shrink-0 ${isTouchMode ? 'top-[220px] sm:top-[240px] bottom-10 left-0 right-0 w-full h-auto' : 'relative inset-auto w-[52%] h-[82vh]'}`}>
+          <div className={`relative w-full h-full ${isTouchMode ? 'flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 px-6' : 'block px-0'}`}>
+            {(projectsData?.projectsData ?? []).map((project, index) => (
+              <div
+                key={project.name || index}
+                ref={setPanelRef(index)}
+                className={`flex flex-col ${isTouchMode ? 'w-[85vw] md:w-[55vw] lg:w-[45vw] max-w-[600px] shrink-0 snap-center mt-2 pt-2' : 'absolute inset-0 w-full pt-20'}`}
+                style={{ zIndex: (projectsData?.projectsData?.length ?? 0) - index }}
+              >
               {/* Screenshot / mockup image */}
               <div
                 className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10"
@@ -293,6 +298,7 @@ const Projects = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>

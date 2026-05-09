@@ -15,6 +15,9 @@ const Loader = ({ isAppLoaded, onComplete }) => {
   const wrapperRef = useRef(null);
   const textRef = useRef(null);
   const lineRef = useRef(null);
+  const topPanelRef = useRef(null);
+  const bottomPanelRef = useRef(null);
+  const svgRef = useRef(null);
   
   useEffect(() => {
     let interval;
@@ -74,12 +77,30 @@ const Loader = ({ isAppLoaded, onComplete }) => {
       // Dramatic cinematic exit
       tl.to(textRef.current, { scale: 1.1, opacity: 0, filter: "blur(12px)", duration: 0.6, ease: "power3.inOut" })
         .to(lineRef.current, { scaleX: 0, opacity: 0, duration: 0.4, ease: "power3.inOut" }, "-=0.4")
-        .to(wrapperRef.current, { y: "-100%", duration: 1.2, ease: "power4.inOut" }, "-=0.1");
+        .to(svgRef.current, { opacity: 0, duration: 0.4 }, "-=0.4")
+        .to(topPanelRef.current, { y: "-100%", duration: 1.2, ease: "power4.inOut" }, "-=0.1")
+        .to(bottomPanelRef.current, { y: "100%", duration: 1.2, ease: "power4.inOut" }, "<")
+        .set(wrapperRef.current, { display: "none" });
     }
   }, [progress, onComplete]);
 
   return (
-    <div ref={wrapperRef} className="fixed inset-0 z-[10000] bg-brand-bg flex items-center justify-center flex-col pointer-events-auto">
+    <div ref={wrapperRef} className="fixed inset-0 z-[10000] flex items-center justify-center flex-col pointer-events-auto">
+       {/* Split Screen Backgrounds */}
+       <div ref={topPanelRef} className="absolute top-0 left-0 w-full h-[50vh] bg-brand-bg pointer-events-none" />
+       <div ref={bottomPanelRef} className="absolute bottom-0 left-0 w-full h-[50vh] bg-brand-bg pointer-events-none" />
+
+       {/* SVG Grain Filter */}
+       <div ref={svgRef} className="pointer-events-none absolute inset-0 z-50 opacity-[0.05] mix-blend-screen">
+         <svg className="w-full h-full">
+           <filter id="noiseFilter">
+             <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+             <feColorMatrix type="saturate" values="0" />
+           </filter>
+           <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+         </svg>
+       </div>
+
        <div ref={textRef} className="flex flex-col items-center w-full max-w-md px-6 relative z-10">
          {/* Percentage */}
          <span className="font-display font-black text-[clamp(6rem,15vw,12rem)] tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 drop-shadow-2xl">
@@ -100,23 +121,35 @@ const Loader = ({ isAppLoaded, onComplete }) => {
          </div>
 
          {/* Loading Phrases */}
-         <div className="flex items-center gap-4 mt-6 h-6 overflow-hidden relative">
+         <div className="flex items-center gap-4 mt-6 h-6 w-full justify-center relative">
            <div className="w-2 h-2 rounded-full bg-brand-accent animate-ping shadow-[0_0_10px_rgba(191,219,254,0.8)] shrink-0" />
-           <div className="relative h-full flex flex-col items-start justify-start transition-transform duration-500 ease-out" style={{ transform: `translateY(-${phraseIndex * 24}px)` }}>
-              {LOADING_PHRASES.map((phrase, idx) => (
-                <span key={idx} className="h-[24px] tracking-[0.4em] text-xs font-body uppercase text-brand-muted flex items-center whitespace-nowrap">
-                  {phrase}
-                </span>
-              ))}
+           <div className="relative h-6 w-48">
+              {LOADING_PHRASES.map((phrase, idx) => {
+                const isActive = idx === phraseIndex;
+                return (
+                  <span 
+                    key={idx} 
+                    className="absolute left-0 top-1/2 -translate-y-1/2 tracking-[0.4em] text-xs font-body uppercase text-brand-muted whitespace-nowrap transition-all duration-700 ease-in-out"
+                    style={{
+                      opacity: isActive ? 1 : 0,
+                      filter: isActive ? "blur(0px)" : "blur(4px)",
+                      transform: isActive ? "scale(1)" : "scale(0.95)",
+                      pointerEvents: isActive ? "auto" : "none"
+                    }}
+                  >
+                    {phrase}
+                  </span>
+                )
+              })}
            </div>
          </div>
        </div>
        
        {/* Ambient glow in background */}
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent rounded-full blur-[150px] opacity-10 pointer-events-none" />
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent rounded-full blur-[150px] opacity-10 pointer-events-none z-0" />
 
        {/* Accents */}
-       <div ref={lineRef} className="absolute bottom-10 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50" />
+       <div ref={lineRef} className="absolute bottom-10 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50 z-10" />
     </div>
   )
 }
