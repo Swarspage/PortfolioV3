@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import Loader  from "./components/Loader";
 import Navbar  from "./sections/Navbar";
 import Me      from "./sections/Me";
+import Cursor  from "./components/Cursor";
 
 // ─── Lazy: Particles ──────────────────────────────────────────────────────────
 // Deferred so the heavy `ogl` WebGL bundle doesn't block the initial parse.
@@ -147,6 +148,8 @@ function App() {
 
       {/* ── Page content ── */}
       <div className="relative z-10 w-full overflow-hidden text-brand-text min-h-screen bg-transparent pointer-events-none">
+
+        <Cursor />
 
         {/* Navbar — eager, always visible */}
         <Navbar />

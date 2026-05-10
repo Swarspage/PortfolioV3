@@ -3,72 +3,87 @@
   inset: 0;
   z-index: 120;
   pointer-events: none;
+  mix-blend-mode: difference;
 }
 
-.cursorDot,
 .cursorRing {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   opacity: 1;
-  transition:
-    opacity 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    width 0.2s ease,
-    height 0.2s ease,
-    border-radius 0.2s ease;
-  will-change: transform, width, height;
-}
-
-.cursorDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
+  width: 14px;
+  height: 14px;
   background: #fff;
-  transform: translate(-50%, -50%);
-}
-
-.cursorRing {
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border: 2px solid transparent;
   border-radius: 999px;
-  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+  will-change: transform, width, height;
+}
+
+/* The tiny dot on the ring to make rotation visible */
+.cursorRing::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.pointer::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.cursorDot {
+  display: none;
 }
 
 .label {
   opacity: 0;
-  font-size: 0.52rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: #fff;
-  transition: opacity 0.2s ease;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #000;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
 }
 
 .pointer {
-  width: 64px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.text {
-  width: 96px;
-  height: 10px;
-  border-radius: 999px;
-  opacity: 0.5;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border-color: #fff;
 }
 
 .card {
-  width: 64px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.08);
+  width: 72px;
+  height: 72px;
+  background: #fff;
+  border-color: transparent;
 }
 
 .card .label {
   opacity: 1;
+}
+
+.text {
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
+  background: #fff;
+  border-color: transparent;
 }

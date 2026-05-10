@@ -47,8 +47,9 @@ const Cursor = () => {
     const xTo = gsap.quickTo(ring, "x", { duration: 0.15, ease: "power2.out" });
     const yTo = gsap.quickTo(ring, "y", { duration: 0.15, ease: "power2.out" });
 
-    const updateMode = (nextMode) => {
-      if (currentModeRef.current === nextMode) {
+    const updateMode = (nextState) => {
+      const { mode: nextMode, label: nextLabel = "" } = nextState;
+      if (currentModeRef.current === nextMode && label.textContent === nextLabel) {
         return;
       }
 
@@ -57,6 +58,9 @@ const Cursor = () => {
 
       if (nextMode === "pointer") {
         ring.classList.add(styles.pointer);
+        gsap.to(ring, { rotation: 90, duration: 0.5, ease: "back.out(1.5)", overwrite: "auto" });
+      } else {
+        gsap.to(ring, { rotation: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" });
       }
 
       if (nextMode === "text") {
@@ -65,7 +69,7 @@ const Cursor = () => {
 
       if (nextMode === "card") {
         ring.classList.add(styles.card);
-        label.textContent = "VIEW";
+        label.textContent = nextLabel;
       }
 
       currentModeRef.current = nextMode;
@@ -73,25 +77,27 @@ const Cursor = () => {
 
     const resolveMode = (target) => {
       if (!target || !(target instanceof Element)) {
-        return "default";
+        return { mode: "default" };
       }
 
-      if (target.closest("[data-cursor='card']")) {
-        return "card";
+      const card = target.closest("[data-cursor='card']");
+      if (card) {
+        return { mode: "card", label: card.getAttribute("data-cursor-label") || "VIEW" };
       }
 
       if (target.closest("[data-cursor='text']")) {
-        return "text";
+        return { mode: "text" };
       }
 
       if (target.closest("a, button, [data-cursor='pointer']")) {
-        return "pointer";
+        return { mode: "pointer" };
       }
 
-      return "default";
+      return { mode: "default" };
     };
 
     const handleMove = (event) => {
+      // Keep dot in sync (even though it's hidden now, we update it)
       dot.style.left = `${event.clientX}px`;
       dot.style.top = `${event.clientY}px`;
       xTo(event.clientX);
