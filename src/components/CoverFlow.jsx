@@ -92,6 +92,8 @@ const CoverFlow = ({ items, activeIndex, setActiveIndex, onCardClick }) => {
                 else setActiveIndex(i);
               }}
               className="absolute top-0 left-0 w-full h-full rounded-2xl sm:rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-auto"
+              data-cursor="card"
+              data-cursor-label="VIEW"
               style={{
                 transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
                 zIndex: items.length - absOffset,

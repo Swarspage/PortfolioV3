@@ -183,7 +183,7 @@ const About = () => {
 
             {/* Central Portrait */}
             <div className="relative w-[40%] md:w-[35%] lg:w-[28%] h-[60vh] lg:h-[70vh] aspect-[3/4] z-10 shrink-0 mt-[8%]">
-               <div ref={imageContainerRef} className="w-full h-full relative overflow-hidden rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#050505]">
+               <div ref={imageContainerRef} className="w-full h-full relative overflow-hidden rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#050505] pointer-events-auto" data-cursor="card" data-cursor-label="HI">
                   <div className="absolute inset-0 bg-gradient-to-t z-10 pointer-events-none from-black/60 via-transparent to-transparent"></div>
                   <div className="absolute inset-0 bg-brand-accent/5 z-[1] mix-blend-overlay"></div>
                   <img src={image} alt="Swar Shinde" width={900} height={1200} loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center scale-[1.05]" />

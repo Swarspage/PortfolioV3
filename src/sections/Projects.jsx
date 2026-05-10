@@ -210,7 +210,9 @@ const Projects = () => {
               >
                 {/* Screenshot / mockup image */}
                 <div
-                  className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10"
+                  data-cursor="card"
+                  data-cursor-label="VIEW"
+                  className="w-full rounded-2xl overflow-hidden mb-5 shrink-0 border border-white/10 pointer-events-auto"
                   style={{
                     height: "45%",
                     background: "rgba(255,255,255,0.04)",

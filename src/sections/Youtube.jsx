@@ -124,6 +124,8 @@ const Youtube = () => {
                   onClick={() => setPlaying(true)}
                   aria-label="Play featured video"
                   className="absolute inset-0 w-full h-full group"
+                  data-cursor="card"
+                  data-cursor-label="PLAY"
                 >
                   <img
                     src={featuredThumb}
@@ -170,6 +172,8 @@ const Youtube = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`group flex items-center gap-3 p-2.5 lg:p-3 rounded-xl bg-brand-surface border border-brand-border hover:bg-brand-surface-hover hover:border-brand-accent/30 transition-all duration-300 pointer-events-auto ${i === 2 ? "hidden lg:flex" : ""}`}
+                  data-cursor="card"
+                  data-cursor-label="WATCH"
                 >
                   {/* Thumbnail */}
                   <div className="relative w-20 h-12 lg:w-24 lg:h-14 rounded-lg overflow-hidden flex-shrink-0 bg-black">
