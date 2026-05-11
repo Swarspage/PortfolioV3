@@ -47,8 +47,6 @@ const SkillCard = forwardRef(function SkillCard({ skill, floatDelay, floatDurati
       onPointerLeave={leaveHandler}
       className="relative flex-shrink-0 will-change-transform pointer-events-auto"
       style={{ width: w, height: h }}
-      data-cursor="card"
-      data-cursor-label={skill.skill}
     >
       <div
         className="absolute inset-0 rounded-[1.1rem] flex flex-col items-center justify-center"

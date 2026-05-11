@@ -80,14 +80,14 @@ const Youtube = () => {
       {/* Opacity / scale wrapper */}
       <div ref={innerRef} className="absolute inset-0 flex flex-col justify-center px-4 md:px-12 lg:px-20 pt-16 lg:pt-0">
 
-        {/* ── Label ── */}
-        <p className="text-brand-muted tracking-[0.3em] uppercase text-[10px] lg:text-xs font-body mb-3 lg:mb-6">Building in Public</p>
-
         {/* ── Two-column layout ── */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 w-full max-w-7xl mx-auto h-auto lg:h-[calc(100dvh-12rem)] lg:max-h-[600px] mt-8 lg:mt-0">
 
           {/* ── LEFT: Featured Video ── */}
           <div ref={leftRef} className="flex-1 flex flex-col gap-2 lg:gap-3 min-w-0">
+
+            {/* Label — inside left column so it aligns with the video on desktop */}
+            <p className="text-brand-muted tracking-[0.3em] uppercase text-[10px] lg:text-xs font-body mb-1 lg:mb-3">Building in Public</p>
 
             {/* Channel identity row */}
             <div className="flex items-center gap-3">
