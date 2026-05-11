@@ -164,33 +164,41 @@ const Youtube = () => {
             <p className="text-brand-muted text-[10px] lg:text-xs tracking-widest uppercase font-body">Recent Uploads</p>
 
             <div className="flex flex-col gap-2 lg:gap-3 flex-1 pointer-events-auto">
-              {recentVideos.map((v, i) => (
-                <a
-                  key={i}
-                  ref={setVideoRef(i)}
-                  href={v.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group flex items-center gap-3 p-2.5 lg:p-3 rounded-xl bg-brand-surface border border-brand-border hover:bg-brand-surface-hover hover:border-brand-accent/30 transition-all duration-300 pointer-events-auto ${i === 2 ? "hidden lg:flex" : ""}`}
-                  data-cursor="card"
-                  data-cursor-label="WATCH"
-                >
-                  {/* Thumbnail */}
-                  <div className="relative w-20 h-12 lg:w-24 lg:h-14 rounded-lg overflow-hidden flex-shrink-0 bg-black">
-                    <img
-                      src={v.thumbnail}
-                      alt={v.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => { e.target.style.display = "none"; }}
-                    />
+              {recentVideos.map((v, i) => {
+                const isLocked = v.isLocked;
+                return (
+                  <div
+                    key={i}
+                    ref={setVideoRef(i)}
+                    onClick={() => !isLocked && window.open(v.link, "_blank")}
+                    className={`group flex items-center gap-3 p-2.5 lg:p-3 rounded-xl bg-brand-surface border border-brand-border transition-all duration-300 pointer-events-auto ${i === 2 ? "hidden lg:flex" : ""} ${isLocked ? "opacity-60 grayscale-[0.5]" : "hover:bg-brand-surface-hover hover:border-brand-accent/30 cursor-pointer"}`}
+                    data-cursor="card"
+                    data-cursor-label={isLocked ? "SOON" : "WATCH"}
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative w-20 h-12 lg:w-24 lg:h-14 rounded-lg overflow-hidden flex-shrink-0 bg-black">
+                      <img
+                        src={v.thumbnail}
+                        alt={v.title}
+                        className={`w-full h-full object-cover transition-transform duration-500 ${!isLocked ? "group-hover:scale-105" : "blur-[2px]"}`}
+                        onError={(e) => { e.target.style.display = "none"; }}
+                      />
+                      {isLocked && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <svg className="w-4 h-4 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {/* Info */}
+                    <div className="flex flex-col min-w-0">
+                      <p className={`text-white text-xs lg:text-sm font-body font-medium leading-snug line-clamp-2 transition-colors ${!isLocked && "group-hover:text-brand-accent"}`}>{v.title}</p>
+                      <p className="text-brand-muted text-[10px] lg:text-xs mt-0.5">{isLocked ? "Locked Content" : v.label}</p>
+                    </div>
                   </div>
-                  {/* Info */}
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-white text-xs lg:text-sm font-body font-medium leading-snug line-clamp-2 group-hover:text-brand-accent transition-colors">{v.title}</p>
-                    <p className="text-brand-muted text-[10px] lg:text-xs mt-0.5">{v.label}</p>
-                  </div>
-                </a>
-              ))}
+                );
+              })}
             </div>
 
             {/* Banner strip */}

@@ -51,6 +51,13 @@ body {
   @apply font-body text-brand-text bg-brand-bg;
 }
 
+/* Hide system cursor on desktop when custom cursor is active */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  html, body, * {
+    cursor: none !important;
+  }
+}
+
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; margin: 0; }
 ::-webkit-scrollbar-thumb { background: rgba(107, 114, 128, 0.8); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }

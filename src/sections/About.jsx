@@ -133,18 +133,19 @@ const About = () => {
 
       {/* ──────────────── MOBILE LAYOUT ──────────────── */}
       {isMobile && (
-        <div ref={innerRef} className="w-full h-full relative">
+        <div ref={innerRef} className="w-full h-full relative flex flex-col justify-between pb-6">
           {/* Background Image */}
           <div className="absolute inset-0 w-full h-full z-[-1]">
             <div ref={imageContainerRef} className="w-full h-full relative overflow-hidden bg-black">
-              <div className="absolute inset-0 bg-gradient-to-t z-10 pointer-events-none from-brand-bg via-brand-bg/80 to-brand-bg/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-t z-10 pointer-events-none from-brand-bg via-brand-bg/80 to-brand-bg/30"></div>
+              <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-brand-bg/80 to-transparent z-10 pointer-events-none"></div>
               <div className="absolute inset-0 bg-brand-accent/10 z-[1] mix-blend-overlay"></div>
-              <img src={image} alt="Swar Shinde" width={900} height={1200} loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover object-top scale-[1.02]" />
+              <img src={image} alt="Swar Shinde" width={900} height={1200} loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover object-[center_10%] scale-[1.02]" />
             </div>
           </div>
 
           {/* Title */}
-          <div className="absolute top-0 left-0 right-0 p-6 pt-24 pb-6 flex flex-col items-center text-center drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] z-20 pointer-events-none">
+          <div className="w-full px-6 pt-24 pb-4 flex flex-col items-center text-center drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] z-20 pointer-events-none shrink-0">
             <div ref={headingRef}>
               <SplitText text="ABOUT" className="font-display text-[clamp(3.5rem,10vw,5rem)] font-bold text-white tracking-widest leading-[0.8] drop-shadow-2xl" delay={0} duration={0.8} ease="power3.out" splitType="chars" from={{ opacity: 0, y: 50 }} to={{ opacity: 1, y: 0 }} threshold={0.3} />
               <div className="text-brand-accent tracking-[0.2em] uppercase font-body text-[10px] mt-3 opacity-90 drop-shadow-lg">The person behind the code</div>
@@ -152,15 +153,15 @@ const About = () => {
           </div>
 
           {/* Horizontal Scroll Cards */}
-          <div className="z-0 flex flex-col pointer-events-auto absolute top-[260px] md:top-auto bottom-4 left-0 right-0 pb-4 h-[50vh]">
-            <div className="relative flex-1 w-full perspective-1000 flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4">
+          <div className="z-0 flex flex-col pointer-events-auto w-full shrink-0 relative mt-auto">
+            <div className="relative w-full perspective-1000 flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4 pb-2">
               {aboutData.paragraphs.map((para, index) => (
-                <div key={index} ref={setTextBlockRef(index)} className="flex flex-col font-body text-[clamp(1rem,1.2vw,1.1rem)] leading-relaxed justify-end text-white w-[85vw] max-w-[500px] shrink-0 snap-center p-6 rounded-[1.5rem] bg-brand-bg/20 border border-white/10 backdrop-blur-sm shadow-lg" style={{ zIndex: aboutData.paragraphs.length - index }}>
+                <div key={index} ref={setTextBlockRef(index)} className="flex flex-col font-body text-[clamp(0.95rem,4vw,1.1rem)] leading-relaxed justify-end text-white w-[85vw] max-w-[400px] shrink-0 snap-center p-6 rounded-[1.5rem] bg-brand-bg/30 border border-white/10 backdrop-blur-md shadow-lg" style={{ zIndex: aboutData.paragraphs.length - index }}>
                   <p dangerouslySetInnerHTML={{ __html: para }} />
                 </div>
               ))}
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 shrink-0 px-6 justify-center">
+            <div className="flex flex-wrap gap-2 pt-4 shrink-0 px-6 justify-center">
               <span className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white text-[10px] tracking-wider">🧩 Builder</span>
               <span className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white text-[10px] tracking-wider">🎯 Focused</span>
               <span className="px-4 py-1.5 rounded-full border border-brand-accent/30 bg-white/5 text-brand-accent text-[10px] tracking-wider">✨ Creative</span>

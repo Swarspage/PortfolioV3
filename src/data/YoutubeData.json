@@ -14,13 +14,15 @@
       "title": "Building Session #1",
       "label": "Live Build",
       "thumbnail": "https://img.youtube.com/vi/ZVaLEBNFlzc/maxresdefault.jpg",
-      "link": "https://www.youtube.com/watch?v=ZVaLEBNFlzc"
+      "link": "https://www.youtube.com/watch?v=ZVaLEBNFlzc",
+      "isLocked": true
     },
     {
       "title": "Building Session #2",
       "label": "Live Build",
       "thumbnail": "https://img.youtube.com/vi/5Y-RAEXeUjU/maxresdefault.jpg",
-      "link": "https://www.youtube.com/watch?v=5Y-RAEXeUjU"
+      "link": "https://www.youtube.com/watch?v=5Y-RAEXeUjU",
+      "isLocked": true
     }
   ]
 }

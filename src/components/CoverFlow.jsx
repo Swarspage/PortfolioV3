@@ -134,7 +134,7 @@ const CoverFlow = ({ items, activeIndex, setActiveIndex, onCardClick }) => {
         onClick={handlePrev}
         disabled={activeIndex === 0}
         aria-label="Previous Achievement"
-        className="absolute left-2 sm:left-6 lg:left-12 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 lg:p-5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white transition-all duration-300 hover:bg-white/10 hover:scale-110 disabled:opacity-0 disabled:scale-90 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+        className="absolute left-2 sm:left-6 lg:left-12 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 lg:p-5 rounded-full bg-black/60 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white/10 hover:border-white/50 hover:scale-110 disabled:opacity-0 disabled:scale-90 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 lg:w-6 lg:h-6"><path d="m15 18-6-6 6-6"/></svg>
       </button>
@@ -143,7 +143,7 @@ const CoverFlow = ({ items, activeIndex, setActiveIndex, onCardClick }) => {
         onClick={handleNext}
         disabled={activeIndex === items.length - 1}
         aria-label="Next Achievement"
-        className="absolute right-2 sm:right-6 lg:right-12 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 lg:p-5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white transition-all duration-300 hover:bg-white/10 hover:scale-110 disabled:opacity-0 disabled:scale-90 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
+        className="absolute right-2 sm:right-6 lg:left-auto lg:right-12 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 lg:p-5 rounded-full bg-black/60 backdrop-blur-md border border-white/30 text-white transition-all duration-300 hover:bg-white/10 hover:border-white/50 hover:scale-110 disabled:opacity-0 disabled:scale-90 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-accent/50"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 lg:w-6 lg:h-6"><path d="m9 18 6-6-6-6"/></svg>
       </button>
