@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://swarshinde.dev/</loc>
+    <lastmod>2025-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://swarshinde.dev/og-image.png</image:loc>
+      <image:title>Swar Shinde — Frontend Developer Portfolio</image:title>
+      <image:caption>Portfolio of Swar Shinde, Frontend Developer and creative builder</image:caption>
+    </image:image>
+  </url>
+</urlset>
