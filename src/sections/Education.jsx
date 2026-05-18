@@ -102,8 +102,8 @@ const Education = () => {
           ease: "none",
           scrollTrigger: {
             trigger: line.parentElement, // the track
-            start: "top 75%",
-            end: "bottom 75%",
+            start: "top 85%",
+            end: "bottom 85%",
             scrub: true
           }
         }
@@ -114,7 +114,7 @@ const Education = () => {
         const itemTl = gsap.timeline({
           scrollTrigger: {
             trigger: node.parentElement, // the row
-            start: "top 80%",
+            start: "top 85%",
           }
         });
         
