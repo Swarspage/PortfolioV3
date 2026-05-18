@@ -18,6 +18,7 @@ const Loader = ({ isAppLoaded, onComplete }) => {
   const topPanelRef = useRef(null);
   const bottomPanelRef = useRef(null);
   const svgRef = useRef(null);
+  const glowRef = useRef(null);
   
   useEffect(() => {
     let interval;
@@ -74,8 +75,9 @@ const Loader = ({ isAppLoaded, onComplete }) => {
       const tl = gsap.timeline({
         onComplete: onComplete
       });
-      // Dramatic cinematic exit
-      tl.to(textRef.current, { scale: 1.1, opacity: 0, filter: "blur(12px)", duration: 0.6, ease: "power3.inOut" })
+      // Fade ambient glow FIRST (t=0) so it doesn't flash between the sliding panels
+      tl.to(glowRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0)
+        .to(textRef.current, { scale: 1.1, opacity: 0, filter: "blur(12px)", duration: 0.6, ease: "power3.inOut" }, 0)
         .to(lineRef.current, { scaleX: 0, opacity: 0, duration: 0.4, ease: "power3.inOut" }, "-=0.4")
         .to(svgRef.current, { opacity: 0, duration: 0.4 }, "-=0.4")
         .to(topPanelRef.current, { y: "-100%", duration: 1.2, ease: "power4.inOut" }, "-=0.1")
@@ -145,8 +147,8 @@ const Loader = ({ isAppLoaded, onComplete }) => {
          </div>
        </div>
        
-       {/* Ambient glow in background */}
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent rounded-full blur-[150px] opacity-10 pointer-events-none z-0" />
+       {/* Ambient glow — ref'd so it can be faded before panels slide */}
+       <div ref={glowRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent rounded-full blur-[150px] opacity-10 pointer-events-none z-0" />
 
        {/* Accents */}
        <div ref={lineRef} className="absolute bottom-10 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50 z-10" />
