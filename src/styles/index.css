@@ -127,6 +127,39 @@ textarea:-webkit-autofill:focus {
   50%       { transform: translateY(-5px); }
 }
 
+/* ── Orbital Orrery keyframes (Skills section) ────────────────────────────────
+
+   orbitRotate    — rotates the planet's zero-size anchor around the ring center.
+                    Negative animationDelay offsets each planet to its startDeg.
+   counterRotate  — counter-rotates the chip so it always faces upright.
+                    Uses --r CSS custom property (orbit radius, set inline).
+   orbPulse       — breathing glow on the center orb.                         */
+
+@keyframes orbitRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes counterRotate {
+  from { transform: translateX(-50%) translateY(calc(-1 * var(--r))) rotate(0deg); }
+  to   { transform: translateX(-50%) translateY(calc(-1 * var(--r))) rotate(-360deg); }
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px 6px rgba(191,219,254,0.12),
+      0 0 50px 15px rgba(191,219,254,0.06),
+      inset 0 0 16px rgba(191,219,254,0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 35px 12px rgba(191,219,254,0.25),
+      0 0 80px 25px rgba(191,219,254,0.12),
+      inset 0 0 28px rgba(191,219,254,0.18);
+  }
+}
+
 /* ── Keyframe: achievement info panel fade-slide (Achievements section) ───── */
 @keyframes fadeSlideIn {
   from { opacity: 0; transform: translateY(10px); }

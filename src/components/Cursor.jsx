@@ -44,8 +44,8 @@ const Cursor = () => {
     const ring = ringRef.current;
     const label = labelRef.current;
     gsap.set(ring, { xPercent: -50, yPercent: -50 });
-    const xTo = gsap.quickTo(ring, "x", { duration: 0.15, ease: "power2.out" });
-    const yTo = gsap.quickTo(ring, "y", { duration: 0.15, ease: "power2.out" });
+    const xTo = gsap.quickTo(ring, "x", { duration: 0.06, ease: "power2.out" });
+    const yTo = gsap.quickTo(ring, "y", { duration: 0.06, ease: "power2.out" });
 
     const updateMode = (nextState) => {
       const { mode: nextMode, label: nextLabel = "" } = nextState;
