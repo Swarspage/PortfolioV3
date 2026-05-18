@@ -154,9 +154,9 @@ const About = () => {
 
           {/* Horizontal Scroll Cards */}
           <div className="z-0 flex flex-col pointer-events-auto w-full shrink-0 relative mt-auto">
-            <div className="relative w-full perspective-1000 flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4 pb-2">
+            <div className="relative w-full perspective-1000 flex flex-row items-end overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4 pb-2">
               {aboutData.paragraphs.map((para, index) => (
-                <div key={index} ref={setTextBlockRef(index)} className="flex flex-col font-body text-[clamp(0.95rem,4vw,1.1rem)] leading-relaxed justify-end text-white w-[85vw] max-w-[400px] shrink-0 snap-center p-6 rounded-[1.5rem] bg-brand-bg/30 border border-white/10 backdrop-blur-md shadow-lg" style={{ zIndex: aboutData.paragraphs.length - index }}>
+                <div key={index} ref={setTextBlockRef(index)} className="font-body text-[clamp(0.95rem,4vw,1.1rem)] leading-relaxed text-white w-[85vw] max-w-[400px] shrink-0 snap-center p-6 rounded-[1.5rem] bg-brand-bg/30 border border-white/10 backdrop-blur-md shadow-lg h-fit" style={{ zIndex: aboutData.paragraphs.length - index }}>
                   <p dangerouslySetInnerHTML={{ __html: para }} />
                 </div>
               ))}
